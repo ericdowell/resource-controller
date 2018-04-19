@@ -14,9 +14,9 @@ trait LoadTestConfiguration
      *
      * @return void
      */
-    protected function getEnvironmentSetUp( $app )
+    protected function getEnvironmentSetUp($app)
     {
-        $this->loadTestConfigs( $app );
+        $this->loadTestConfigs($app);
     }
 
     /**
@@ -24,16 +24,16 @@ trait LoadTestConfiguration
      *
      * @param \Illuminate\Foundation\Application $app
      */
-    protected function loadTestConfigs( $app )
+    protected function loadTestConfigs($app)
     {
-        foreach( $this->getConfigurationFiles() as $key => $path ) {
+        foreach ($this->getConfigurationFiles() as $key => $path) {
             $config = require $path;
 
-            if( $app[ 'config' ]->has( $key ) ) {
-                $config = array_replace_recursive( $app[ 'config' ]->get( $key ), $config );
+            if ($app['config']->has($key)) {
+                $config = array_replace_recursive($app['config']->get($key), $config);
             }
 
-            $app[ 'config' ]->set( $key, $config );
+            $app['config']->set($key, $config);
         }
     }
 
@@ -46,11 +46,11 @@ trait LoadTestConfiguration
     {
         $files = [];
 
-        $configPath = realpath( dirname( dirname( __DIR__ ) ) ) . '/config/';
+        $configPath = realpath(dirname(dirname(__DIR__))).'/config/';
 
         /** @var SplFileInfo $file */
-        foreach( Finder::create()->files()->name( '*.php' )->in( $configPath ) as $file ) {
-            $files[ basename( $file->getRealPath(), '.php' ) ] = $file->getRealPath();
+        foreach (Finder::create()->files()->name('*.php')->in($configPath) as $file) {
+            $files[basename($file->getRealPath(), '.php')] = $file->getRealPath();
         }
 
         return $files;

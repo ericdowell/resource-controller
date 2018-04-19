@@ -15,7 +15,7 @@ class TestCase extends SupportTestCase
      *
      * @return array
      */
-    protected function getPackageProviders( $app )
+    protected function getPackageProviders($app)
     {
         return [
             ServiceProvider::class,
