@@ -6,10 +6,10 @@
 [![Issue Count](https://codeclimate.com/github/ericdowell/resource-controller/badges/issue_count.svg)](https://codeclimate.com/github/ericdowell/resource-controller)
 
 
-[![Total Downloads](https://poser.pugx.org/ericdowell/resource-controller/downloads?format=flat-square)](https://packagist.org/packages/ericdowell/resource-controller)
+[![License](https://poser.pugx.org/ericdowell/resource-controller/license?format=flat-square)](https://packagist.org/packages/ericdowell/resource-controller)
 [![Latest Stable Version](https://poser.pugx.org/ericdowell/resource-controller/version?format=flat-square)](https://packagist.org/packages/ericdowell/resource-controller)
 [![Latest Unstable Version](https://poser.pugx.org/ericdowell/resource-controller/v/unstable?format=flat-square)](https://packagist.org/packages/ericdowell/resource-controller)
-[![License](https://poser.pugx.org/ericdowell/resource-controller/license?format=flat-square)](https://packagist.org/packages/ericdowell/resource-controller)
+[![Total Downloads](https://poser.pugx.org/ericdowell/resource-controller/downloads?format=flat-square)](https://packagist.org/packages/ericdowell/resource-controller)
 
 
 # Installation
