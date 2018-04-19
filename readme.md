@@ -196,8 +196,8 @@ Go to the following file and add the following to the boot method:
 namespace App\Providers;
 
 use App\Post;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
 {
