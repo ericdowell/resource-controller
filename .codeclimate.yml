@@ -1,0 +1,16 @@
+engines:
+  phpcodesniffer:
+    enabled: true
+    config:
+      file_extensions: "php"
+  fixme:
+    enabled: true
+ratings:
+  paths:
+    - "src/**.php"
+exclude_paths:
+  - "phpunit.php"
+  - "config/**/*"
+  - "src/Providers/*"
+  - "tests/**/*"
+  - "vendor/**/*"
