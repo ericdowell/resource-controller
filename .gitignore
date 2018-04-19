@@ -1,0 +1,11 @@
+build/
+coverage/
+docs/
+vendor/
+
+.env
+.DS_Store
+.idea
+composer.lock
+composer.phar
+Thumbs.db

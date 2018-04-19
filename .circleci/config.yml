@@ -1,0 +1,12 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: ericdowell/laravel-circleci
+    environment:
+      TZ: "/usr/share/zoneinfo/America/Chicago"
+    steps:
+      - checkout
+      - run: composer install --no-interaction --optimize-autoloader --prefer-dist
+      - run: php vendor/bin/phpunit
+      - run: if [ -z ${CODECLIMATE_REPO_TOKEN+x} ]; then echo "CODECLIMATE_REPO_TOKEN not set"; else ./vendor/bin/test-reporter || echo 'Nothing sent, failed'; fi
