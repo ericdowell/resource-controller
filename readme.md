@@ -4,6 +4,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/9667d6f991e0b1573e99/maintainability)](https://codeclimate.com/github/ericdowell/resource-controller/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/9667d6f991e0b1573e99/test_coverage)](https://codeclimate.com/github/ericdowell/resource-controller/test_coverage)
 [![Issue Count](https://codeclimate.com/github/ericdowell/resource-controller/badges/issue_count.svg)](https://codeclimate.com/github/ericdowell/resource-controller)
+
+
 [![Total Downloads](https://poser.pugx.org/ericdowell/resource-controller/downloads?format=flat-square)](https://packagist.org/packages/ericdowell/resource-controller)
 [![Latest Stable Version](https://poser.pugx.org/ericdowell/resource-controller/version?format=flat-square)](https://packagist.org/packages/ericdowell/resource-controller)
 [![Latest Unstable Version](https://poser.pugx.org/ericdowell/resource-controller/v/unstable?format=flat-square)](https://packagist.org/packages/ericdowell/resource-controller)
