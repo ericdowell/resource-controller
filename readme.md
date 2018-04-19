@@ -187,6 +187,44 @@ class Post extends Model
 }
 ```
 
+### AppServiceProvider
+Go to the following file and add the following to the boot method:
+**app/Providers/AppServiceProvider.php**
+```php
+<?php
+
+namespace App\Providers;
+
+use App\Post;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Relation::morphMap([
+            'post' => Post::class,
+        ]);
+    }
+
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+}
+```
+
 ### Routes:
 Go to the following file and add the following:
 **routes/web.php**
