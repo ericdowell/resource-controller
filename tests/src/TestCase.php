@@ -2,10 +2,10 @@
 
 namespace EricDowell\ResourceController\Tests;
 
-use EricDowell\ResourceController\Tests\Models\TestPost;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Orchestra\Testbench\TestCase as SupportTestCase;
+use EricDowell\ResourceController\Tests\Models\TestPost;
 use EricDowell\ResourceController\Tests\Traits\LoadTestConfiguration;
 
 class TestCase extends SupportTestCase
