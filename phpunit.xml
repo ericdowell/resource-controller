@@ -29,5 +29,7 @@
     </logging>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <env name="APP_DEBUG" value="true"/>
+        <env name="APP_KEY" value="base64:oPF0DoJcm8nOjTkN9vk3kZYw6Z0f+cP+poFKhtQZiFU="/>
     </php>
 </phpunit>

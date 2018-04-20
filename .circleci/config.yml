@@ -3,6 +3,12 @@ jobs:
   build:
     docker:
       - image: ericdowell/laravel-circleci
+      - image: mysql:5.7
+        environment:
+          - MYSQL_DATABASE=forge
+          - MYSQL_USER=forge
+          - MYSQL_ALLOW_EMPTY_PASSWORD=true
+          - MYSQL_ROOT_HOST=%
     environment:
       TZ: "/usr/share/zoneinfo/America/Chicago"
     steps:

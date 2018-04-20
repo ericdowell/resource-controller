@@ -4,7 +4,7 @@ namespace EricDowell\ResourceController\Tests\Feature;
 
 use EricDowell\ResourceController\Tests\TestCase;
 
-class ExampleTest extends TestCase
+class PostTest extends TestCase
 {
     /**
      * A basic test example.
@@ -13,7 +13,7 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
-        $response = $this->get('/');
+        $response = $this->get('/post');
 
         $response->assertStatus(200);
     }

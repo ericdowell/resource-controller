@@ -23,6 +23,6 @@ class TestCase extends SupportTestCase
 
         Route::middleware('web')
             ->namespace('EricDowell\\ResourceController\\Tests\\Http\\Controllers')
-            ->group($basePath.'routes/web.php');
+            ->group($basePath.'/routes/web.php');
     }
 }
