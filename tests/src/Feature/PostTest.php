@@ -13,24 +13,28 @@ class PostTest extends TestCase
     /**
      * @test
      */
-    public function testPostModelIndexCreate()
+    public function testPostModelIndex()
     {
-        $status = 200;
-        $user = factory(TestUser::class)->create();
-
         $response = $this->get('/post');
 
         if ($response->getStatusCode() != 200) {
-            file_put_contents(__DIR__.'/error-html/post-index.html', $response->getContent());
+            file_put_contents(__DIR__.'/error-html/'.__FUNCTION__.'.html', $response->getContent());
         }
         $response->assertStatus(200);
+    }
 
+    /**
+     * @test
+     */
+    public function testPostModelCreate()
+    {
+        $user = factory(TestUser::class)->create();
         $response = $this->actingAs($user)->get('/post/create');
 
         if ($response->getStatusCode() != 200) {
-            file_put_contents(__DIR__.'/error-html/post-create.html', $response->getContent());
+            file_put_contents(__DIR__.'/error-html/'.__FUNCTION__.'.html', $response->getContent());
         }
-        $response->assertStatus($status);
+        $response->assertStatus(200);
     }
 
     /**
