@@ -7,6 +7,7 @@ jobs:
         environment:
           - MYSQL_DATABASE=forge
           - MYSQL_USER=forge
+          - MYSQL_PASSWORD=''
           - MYSQL_ALLOW_EMPTY_PASSWORD=true
           - MYSQL_ROOT_HOST=%
     environment:
@@ -15,4 +16,8 @@ jobs:
       - checkout
       - run: composer install --no-interaction --optimize-autoloader --prefer-dist
       - run: php vendor/bin/phpunit
+      - store_test_results:
+          path: build/junit
+      - store_artifacts:
+          path: build/junit
       - run: if [ -z ${CODECLIMATE_REPO_TOKEN+x} ]; then echo "CODECLIMATE_REPO_TOKEN not set"; else ./vendor/bin/test-reporter || echo 'Nothing sent, failed'; fi

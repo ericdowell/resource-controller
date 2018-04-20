@@ -26,10 +26,12 @@
     </filter>
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="junit" target="build/junit/junit.xml"/>
     </logging>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_DEBUG" value="true"/>
         <env name="APP_KEY" value="base64:oPF0DoJcm8nOjTkN9vk3kZYw6Z0f+cP+poFKhtQZiFU="/>
+        <env name="DB_USERNAME" value="root"/>
     </php>
 </phpunit>
