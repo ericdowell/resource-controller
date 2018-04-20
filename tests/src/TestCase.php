@@ -20,6 +20,7 @@ class TestCase extends SupportTestCase
         $basePath = dirname(__DIR__);
 
         $this->loadMigrationsFrom($basePath.'/database/migrations');
+        $this->withFactories($basePath.'/database/factories');
 
         Route::middleware('web')
             ->namespace('EricDowell\\ResourceController\\Tests\\Http\\Controllers')
