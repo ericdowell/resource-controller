@@ -2,10 +2,10 @@
 
 namespace EricDowell\ResourceController\Tests\Http\Controllers;
 
-use EricDowell\ResourceController\Http\Controllers\ModelMorphController;
-use EricDowell\ResourceController\Tests\Models\Text;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
+use EricDowell\ResourceController\Tests\Models\Text;
+use EricDowell\ResourceController\Http\Controllers\ModelMorphController;
 
 class TextController extends ModelMorphController
 {
