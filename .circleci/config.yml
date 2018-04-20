@@ -14,8 +14,15 @@ jobs:
       TZ: "/usr/share/zoneinfo/America/Chicago"
     steps:
       - checkout
-      - run: composer install --no-interaction --optimize-autoloader --prefer-dist
-      - run: php vendor/bin/phpunit
+      - run:
+          name: Install PHP Dependencies
+          command: composer install --no-interaction --optimize-autoloader --prefer-dist
+      - run:
+          name: Wait for MySQL
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      - run:
+          name: Run Unit Tests and Generate Code Coverage XML File
+          command: php vendor/bin/phpunit
       - store_test_results:
           path: build/junit
       - store_artifacts:
