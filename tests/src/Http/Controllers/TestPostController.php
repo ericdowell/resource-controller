@@ -3,26 +3,26 @@
 namespace EricDowell\ResourceController\Tests\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
-use EricDowell\ResourceController\Tests\Models\Post;
-use EricDowell\ResourceController\Tests\Http\Requests\PostRequest;
+use EricDowell\ResourceController\Tests\Models\TestPost;
+use EricDowell\ResourceController\Tests\Http\Requests\TestPostRequest;
 
-class PostController extends TextController
+class TestPostController extends TestTextController
 {
     /**
      * Name of the affected Eloquent model.
      *
      * @var string
      */
-    protected $model = Post::class;
+    protected $model = TestPost::class;
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  PostRequest $request
+     * @param  TestPostRequest $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(PostRequest $request): RedirectResponse
+    public function store(TestPostRequest $request): RedirectResponse
     {
         return $this->storeModel($request);
     }
@@ -30,12 +30,12 @@ class PostController extends TextController
     /**
      * Update the specified resource in storage.
      *
-     * @param  PostRequest $request
+     * @param  TestPostRequest $request
      * @param  mixed $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(PostRequest $request, $id): RedirectResponse
+    public function update(TestPostRequest $request, $id): RedirectResponse
     {
         return $this->updateModel($request, $id);
     }

@@ -24,6 +24,9 @@
         }
     },
     "autoload-dev": {
+        "classmap": [
+            "tests/database/factories"
+        ],
         "psr-4": {
             "EricDowell\\ResourceController\\Tests\\": "tests/src/"
         }

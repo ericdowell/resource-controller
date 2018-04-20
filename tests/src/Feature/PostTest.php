@@ -4,7 +4,7 @@ namespace EricDowell\ResourceController\Tests\Feature;
 
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use EricDowell\ResourceController\Tests\Models\User;
+use EricDowell\ResourceController\Tests\Models\TestUser;
 
 class PostTest extends TestCase
 {
@@ -16,7 +16,7 @@ class PostTest extends TestCase
     public function testPostModelIndexCreate()
     {
         $status = 200;
-        $user = factory(User::class)->create();
+        $user = factory(TestUser::class)->create();
 
         $response = $this->get('/post');
 

@@ -1,10 +1,10 @@
 <?php
 
 use Faker\Generator as Faker;
-use EricDowell\ResourceController\Tests\Models\User;
+use EricDowell\ResourceController\Tests\Models\TestUser;
 
 /* @var \Illuminate\Database\Eloquent\Factory $factory */
-$factory->define(User::class, function (Faker $faker) {
+$factory->define(TestUser::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,

@@ -3,4 +3,4 @@
 /*
  * Models
  */
-Route::resource('post', 'PostController');
+Route::resource('post', 'TestPostController');

@@ -4,8 +4,15 @@ namespace EricDowell\ResourceController\Tests\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class TestPost extends Model
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'posts';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +29,6 @@ class Post extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(TestUser::class);
     }
 }

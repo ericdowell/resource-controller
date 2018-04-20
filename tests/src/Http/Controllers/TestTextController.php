@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use EricDowell\ResourceController\Tests\Models\Text;
 use EricDowell\ResourceController\Http\Controllers\ModelMorphController;
 
-class TextController extends ModelMorphController
+class TestTextController extends ModelMorphController
 {
     /**
      * @var string
