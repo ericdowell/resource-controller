@@ -12,7 +12,7 @@
 [![Total Downloads](https://poser.pugx.org/ericdowell/resource-controller/downloads?format=flat-square)](https://packagist.org/packages/ericdowell/resource-controller)
 
 ## Installation
-To install through composer by running:
+Install using composer by running:
 ```bash
 composer require ericdowell/resource-controller 1.0.*
 ```
