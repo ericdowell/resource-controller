@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Traits;
 
@@ -38,7 +40,7 @@ trait WithModel
     protected $model;
 
     /**
-     * Instance of the Eloquent Model
+     * Instance of the Eloquent Model.
      *
      * @var Model|Builder
      */

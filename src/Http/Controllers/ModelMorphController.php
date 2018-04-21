@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Http\Controllers;
 
@@ -11,7 +13,7 @@ use Illuminate\Foundation\Http\FormRequest;
 abstract class ModelMorphController extends ResourceModelController
 {
     /**
-     * Instance of parent morph Eloquent Model
+     * Instance of parent morph Eloquent Model.
      *
      * @var Model|Builder
      */
