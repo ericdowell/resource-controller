@@ -73,19 +73,19 @@ trait WithModel
     protected $formAction;
 
     /**
-     * @return string
-     */
-    protected function getFindModel()
-    {
-        return $this->model;
-    }
-
-    /**
      * @return bool
      */
     protected function withUser(): bool
     {
         return $this->withUser;
+    }
+
+    /**
+     * @return string
+     */
+    protected function modelClass()
+    {
+        return $this->model;
     }
 
     /**
@@ -111,10 +111,10 @@ trait WithModel
     protected function findModel($id, $callback = null): Model
     {
         if (! $this->withUser()) {
-            return tap(forward_static_call([$this->getFindModel(), 'findOrFail'], $id), $callback);
+            return tap(forward_static_call([$this->modelClass(), 'findOrFail'], $id), $callback);
         }
 
-        return tap(forward_static_call([$this->getFindModel(), 'with'], 'user')->findOrFail($id), $callback);
+        return tap(forward_static_call([$this->modelClass(), 'with'], 'user')->findOrFail($id), $callback);
     }
 
     /**
@@ -159,14 +159,16 @@ trait WithModel
      *
      * @return array
      */
-    protected function setDefaults(CurrentRoute $route): array
+    protected function generateDefaults(CurrentRoute $route): array
     {
-        $context = [];
-        if (method_exists($route, 'getName') && ! empty($route->getName())) {
-            $this->template = $this->template ?? $route->getName();
-
-            $this->setTypeAndFormAction($context)->setTypeName($context)->setModelInstance($context);
+        if (! method_exists($route, 'getName') || empty($route->getName())) {
+            return [];
         }
+        $context = [];
+        $template = $this->template = $this->template ?? $route->getName();
+
+        $this->mergeContext($context, compact('template'))->setTypeAndFormAction($context)->setTypeName($context);
+        $this->setModelInstance($context)->setMessageAndHeader($context);
 
         return $context;
     }
@@ -176,10 +178,25 @@ trait WithModel
      *
      * @return $this
      */
+    protected function setMessageAndHeader(array &$context)
+    {
+        $btnMessage = sprintf('%s %s', ucfirst($this->formAction), ucfirst($this->type));
+        $formHeader = ($this->formAction === 'update' ? ucfirst($this->formAction) : 'Create').' '.ucfirst($this->type);
+
+        return $this->mergeContext($context, compact('btnMessage', 'formHeader'));
+    }
+
+    /**
+     * @param array $context
+     *
+     * @return $this
+     */
     protected function setTypeAndFormAction(array &$context)
     {
-        // @todo: Add support for grouped/prefixed routes.
-        list($type, $action) = explode('.', $this->template);
+        $nameParts = explode('.', $this->template);
+
+        $action = array_pop($nameParts);
+        $type = array_pop($nameParts);
 
         if (array_key_exists($action, $this->actionMap)) {
             $action = $this->actionMap[$action];
@@ -187,12 +204,7 @@ trait WithModel
         $this->type = $type;
         $this->formAction = $action;
 
-        $btnMessage = sprintf('%s %s', ucfirst($this->formAction), ucfirst($this->type));
-        $formHeader = ($action === 'update' ? ucfirst($this->formAction) : 'Create').' '.ucfirst($this->type);
-
-        $context = array_merge($context, compact('type', 'btnMessage', 'action', 'formHeader'));
-
-        return $this;
+        return $this->mergeContext($context, compact('type', 'action'));
     }
 
     /**
@@ -204,9 +216,7 @@ trait WithModel
     {
         $this->typeName = $typeName = str_plural(ucfirst($this->type));
 
-        $context = array_merge($context, compact('typeName'));
-
-        return $this;
+        return $this->mergeContext($context, compact('typeName'));
     }
 
     /**
@@ -218,7 +228,20 @@ trait WithModel
     {
         $this->modelInstance = $instance = new $this->model();
 
-        $context = array_merge($context, compact('instance'));
+        return $this->mergeContext($context, compact('instance'));
+    }
+
+    /**
+     * @param $context
+     * @param mixed ...$merge
+     *
+     * @return $this
+     */
+    protected function mergeContext(&$context, ...$merge)
+    {
+        array_unshift($merge, $context);
+
+        $context = call_user_func_array('array_merge', $merge);
 
         return $this;
     }

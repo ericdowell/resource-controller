@@ -29,9 +29,11 @@ trait WithModelResource
     protected $modelMiddleware = [];
 
     /**
-     * @var int
+     * Values used for index pagination.
+     *
+     * @var array
      */
-    protected $perPage = 10;
+    protected $paginate = [];
 
     /**
      * Create a new controller instance.
@@ -41,7 +43,7 @@ trait WithModelResource
     final public function __construct(Router $router)
     {
         $middleware = $this->modelMiddleware;
-        $this->mergeData = $this->checkModel($this->model)->setDefaults($router->current());
+        $this->mergeData = $this->checkModel($this->model)->generateDefaults($router->current());
 
         if (! in_array($this->formAction, $this->publicActions)) {
             $middleware = array_merge($this->authMiddleware, $middleware);
@@ -75,7 +77,16 @@ trait WithModelResource
      */
     public function index()
     {
-        return $this->finish(['all' => $this->allModels()->paginate($this->perPage)]);
+        $perPage = array_get($this->paginate, 'perPage', null);
+        $columns = array_get($this->paginate, 'columns', ['*']);
+        $pageName = array_get($this->paginate, 'pageName', 'page');
+        $page = array_get($this->paginate, 'page', null);
+
+        $templateReference = array_get($this->paginate, 'templateReference', 'models');
+
+        ${$templateReference} = $this->allModels()->paginate($perPage, $columns, $pageName, $page);
+
+        return $this->finish(compact($templateReference));
     }
 
     /**

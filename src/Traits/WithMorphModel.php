@@ -43,7 +43,7 @@ trait WithMorphModel
     /**
      * @return string
      */
-    protected function getFindModel()
+    protected function modelClass()
     {
         return $this->morphModel;
     }
