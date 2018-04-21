@@ -1,11 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Tests\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Text extends Model
+class TestText extends Model
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'texts';
+
     /**
      * The attributes that are mass assignable.
      *

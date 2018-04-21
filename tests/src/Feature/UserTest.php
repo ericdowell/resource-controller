@@ -6,7 +6,7 @@ use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 
-class PostTest extends TestCase
+class UserTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -15,7 +15,7 @@ class PostTest extends TestCase
      */
     public function testModelIndex()
     {
-        $response = $this->get('/post');
+        $response = $this->get('/user');
 
         if ($response->getStatusCode() != 200) {
             file_put_contents(__DIR__.'/error-html/'.basename(__FILE__, '.php').'.'.__FUNCTION__.'.html', $response->getContent());
@@ -29,7 +29,7 @@ class PostTest extends TestCase
     public function testModelCreate()
     {
         $user = factory(TestUser::class)->create();
-        $response = $this->actingAs($user)->get('/post/create');
+        $response = $this->actingAs($user)->get('/user/create');
 
         if ($response->getStatusCode() != 200) {
             file_put_contents(__DIR__.'/error-html/'.basename(__FILE__, '.php').'.'.__FUNCTION__.'.html', $response->getContent());
