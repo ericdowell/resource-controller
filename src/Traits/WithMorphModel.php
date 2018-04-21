@@ -27,7 +27,7 @@ trait WithMorphModel
     abstract public function middleware($middleware, array $options = []);
 
     /**
-     * Instance of parent morph Eloquent Model
+     * Instance of parent morph Eloquent Model.
      *
      * @var Model|Builder
      */
