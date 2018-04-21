@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EricDowell\ResourceController\Tests;
 
 use Orchestra\Testbench\TestCase as SupportTestCase;
@@ -20,6 +22,24 @@ class TestCase extends SupportTestCase
 
         $this->loadMigrationsFrom($basePath.'/database/migrations');
         $this->withFactories($basePath.'/database/factories');
+    }
+
+    /**
+     * @param \Illuminate\Foundation\Testing\TestResponse $response
+     * @param string $file
+     * @param string $function
+     * @param int $statusCode
+     */
+    protected function assertFunctionSuccess($response, $file, $function, $statusCode = 200)
+    {
+        $filename = __DIR__.'/error-html/'.basename($file, '.php').'.'.$function.'.html';
+        if (file_exists($filename)) {
+            @unlink($filename);
+        }
+        if ($response->getStatusCode() !== $statusCode) {
+            file_put_contents($filename, $response->getContent());
+        }
+        $response->assertStatus($statusCode);
     }
 
     /**

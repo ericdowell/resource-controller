@@ -22,8 +22,6 @@ class TestPostRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required',
-            'text_type' => 'required',
             'title' => 'required',
             'body' => 'required',
         ];

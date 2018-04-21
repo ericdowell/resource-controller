@@ -2,6 +2,7 @@
 
 namespace EricDowell\ResourceController\Traits;
 
+use EricDowell\ResourceController\Tests\Http\Controllers\TestUserController;
 use Throwable;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
@@ -124,6 +125,8 @@ trait WithModelResource
     {
         $attributes = array_merge($this->getModelAttributes($request), $this->beforeStoreModel($request));
 
+        $this->setUserIdAttribute($attributes, __FUNCTION__);
+
         return $this->modelInstance->create($attributes);
     }
 
@@ -134,13 +137,7 @@ trait WithModelResource
      */
     protected function beforeStoreModel(FormRequest $request): array
     {
-        if (! $this->withUser()) {
-            return [];
-        }
-
-        return [
-            'user_id' => $request->input('user_id') ?? data_get(auth()->user(), 'id'),
-        ];
+        return [];
     }
 
     /**
@@ -210,6 +207,7 @@ trait WithModelResource
     {
         $this->findModel($id, function (Model $model) use ($request) {
             $this->beforeModelUpdate($request, $model);
+            $this->setUserIdAttribute($model, 'updateModel');
             $this->updateAction($request, $model);
         });
 
@@ -264,6 +262,6 @@ trait WithModelResource
      */
     protected function finishAction($action)
     {
-        return redirect()->route($this->type.'.index');
+        return redirect()->route(sprintf('%s.index', $this->type));
     }
 }

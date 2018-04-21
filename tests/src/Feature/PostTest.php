@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EricDowell\ResourceController\Tests\Feature;
 
 use EricDowell\ResourceController\Tests\TestCase;
+use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 
@@ -14,41 +15,46 @@ class PostTest extends TestCase
 
     /**
      * @test
+     * @group morph-model
      */
     public function testModelIndex()
     {
-        $response = $this->get('/post');
-
-        if ($response->getStatusCode() != 200) {
-            file_put_contents(__DIR__.'/error-html/'.basename(__FILE__, '.php').'.'.__FUNCTION__.'.html', $response->getContent());
-        }
-        $response->assertStatus(200);
+        $this->assertFunctionSuccess($this->get(route('post.index')), __FILE__, __FUNCTION__);
     }
 
     /**
      * @test
+     * @group morph-model
      */
     public function testModelCreate()
     {
         $user = factory(TestUser::class)->create();
-        $response = $this->actingAs($user)->get('/post/create');
-
-        if ($response->getStatusCode() != 200) {
-            file_put_contents(__DIR__.'/error-html/'.basename(__FILE__, '.php').'.'.__FUNCTION__.'.html', $response->getContent());
-        }
-        $response->assertStatus(200);
+        $this->assertFunctionSuccess($this->actingAs($user)->get(route('post.create')), __FILE__, __FUNCTION__);
     }
 
     /**
      * @test
+     * @group morph-model
      */
     public function testModelStoreUpdate()
     {
-        $this->markTestIncomplete();
+        $user = factory(TestUser::class)->create();
+        /** @var Generator $fakery */
+        $fakery = app(Generator::class);
+
+        $body = $fakery->paragraph();
+        $title = $fakery->words(3, true);
+
+        $response = $this->actingAs($user)->post(route('post.store'), compact('title', 'body'));
+
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+
+        $response->assertRedirect(url(route('post.index')));
     }
 
     /**
      * @test
+     * @group morph-model
      */
     public function testModelShow()
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Traits;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
@@ -89,6 +90,28 @@ trait WithModel
     }
 
     /**
+     * @return null|int
+     */
+    protected function userId()
+    {
+        return request()->input('user_id') ?? data_get(auth()->user(), 'id');
+    }
+
+    /**
+     * @param $data
+     * @param string $method
+     *
+     * @return void
+     */
+    protected function setUserIdAttribute(&$data, $method): void
+    {
+        if (! $this->withUser()) {
+            return;
+        }
+        data_set($data, 'user_id', $this->userId());
+    }
+
+    /**
      * @return Builder
      */
     protected function allModels(): Builder
@@ -131,6 +154,9 @@ trait WithModel
             if (is_null($input) && $this->modelInstance->hasCast($key, 'boolean')) {
                 $input = false;
             }
+            if ($key === 'password') {
+                $input = Hash::make($input);
+            }
             $modelAttributes[$key] = $input;
         }
 
@@ -169,6 +195,7 @@ trait WithModel
 
         $this->mergeContext($context, compact('template'))->setTypeAndFormAction($context)->setTypeName($context);
         $this->setModelInstance($context)->setMessageAndHeader($context);
+        $this->setUserIdAttribute($context, __FUNCTION__);
 
         return $context;
     }

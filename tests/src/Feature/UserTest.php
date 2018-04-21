@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EricDowell\ResourceController\Tests\Feature;
 
 use EricDowell\ResourceController\Tests\TestCase;
+use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 
@@ -14,41 +15,47 @@ class UserTest extends TestCase
 
     /**
      * @test
+     * @group single-model
      */
     public function testModelIndex()
     {
-        $response = $this->get('/user');
-
-        if ($response->getStatusCode() != 200) {
-            file_put_contents(__DIR__.'/error-html/'.basename(__FILE__, '.php').'.'.__FUNCTION__.'.html', $response->getContent());
-        }
-        $response->assertStatus(200);
+        $this->assertFunctionSuccess($this->get(route('user.index')), __FILE__, __FUNCTION__);
     }
 
     /**
      * @test
+     * @group single-model
      */
     public function testModelCreate()
     {
         $user = factory(TestUser::class)->create();
-        $response = $this->actingAs($user)->get('/user/create');
-
-        if ($response->getStatusCode() != 200) {
-            file_put_contents(__DIR__.'/error-html/'.basename(__FILE__, '.php').'.'.__FUNCTION__.'.html', $response->getContent());
-        }
-        $response->assertStatus(200);
+        $this->assertFunctionSuccess($this->actingAs($user)->get(route('user.create')), __FILE__, __FUNCTION__);
     }
 
     /**
      * @test
+     * @group single-model
      */
     public function testModelStoreUpdate()
     {
-        $this->markTestIncomplete();
+        $user = factory(TestUser::class)->create();
+        /** @var Generator $fakery */
+        $fakery = app(Generator::class);
+
+        $name = $fakery->name;
+        $email = $fakery->unique()->safeEmail;
+        $password = $password_confirmation = 'secret';
+
+        $response = $this->actingAs($user)->post(route('user.store'), compact('name', 'email', 'password', 'password_confirmation'));
+
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+
+        $response->assertRedirect(url(route('user.index')));
     }
 
     /**
      * @test
+     * @group single-model
      */
     public function testModelShow()
     {

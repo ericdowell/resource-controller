@@ -63,6 +63,8 @@ trait WithMorphModel
             "{$morphType}_id" => $model->id,
         ]);
 
+        $this->setUserIdAttribute($attributes, __FUNCTION__);
+
         return $this->morphInstance->create($attributes);
     }
 
@@ -84,7 +86,12 @@ trait WithMorphModel
      */
     protected function updateAction(FormRequest $request, Model $instance): bool
     {
-        return $instance->{$this->getMorphType()}->update($this->getModelAttributes($request)) ?? false;
+        $instance->save();
+
+        $attributes = $this->getModelAttributes($request);
+        $this->setUserIdAttribute($attributes, __FUNCTION__);
+
+        return $instance->{$this->getMorphType()}->update($attributes) ?? false;
     }
 
     /**
@@ -128,6 +135,16 @@ trait WithMorphModel
             return $query;
         }
 
+        return $this->queryWithUser($query);
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return Builder
+     */
+    protected function queryWithUser(Builder $query): Builder
+    {
         return $query->with('user');
     }
 
