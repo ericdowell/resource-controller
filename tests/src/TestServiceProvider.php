@@ -3,12 +3,21 @@
 namespace EricDowell\ResourceController\Tests;
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use EricDowell\ResourceController\Tests\Models\TestPost;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class TestServiceProvider extends ServiceProvider
 {
+    /**
+     * This namespace is applied to your controller routes.
+     *
+     * In addition, it is set as the URL generator's root namespace.
+     *
+     * @var string
+     */
+    protected $namespace = 'EricDowell\ResourceController\Tests\Http\Controllers';
+
     /**
      * Bootstrap any application services.
      *
@@ -20,18 +29,18 @@ class TestServiceProvider extends ServiceProvider
             'post' => TestPost::class,
         ]);
 
-        Route::middleware('web')
-            ->namespace('EricDowell\\ResourceController\\Tests\\Http\\Controllers')
-            ->group(dirname(__DIR__).'/routes/web.php');
+        parent::boot();
     }
 
     /**
-     * Register any application services.
+     * Define the routes for the application.
      *
      * @return void
      */
-    public function register()
+    public function map()
     {
-        //
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(dirname(__DIR__).'/routes/web.php');
     }
 }

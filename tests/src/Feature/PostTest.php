@@ -18,7 +18,7 @@ class PostTest extends TestCase
         $response = $this->get('/post');
 
         if ($response->getStatusCode() != 200) {
-            file_put_contents(__DIR__.'/error-html/'.__FUNCTION__.'.html', $response->getContent());
+            file_put_contents(__DIR__.'/error-html/'.basename(__FILE__, '.php').'.'.__FUNCTION__.'.html', $response->getContent());
         }
         $response->assertStatus(200);
     }
@@ -32,7 +32,7 @@ class PostTest extends TestCase
         $response = $this->actingAs($user)->get('/post/create');
 
         if ($response->getStatusCode() != 200) {
-            file_put_contents(__DIR__.'/error-html/'.__FUNCTION__.'.html', $response->getContent());
+            file_put_contents(__DIR__.'/error-html/'.basename(__FILE__, '.php').'.'.__FUNCTION__.'.html', $response->getContent());
         }
         $response->assertStatus(200);
     }
