@@ -11,7 +11,7 @@ ratings:
 exclude_paths:
   - "phpunit.php"
   - "config/**/*"
-  - "src/Http/Controllers/Controller.php"
+  - "src/Http/Controllers/*"
   - "src/Providers/*"
   - "tests/**/*"
   - "vendor/**/*"
