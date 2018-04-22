@@ -172,10 +172,10 @@ trait WithModel
             if (is_null($input) && $this->modelInstance->hasCast($key, 'boolean')) {
                 $input = false;
             }
-            if ($key === 'password') {
-                $input = Hash::make($input);
-            }
             $modelAttributes[$key] = $input;
+        }
+        if (isset($modelAttributes['password'])) {
+            $modelAttributes['password'] = Hash::make($modelAttributes['password']);
         }
 
         return $modelAttributes;
