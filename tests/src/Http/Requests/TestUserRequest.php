@@ -4,7 +4,7 @@ namespace EricDowell\ResourceController\Tests\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TestPostRequest extends FormRequest
+class TestUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,9 @@ class TestPostRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
-            'body' => 'required',
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required|confirmed',
         ];
     }
 

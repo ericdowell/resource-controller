@@ -7,37 +7,36 @@ namespace EricDowell\ResourceController\Tests\Feature;
 use Faker\Generator;
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use EricDowell\ResourceController\Tests\Models\TestPost;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 
-class PostTest extends TestCase
+class UserTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
      * @test
-     * @group morph-model
+     * @group single-model
      */
     public function testModelIndex()
     {
-        $this->assertFunctionSuccess($this->get(route('post.index')), __FILE__, __FUNCTION__);
+        $this->assertFunctionSuccess($this->get(route('user.index')), __FILE__, __FUNCTION__);
     }
 
     /**
      * @test
-     * @group morph-model
+     * @group single-model
      */
     public function testModelCreate()
     {
         $user = factory(TestUser::class)->create();
-        $this->assertFunctionSuccess($this->actingAs($user)->get(route('post.create')), __FILE__, __FUNCTION__);
+        $this->assertFunctionSuccess($this->actingAs($user)->get(route('user.create')), __FILE__, __FUNCTION__);
     }
 
     /**
      * @test
-     * @group morph-model
+     * @group single-model
      *
-     * @returns TestPost|null
+     * @returns TestUser|null
      */
     public function testModelStore()
     {
@@ -45,16 +44,19 @@ class PostTest extends TestCase
         /** @var Generator $fakery */
         $fakery = app(Generator::class);
 
-        $body = $fakery->paragraph();
-        $title = $fakery->words(3, true);
+        $name = $fakery->name;
+        $email = $fakery->unique()->safeEmail;
+        $password = $password_confirmation = 'secret';
 
-        $response = $this->actingAs($user)->post(route('post.store'), compact('title', 'body'));
+        $response = $this->actingAs($user)->post(route('user.store'), compact('name', 'email', 'password', 'password_confirmation'));
 
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
 
-        $response->assertRedirect(url(route('post.index')));
+        $response->assertRedirect(url(route('user.index')));
 
-        return TestPost::whereTitle($title)->first();
+        $this->assertNull(TestUser::wherePassword($password)->first());
+
+        return TestUser::whereEmail($email)->first();
     }
 
     /**
@@ -67,12 +69,12 @@ class PostTest extends TestCase
      */
     public function testStoredModelInstance($model)
     {
-        $this->assertInstanceOf(TestPost::class, $model);
+        $this->assertInstanceOf(TestUser::class, $model);
     }
 
     /**
      * @test
-     * @group morph-model
+     * @group single-model
      */
     public function testModelUpdate()
     {
@@ -89,12 +91,12 @@ class PostTest extends TestCase
      */
     public function testUpdatedModelInstance($model)
     {
-        $this->assertInstanceOf(TestPost::class, $model);
+        $this->assertInstanceOf(TestUser::class, $model);
     }
 
     /**
      * @test
-     * @group morph-model
+     * @group single-model
      */
     public function testModelShow()
     {
