@@ -1,7 +1,8 @@
 {
     "name": "ericdowell/resource-controller",
-    "license": "MIT",
     "description": "Resource controllers to match the laravel resource route method.",
+    "keywords": ["laravel-package", "resource", "resource-controller", "laravel", "laravel-5", "laravel-controller"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Eric Dowell",
