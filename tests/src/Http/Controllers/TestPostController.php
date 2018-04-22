@@ -6,12 +6,20 @@ namespace EricDowell\ResourceController\Tests\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use EricDowell\ResourceController\Tests\Models\TestPost;
+use EricDowell\ResourceController\Tests\Models\TestText;
 use EricDowell\ResourceController\Tests\Http\Requests\TestPostRequest;
+use EricDowell\ResourceController\Http\Controllers\ModelMorphController;
 
-class TestPostController extends TestTextController
+class TestPostController extends ModelMorphController
 {
     /**
-     * Name of the affected Eloquent model.
+     * Complete name/namespace of parent morph Eloquent Model.
+     *
+     * @var string
+     */
+    protected $morphModel = TestText::class;
+    /**
+     * Complete name/namespace of the Eloquent Model.
      *
      * @var string
      */
