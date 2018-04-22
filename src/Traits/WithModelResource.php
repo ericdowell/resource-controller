@@ -36,6 +36,14 @@ trait WithModelResource
     protected $paginate = [];
 
     /**
+     * @var array
+     */
+    protected $publicActions = [
+        'index',
+        'show',
+    ];
+
+    /**
      * Create a new controller instance.
      *
      * @param Router $router

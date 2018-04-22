@@ -61,14 +61,6 @@ trait WithModel
     ];
 
     /**
-     * @var array
-     */
-    protected $publicActions = [
-        'index',
-        'show',
-    ];
-
-    /**
      * @var string
      */
     protected $formAction;
