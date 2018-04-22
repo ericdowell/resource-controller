@@ -90,6 +90,14 @@ trait WithModel
     }
 
     /**
+     * @return Builder|Model
+     */
+    protected function modelInstance()
+    {
+        return $this->modelInstance;
+    }
+
+    /**
      * @return null|int
      */
     protected function userId()
@@ -116,12 +124,22 @@ trait WithModel
      */
     protected function allModels(): Builder
     {
-        $query = $this->modelInstance->newQuery();
+        $query = $this->modelInstance()->newQuery();
 
         if (! $this->withUser()) {
             return $query;
         }
 
+        return $this->queryWithUser($query);
+    }
+
+    /**
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    protected function queryWithUser(Builder $query): Builder
+    {
         return $query->with('user');
     }
 
@@ -164,12 +182,32 @@ trait WithModel
     }
 
     /**
+     * @return array
+     */
+    protected function modelList(): array
+    {
+        return [$this->model];
+    }
+
+    /**
+     * @return $this
+     */
+    protected function checkModels()
+    {
+        foreach ($this->modelList() as $model) {
+            $this->checkModelExists($model);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param string $model
      *
      * @return $this
      * @throws ModelNotFoundException
      */
-    protected function checkModel(string $model)
+    protected function checkModelExists(string $model)
     {
         /** @var ModelNotFoundException $modelNotFound */
         $modelNotFound = with(new ModelNotFoundException())->setModel($model);

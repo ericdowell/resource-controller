@@ -13,6 +13,7 @@ use Illuminate\Foundation\Http\FormRequest;
 trait WithMorphModel
 {
     use WithModelResource {
+        WithModelResource::allModels as callAllModels;
         WithModelResource::storeAction as callStoreAction;
         WithModelResource::setModelInstance as callSetModelInstance;
     }
@@ -22,6 +23,7 @@ trait WithMorphModel
      *
      * @param  array|string|\Closure $middleware
      * @param  array $options
+     *
      * @return \Illuminate\Routing\ControllerMiddlewareOptions
      */
     abstract public function middleware($middleware, array $options = []);
@@ -46,6 +48,22 @@ trait WithMorphModel
     protected function modelClass()
     {
         return $this->morphModel;
+    }
+
+    /**
+     * @return Builder|Model
+     */
+    protected function modelInstance()
+    {
+        return $this->morphInstance;
+    }
+
+    /**
+     * @return array
+     */
+    protected function modelList(): array
+    {
+        return [$this->morphModel, $this->model];
     }
 
     /**
@@ -79,7 +97,7 @@ trait WithMorphModel
     }
 
     /**
-     * @param \Illuminate\Foundation\Http\FormRequest $request
+     * @param FormRequest $request
      * @param Model $instance
      *
      * @return bool
@@ -104,12 +122,12 @@ trait WithMorphModel
      */
     public function destroy($id)
     {
-        $instance = $this->findModel($id);
-        /** @var Model $model */
-        $model = $instance->{$this->getMorphType()};
-
-        $model->delete();
-        $instance->delete();
+        $this->findModel($id, function (Model $instance) {
+            /** @var Model $model */
+            $model = $instance->{$this->getMorphType()};
+            $model->delete();
+            $instance->delete();
+        });
 
         return $this->finishAction(__FUNCTION__);
     }
@@ -127,25 +145,7 @@ trait WithMorphModel
      */
     protected function allModels(): Builder
     {
-        $morphType = $this->getMorphType();
-
-        $query = forward_static_call([$this->morphModel, 'where'], "{$morphType}_type", str_singular($this->type));
-
-        if (! $this->withUser()) {
-            return $query;
-        }
-
-        return $this->queryWithUser($query);
-    }
-
-    /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return Builder
-     */
-    protected function queryWithUser(Builder $query): Builder
-    {
-        return $query->with('user');
+        return $this->callAllModels()->where("{$this->getMorphType()}_type", str_singular($this->type));
     }
 
     /**
@@ -155,10 +155,10 @@ trait WithMorphModel
      */
     protected function setModelInstance(array &$context)
     {
-        $this->morphInstance = new $this->morphModel();
+        $this->morphInstance = $morphInstance = new $this->morphModel();
 
         $this->callSetModelInstance($context);
 
-        return $this;
+        return $this->mergeContext($context, compact('morphInstance'));
     }
 }

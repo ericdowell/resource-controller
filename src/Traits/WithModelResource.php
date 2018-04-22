@@ -2,7 +2,6 @@
 
 namespace EricDowell\ResourceController\Traits;
 
-use EricDowell\ResourceController\Tests\Http\Controllers\TestUserController;
 use Throwable;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
@@ -44,7 +43,7 @@ trait WithModelResource
     final public function __construct(Router $router)
     {
         $middleware = $this->modelMiddleware;
-        $this->mergeData = $this->checkModel($this->model)->generateDefaults($router->current());
+        $this->mergeData = $this->checkModels()->generateDefaults($router->current());
 
         if (! in_array($this->formAction, $this->publicActions)) {
             $middleware = array_merge($this->authMiddleware, $middleware);
@@ -59,6 +58,7 @@ trait WithModelResource
      *
      * @param  array|string|\Closure $middleware
      * @param  array $options
+     *
      * @return \Illuminate\Routing\ControllerMiddlewareOptions
      */
     abstract public function middleware($middleware, array $options = []);
@@ -119,6 +119,7 @@ trait WithModelResource
 
     /**
      * @param FormRequest $request
+     *
      * @return Model
      */
     protected function storeAction(FormRequest $request): Model
@@ -239,7 +240,7 @@ trait WithModelResource
      */
     protected function render(array $data = [])
     {
-        return $content = view($this->template, $data, $this->mergeData)->render();
+        return view($this->template, $data, $this->mergeData)->render();
     }
 
     /**
