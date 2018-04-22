@@ -38,17 +38,17 @@ class UserTest extends TestCase
      *
      * @returns TestUser|null
      */
-    public function testModelStore()
+    public function testModelStoreAndShow()
     {
         $user = factory(TestUser::class)->create();
-        /** @var Generator $fakery */
-        $fakery = app(Generator::class);
+        /** @var Generator $faker */
+        $faker = app(Generator::class);
 
-        $name = $fakery->name;
-        $email = $fakery->unique()->safeEmail;
-        $password = $password_confirmation = 'secret';
+        $name = $faker->name;
+        $email = $faker->unique()->safeEmail;
+        $password = 'secret';
 
-        $response = $this->actingAs($user)->post(route('user.store'), compact('name', 'email', 'password', 'password_confirmation'));
+        $response = $this->actingAs($user)->post(route('user.store'), compact('name', 'email', 'password'));
 
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
 
@@ -56,20 +56,11 @@ class UserTest extends TestCase
 
         $this->assertNull(TestUser::wherePassword($password)->first());
 
-        return TestUser::whereEmail($email)->first();
-    }
+        $model = TestUser::whereEmail($email)->first();
 
-    /**
-     * @depends testModelStore
-     *
-     * @test
-     * @group single-model
-     *
-     * @param $model
-     */
-    public function testStoredModelInstance($model)
-    {
         $this->assertInstanceOf(TestUser::class, $model);
+
+        $this->assertFunctionSuccess($this->get(route('user.show', $model->id)), __FILE__, __FUNCTION__);
     }
 
     /**
@@ -78,28 +69,25 @@ class UserTest extends TestCase
      */
     public function testModelUpdate()
     {
-        $this->markTestIncomplete();
-    }
+        /** @var TestUser $user */
+        $user = factory(TestUser::class)->create();
 
-    /**
-     * @depends testModelUpdate
-     *
-     * @test
-     * @group single-model
-     *
-     * @param $model
-     */
-    public function testUpdatedModelInstance($model)
-    {
-        $this->assertInstanceOf(TestUser::class, $model);
-    }
+        /** @var Generator $faker */
+        $faker = app(Generator::class);
 
-    /**
-     * @test
-     * @group single-model
-     */
-    public function testModelShow()
-    {
-        $this->markTestIncomplete();
+        $name = $faker->name;
+        $email = $faker->unique()->safeEmail;
+        $password = 'secret';
+
+        $response = $this->actingAs($user)->put(route('user.update', $user->id), compact('name', 'email', 'password'));
+
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+
+        $response->assertRedirect(url(route('user.index')));
+
+        $user->refresh();
+
+        $this->assertSame($name, $user->name);
+        $this->assertSame($email, $user->email);
     }
 }

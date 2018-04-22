@@ -232,10 +232,11 @@ trait WithModelResource
      */
     public function updateModel(Request $request, $id)
     {
-        tap($this->findModel($id), function (Model $model) use ($request) {
-            $this->beforeModelUpdate($request, $model);
-            $this->setUserIdAttribute($model, 'updateModel');
-            $this->updateAction($request, $model);
+
+        tap($this->findModel($id), function (Model $instance) use ($request) {
+            $this->beforeModelUpdate($request, $instance);
+            $this->setUserIdAttribute($instance, 'updateModel');
+            $this->updateAction($request, $instance);
         });
 
         return $this->finishAction('update');
@@ -251,8 +252,8 @@ trait WithModelResource
      */
     public function destroy($id)
     {
-        tap($this->findModel($id), function (Model $model) {
-            $model->delete();
+        tap($this->findModel($id), function (Model $instance) {
+            $instance->delete();
         });
 
         return $this->finishAction(__FUNCTION__);
