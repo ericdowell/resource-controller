@@ -18,4 +18,4 @@ composer require ericdowell/resource-controller 1.0.*
 ```
 
 ## Quick Start
-Full Documentation can be found int the [Wiki](https://github.com/ericdowell/resource-controller/wiki/Index)
+Full Documentation can be found in the [Wiki](https://github.com/ericdowell/resource-controller/wiki/Index)
