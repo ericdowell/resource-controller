@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Tests\Feature;
 
-use EricDowell\ResourceController\Tests\TestCase;
 use Faker\Generator;
+use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 
