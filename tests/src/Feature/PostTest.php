@@ -7,6 +7,7 @@ namespace EricDowell\ResourceController\Tests\Feature;
 use Faker\Generator;
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use EricDowell\ResourceController\Tests\Models\TestPost;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 
 class PostTest extends TestCase
@@ -35,8 +36,10 @@ class PostTest extends TestCase
     /**
      * @test
      * @group morph-model
+     *
+     * @returns TestPost|null
      */
-    public function testModelStoreUpdate()
+    public function testModelStore()
     {
         $user = factory(TestUser::class)->create();
         /** @var Generator $fakery */
@@ -50,6 +53,43 @@ class PostTest extends TestCase
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
 
         $response->assertRedirect(url(route('post.index')));
+
+        return TestPost::whereTitle($title)->first();
+    }
+
+    /**
+     * @depends testModelStore
+     *
+     * @test
+     * @group single-model
+     *
+     * @param $model
+     */
+    public function testStoredModelInstance($model)
+    {
+        $this->assertInstanceOf(TestPost::class, $model);
+    }
+
+    /**
+     * @test
+     * @group morph-model
+     */
+    public function testModelUpdate()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * @depends testModelUpdate
+     *
+     * @test
+     * @group single-model
+     *
+     * @param $model
+     */
+    public function testUpdatedModelInstance($model)
+    {
+        $this->assertInstanceOf(TestPost::class, $model);
     }
 
     /**

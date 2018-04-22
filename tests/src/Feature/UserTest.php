@@ -35,8 +35,10 @@ class UserTest extends TestCase
     /**
      * @test
      * @group single-model
+     *
+     * @returns TestUser|null
      */
-    public function testModelStoreUpdate()
+    public function testModelStore()
     {
         $user = factory(TestUser::class)->create();
         /** @var Generator $fakery */
@@ -51,6 +53,43 @@ class UserTest extends TestCase
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
 
         $response->assertRedirect(url(route('user.index')));
+
+        return TestUser::whereEmail($email)->first();
+    }
+
+    /**
+     * @depends testModelStore
+     *
+     * @test
+     * @group single-model
+     *
+     * @param $model
+     */
+    public function testStoredModelInstance($model)
+    {
+        $this->assertInstanceOf(TestUser::class, $model);
+    }
+
+    /**
+     * @test
+     * @group single-model
+     */
+    public function testModelUpdate()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * @depends testModelUpdate
+     *
+     * @test
+     * @group single-model
+     *
+     * @param $model
+     */
+    public function testUpdatedModelInstance($model)
+    {
+        $this->assertInstanceOf(TestUser::class, $model);
     }
 
     /**
