@@ -19,16 +19,6 @@ trait WithMorphModel
     }
 
     /**
-     * Register middleware on the controller.
-     *
-     * @param  array|string|\Closure $middleware
-     * @param  array $options
-     *
-     * @return \Illuminate\Routing\ControllerMiddlewareOptions
-     */
-    abstract public function middleware($middleware, array $options = []);
-
-    /**
      * Instance of parent morph Eloquent Model.
      *
      * @var Model|Builder
@@ -41,6 +31,16 @@ trait WithMorphModel
      * @var string
      */
     protected $morphModel;
+
+    /**
+     * Register middleware on the controller.
+     *
+     * @param  array|string|\Closure $middleware
+     * @param  array $options
+     *
+     * @return \Illuminate\Routing\ControllerMiddlewareOptions
+     */
+    abstract public function middleware($middleware, array $options = []);
 
     /**
      * @return string
