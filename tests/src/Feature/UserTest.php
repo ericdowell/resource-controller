@@ -54,6 +54,8 @@ class UserTest extends TestCase
 
         $response->assertRedirect(url(route('user.index')));
 
+        $this->assertNotInstanceOf(TestUser::class, TestUser::wherePassword($password));
+
         return TestUser::whereEmail($email)->first();
     }
 
