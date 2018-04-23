@@ -40,7 +40,7 @@ class PostTest extends TestCase
      *
      * @returns TestPost|null
      */
-    public function testModelStoreAndShow()
+    public function testModelStoreShowEdit()
     {
         /** @var Generator $faker */
         $faker = app(Generator::class);
@@ -50,9 +50,7 @@ class PostTest extends TestCase
 
         $authUser = factory(TestUser::class)->create();
         $response = $this->actingAs($authUser)->post(route('post.store'), compact('title', 'body'));
-
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
-
         $response->assertRedirect(url(route('post.index')));
 
         $model = TestPost::whereTitle($title)->first();
@@ -60,13 +58,14 @@ class PostTest extends TestCase
         $this->assertInstanceOf(TestPost::class, $model);
 
         $this->assertFunctionSuccess($this->get(route('post.show', $model->id)), __FILE__, __FUNCTION__);
+        $this->assertFunctionSuccess($this->get(route('post.edit', $model->id)), __FILE__, __FUNCTION__);
     }
 
     /**
      * @test
      * @group morph-model
      */
-    public function testModelUpdate()
+    public function testModelUpdateAndDestroy()
     {
         /** @var TestText $textPost */
         $textPost = factory(TestText::class, TestPost::class)->create();
@@ -79,14 +78,16 @@ class PostTest extends TestCase
 
         $authUser = factory(TestUser::class)->create();
         $response = $this->actingAs($authUser)->put(route('post.update', $textPost->id), compact('title', 'body'));
-
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
-
         $response->assertRedirect(url(route('post.index')));
 
         $textPost->refresh();
 
         $this->assertSame($title, $textPost->text->title);
         $this->assertSame($body, $textPost->text->body);
+
+        $response = $this->actingAs($authUser)->delete(route('post.destroy', $textPost->id));
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+        $response->assertRedirect(url(route('post.index')));
     }
 }

@@ -38,7 +38,7 @@ class UserTest extends TestCase
      *
      * @returns TestUser|null
      */
-    public function testModelStoreAndShow()
+    public function testModelStoreShowEdit()
     {
         $user = factory(TestUser::class)->create();
         /** @var Generator $faker */
@@ -49,7 +49,6 @@ class UserTest extends TestCase
         $password = 'secret';
 
         $response = $this->actingAs($user)->post(route('user.store'), compact('name', 'email', 'password'));
-
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
 
         $response->assertRedirect(url(route('user.index')));
@@ -61,13 +60,14 @@ class UserTest extends TestCase
         $this->assertInstanceOf(TestUser::class, $model);
 
         $this->assertFunctionSuccess($this->get(route('user.show', $model->id)), __FILE__, __FUNCTION__);
+        $this->assertFunctionSuccess($this->get(route('user.edit', $model->id)), __FILE__, __FUNCTION__);
     }
 
     /**
      * @test
      * @group single-model
      */
-    public function testModelUpdate()
+    public function testModelUpdateAndDestroy()
     {
         /** @var TestUser $user */
         $user = factory(TestUser::class)->create();
@@ -80,14 +80,16 @@ class UserTest extends TestCase
         $password = 'secret';
 
         $response = $this->actingAs($user)->put(route('user.update', $user->id), compact('name', 'email', 'password'));
-
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
-
         $response->assertRedirect(url(route('user.index')));
 
         $user->refresh();
 
         $this->assertSame($name, $user->name);
         $this->assertSame($email, $user->email);
+
+        $response = $this->actingAs($user)->delete(route('user.destroy', $user->id));
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+        $response->assertRedirect(url(route('user.index')));
     }
 }
