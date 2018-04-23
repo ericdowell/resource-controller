@@ -232,7 +232,6 @@ trait WithModelResource
      */
     public function updateModel(Request $request, $id)
     {
-
         tap($this->findModel($id), function (Model $instance) use ($request) {
             $this->beforeModelUpdate($request, $instance);
             $this->setUserIdAttribute($instance, 'updateModel');

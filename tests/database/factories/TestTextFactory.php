@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Faker\Generator as Faker;
-use EricDowell\ResourceController\Tests\Models\TestUser;
 use EricDowell\ResourceController\Tests\Models\TestPost;
 use EricDowell\ResourceController\Tests\Models\TestText;
+use EricDowell\ResourceController\Tests\Models\TestUser;
 
 /* @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(TestPost::class, function (Faker $faker) {
