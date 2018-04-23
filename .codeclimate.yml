@@ -10,7 +10,7 @@ ratings:
     - "src/**.php"
 exclude_paths:
   - ".circleci"
-  - ".codeclimate"
+  - ".codeclimate.yml"
   - ".gitignore"
   - ".styleci.yml"
   - "composer.json"
