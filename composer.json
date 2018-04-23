@@ -32,9 +32,12 @@
             "EricDowell\\ResourceController\\Tests\\": "tests/src/"
         }
     },
+    "scripts": {
+        "test": "phpunit"
+    },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.1-dev"
+            "dev-master": "1.2-dev"
         }
     },
     "config": {

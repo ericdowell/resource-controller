@@ -20,7 +20,7 @@ jobs:
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
       - run:
           name: Run Unit Tests and Generate Code Coverage XML File
-          command: php vendor/bin/phpunit
+          command: composer test
       - store_test_results:
           path: build/junit
       - store_artifacts:

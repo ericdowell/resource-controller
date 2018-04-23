@@ -1,29 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EricDowell\ResourceController\Traits;
 
 use Throwable;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Http\FormRequest;
 
 trait WithModelResource
 {
     use WithModel;
 
     /**
+     * Auth Middleware to apply to non-public routes.
+     *
      * @var array
      */
-    protected $authMiddleware = ['auth' => 'auth'];
+    protected $authMiddleware = ['auth'];
 
     /**
+     * The data passed to the view.
+     *
      * @var array
      */
     protected $mergeData = [];
 
     /**
+     * Default Middleware to apply to all routes.
+     *
      * @var array
      */
     protected $modelMiddleware = [];
@@ -36,6 +44,8 @@ trait WithModelResource
     protected $paginate = [];
 
     /**
+     * Route names of public actions, Auth Middleware are not applied to these.
+     *
      * @var array
      */
     protected $publicActions = [
@@ -114,11 +124,11 @@ trait WithModelResource
     /**
      * Store a newly created resource in storage.
      *
-     * @param FormRequest $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
-    public function storeModel(FormRequest $request)
+    public function storeModel(Request $request)
     {
         $this->storeAction($request);
 
@@ -126,27 +136,31 @@ trait WithModelResource
     }
 
     /**
-     * @param FormRequest $request
+     * Method useful to add/update attributes for Eloquent Model before initial creation.
+     *
+     * @param Request $request
+     *
+     * @return array
+     */
+    protected function beforeStoreModel(Request $request): array
+    {
+        return [];
+    }
+
+    /**
+     * Collects attributes and creates Eloquent Model.
+     *
+     * @param Request $request
      *
      * @return Model
      */
-    protected function storeAction(FormRequest $request): Model
+    protected function storeAction(Request $request): Model
     {
         $attributes = array_merge($this->getModelAttributes($request), $this->beforeStoreModel($request));
 
         $this->setUserIdAttribute($attributes, __FUNCTION__);
 
-        return $this->modelInstance->create($attributes);
-    }
-
-    /**
-     * @param FormRequest $request
-     *
-     * @return array
-     */
-    protected function beforeStoreModel(FormRequest $request): array
-    {
-        return [];
+        return $this->modelInstance()->create($attributes);
     }
 
     /**
@@ -172,7 +186,7 @@ trait WithModelResource
      * @return Response
      * @throws Throwable
      */
-    public function edit($id): Response
+    public function edit($id)
     {
         ${$this->type} = $instance = $this->findModel($id);
         $options = [
@@ -184,22 +198,26 @@ trait WithModelResource
     }
 
     /**
-     * @param FormRequest $request
+     * Method useful to add/update attributes for Eloquent Model before storage update.
+     *
+     * @param Request $request
      * @param Model $instance
      *
      * @return void
      */
-    protected function beforeModelUpdate(FormRequest $request, Model &$instance): void
+    protected function beforeModelUpdate(Request $request, Model &$instance): void
     {
     }
 
     /**
-     * @param \Illuminate\Foundation\Http\FormRequest $request
+     * Updates attributes based on request for Eloquent Model.
+     *
+     * @param Request $request
      * @param Model $instance
      *
      * @return bool
      */
-    protected function updateAction(FormRequest $request, Model $instance): bool
+    protected function updateAction(Request $request, Model $instance): bool
     {
         return $instance->update($this->getModelAttributes($request)) ?? false;
     }
@@ -207,17 +225,17 @@ trait WithModelResource
     /**
      * Update the specified resource in storage.
      *
-     * @param  FormRequest $request
+     * @param  Request $request
      * @param  mixed $id
-     *
+     *`
      * @return RedirectResponse
      */
-    public function updateModel(FormRequest $request, $id)
+    public function updateModel(Request $request, $id)
     {
-        tap($this->findModel($id), function (Model $model) use ($request) {
-            $this->beforeModelUpdate($request, $model);
-            $this->setUserIdAttribute($model, 'updateModel');
-            $this->updateAction($request, $model);
+        tap($this->findModel($id), function (Model $instance) use ($request) {
+            $this->beforeModelUpdate($request, $instance);
+            $this->setUserIdAttribute($instance, 'updateModel');
+            $this->updateAction($request, $instance);
         });
 
         return $this->finishAction('update');
@@ -233,14 +251,16 @@ trait WithModelResource
      */
     public function destroy($id)
     {
-        tap($this->findModel($id), function (Model $model) {
-            $model->delete();
+        tap($this->findModel($id), function (Model $instance) {
+            $instance->delete();
         });
 
         return $this->finishAction(__FUNCTION__);
     }
 
     /**
+     * Render html based on template, data and global mergeData.
+     *
      * @param array $data
      *
      * @return string
@@ -252,6 +272,8 @@ trait WithModelResource
     }
 
     /**
+     * Returns html response.
+     *
      * @param array $data
      * @param int $status
      * @param array $headers
@@ -265,6 +287,8 @@ trait WithModelResource
     }
 
     /**
+     * Returns redirects back to index route.
+     *
      * @param string $action
      *
      * @return RedirectResponse

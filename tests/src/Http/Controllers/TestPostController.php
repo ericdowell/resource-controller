@@ -13,17 +13,18 @@ use EricDowell\ResourceController\Http\Controllers\ModelMorphController;
 class TestPostController extends ModelMorphController
 {
     /**
-     * Complete name/namespace of parent morph Eloquent Model.
-     *
-     * @var string
-     */
-    protected $morphModel = TestText::class;
-    /**
      * Complete name/namespace of the Eloquent Model.
      *
      * @var string
      */
-    protected $model = TestPost::class;
+    protected $modelClass = TestPost::class;
+
+    /**
+     * Parent morph Eloquent Model.
+     *
+     * @var string
+     */
+    protected $morphModelClass = TestText::class;
 
     /**
      * Store a newly created resource in storage.

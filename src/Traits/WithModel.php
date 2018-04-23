@@ -4,41 +4,28 @@ declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Traits;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Route as CurrentRoute;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait WithModel
 {
     /**
-     * @var string
-     */
-    protected $template;
-
-    /**
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * @var string
-     */
-    protected $typeName;
-
-    /**
-     * @var array
-     */
-    protected $mergeData = [];
-
-    /**
-     * Complete name/namespace of the Eloquent Model.
+     * Current form action based on parsed route name.
      *
      * @var string
      */
-    protected $model;
+    protected $formAction;
+
+    /**
+     * Eloquent Model ::class string output.
+     *
+     * @var string
+     */
+    protected $modelClass;
 
     /**
      * Instance of the Eloquent Model.
@@ -48,22 +35,32 @@ trait WithModel
     protected $modelInstance;
 
     /**
+     * Matches the current route name.
+     *
+     * @var string
+     */
+    protected $template;
+
+    /**
+     * Model type based on parsed route name.
+     *
+     * @var string
+     */
+    protected $type;
+
+    /**
+     * Plural version of '$type' property, first letter is uppercase.
+     *
+     * @var string
+     */
+    protected $typeName;
+
+    /**
+     * Flag for setting/updating 'user_id' as attribute of Eloquent Model.
+     *
      * @var bool
      */
     protected $withUser = true;
-
-    /**
-     * @var array
-     */
-    protected $actionMap = [
-        'create' => 'store',
-        'edit' => 'update',
-    ];
-
-    /**
-     * @var string
-     */
-    protected $formAction;
 
     /**
      * @return bool
@@ -76,9 +73,27 @@ trait WithModel
     /**
      * @return string
      */
+    protected function findModelClass()
+    {
+        return $this->modelClass();
+    }
+
+    /**
+     * @return Builder|Model
+     */
+    protected function findModelInstance()
+    {
+        $class = $this->findModelClass();
+
+        return new $class();
+    }
+
+    /**
+     * @return string
+     */
     protected function modelClass()
     {
-        return $this->model;
+        return $this->modelClass;
     }
 
     /**
@@ -86,7 +101,11 @@ trait WithModel
      */
     protected function modelInstance()
     {
-        return $this->modelInstance;
+        if ($this->modelInstance instanceof $this->modelClass) {
+            return $this->modelInstance;
+        }
+
+        return $this->modelInstance = new $this->modelClass();
     }
 
     /**
@@ -116,7 +135,7 @@ trait WithModel
      */
     protected function allModels(): Builder
     {
-        $query = $this->modelInstance()->newQuery();
+        $query = $this->findModelInstance()->newQuery();
 
         if (! $this->withUser()) {
             return $query;
@@ -143,24 +162,24 @@ trait WithModel
     protected function findModel($id): Model
     {
         if (! $this->withUser()) {
-            return forward_static_call([$this->modelClass(), 'findOrFail'], $id);
+            return forward_static_call([$this->findModelClass(), 'findOrFail'], $id);
         }
 
-        return forward_static_call([$this->modelClass(), 'with'], 'user')->findOrFail($id);
+        return forward_static_call([$this->findModelClass(), 'with'], 'user')->findOrFail($id);
     }
 
     /**
-     * @param FormRequest $request
+     * @param Request $request
      *
      * @return array
      */
-    protected function getModelAttributes(FormRequest $request): array
+    protected function getModelAttributes(Request $request): array
     {
         $modelAttributes = [];
 
-        foreach ($this->modelInstance->getFillable() as $key) {
+        foreach ($this->modelInstance()->getFillable() as $key) {
             $input = $request->input($key);
-            if (is_null($input) && $this->modelInstance->hasCast($key, 'boolean')) {
+            if (is_null($input) && $this->modelInstance()->hasCast($key, 'boolean')) {
                 $input = false;
             }
             $modelAttributes[$key] = $input;
@@ -177,7 +196,7 @@ trait WithModel
      */
     protected function modelList(): array
     {
-        return [$this->model];
+        return [$this->modelClass];
     }
 
     /**
@@ -249,13 +268,14 @@ trait WithModel
      */
     protected function setTypeAndFormAction(array &$context)
     {
+        $actionMap = ['create' => 'store', 'edit' => 'update'];
         $nameParts = explode('.', $this->template);
 
         $action = array_pop($nameParts);
         $type = array_pop($nameParts);
 
-        if (array_key_exists($action, $this->actionMap)) {
-            $action = $this->actionMap[$action];
+        if (array_key_exists($action, $actionMap)) {
+            $action = $actionMap[$action];
         }
         $this->type = $type;
         $this->formAction = $action;
@@ -282,7 +302,7 @@ trait WithModel
      */
     protected function setModelInstance(array &$context)
     {
-        $this->modelInstance = $instance = new $this->model();
+        $instance = $this->findModelInstance();
 
         return $this->mergeContext($context, compact('instance'));
     }

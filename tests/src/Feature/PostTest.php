@@ -8,6 +8,7 @@ use Faker\Generator;
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use EricDowell\ResourceController\Tests\Models\TestPost;
+use EricDowell\ResourceController\Tests\Models\TestText;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 
 class PostTest extends TestCase
@@ -39,35 +40,26 @@ class PostTest extends TestCase
      *
      * @returns TestPost|null
      */
-    public function testModelStore()
+    public function testModelStoreAndShow()
     {
-        $user = factory(TestUser::class)->create();
-        /** @var Generator $fakery */
-        $fakery = app(Generator::class);
+        /** @var Generator $faker */
+        $faker = app(Generator::class);
 
-        $body = $fakery->paragraph();
-        $title = $fakery->words(3, true);
+        $body = $faker->paragraph();
+        $title = $faker->words(3, true);
 
-        $response = $this->actingAs($user)->post(route('post.store'), compact('title', 'body'));
+        $authUser = factory(TestUser::class)->create();
+        $response = $this->actingAs($authUser)->post(route('post.store'), compact('title', 'body'));
 
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
 
         $response->assertRedirect(url(route('post.index')));
 
-        return TestPost::whereTitle($title)->first();
-    }
+        $model = TestPost::whereTitle($title)->first();
 
-    /**
-     * @depends testModelStore
-     *
-     * @test
-     * @group single-model
-     *
-     * @param $model
-     */
-    public function testStoredModelInstance($model)
-    {
         $this->assertInstanceOf(TestPost::class, $model);
+
+        $this->assertFunctionSuccess($this->get(route('post.show', $model->id)), __FILE__, __FUNCTION__);
     }
 
     /**
@@ -76,28 +68,25 @@ class PostTest extends TestCase
      */
     public function testModelUpdate()
     {
-        $this->markTestIncomplete();
-    }
+        /** @var TestText $textPost */
+        $textPost = factory(TestText::class, TestPost::class)->create();
 
-    /**
-     * @depends testModelUpdate
-     *
-     * @test
-     * @group single-model
-     *
-     * @param $model
-     */
-    public function testUpdatedModelInstance($model)
-    {
-        $this->assertInstanceOf(TestPost::class, $model);
-    }
+        /** @var Generator $faker */
+        $faker = app(Generator::class);
 
-    /**
-     * @test
-     * @group morph-model
-     */
-    public function testModelShow()
-    {
-        $this->markTestIncomplete();
+        $body = $faker->paragraph();
+        $title = $faker->words(3, true);
+
+        $authUser = factory(TestUser::class)->create();
+        $response = $this->actingAs($authUser)->put(route('post.update', $textPost->id), compact('title', 'body'));
+
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+
+        $response->assertRedirect(url(route('post.index')));
+
+        $textPost->refresh();
+
+        $this->assertSame($title, $textPost->text->title);
+        $this->assertSame($body, $textPost->text->body);
     }
 }
