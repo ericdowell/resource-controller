@@ -9,7 +9,15 @@ ratings:
   paths:
     - "src/**.php"
 exclude_paths:
+  - ".circleci"
+  - ".codeclimate"
+  - ".gitignore"
+  - ".styleci.yml"
+  - "composer.json"
+  - "LICENSE"
   - "phpunit.php"
+  - "phpunit.xml"
+  - "readme.md"
   - "config/**/*"
   - "src/Http/Controllers/*"
   - "src/Providers/*"
