@@ -17,6 +17,7 @@ class CreatePostsTestTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('body');
+            $table->boolean('is_published')->default(false);
             $table->integer('user_id')->references('id')->on('users');
             $table->timestamps();
         });

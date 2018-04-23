@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestPost whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestPost whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestPost whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestPost whereIsPublished($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestPost whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestPost whereUserId($value)
  */
@@ -32,6 +33,15 @@ class TestPost extends Model
     protected $table = 'posts';
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_published' => 'boolean',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -39,6 +49,7 @@ class TestPost extends Model
     protected $fillable = [
         'title',
         'body',
+        'is_published',
         'user_id',
     ];
 
