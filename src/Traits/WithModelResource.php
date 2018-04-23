@@ -214,7 +214,7 @@ trait WithModelResource
      */
     public function updateModel(FormRequest $request, $id)
     {
-        $this->findModel($id, function (Model $model) use ($request) {
+        tap($this->findModel($id), function (Model $model) use ($request) {
             $this->beforeModelUpdate($request, $model);
             $this->setUserIdAttribute($model, 'updateModel');
             $this->updateAction($request, $model);
@@ -233,7 +233,7 @@ trait WithModelResource
      */
     public function destroy($id)
     {
-        $this->findModel($id, function (Model $model) {
+        tap($this->findModel($id), function (Model $model) {
             $model->delete();
         });
 

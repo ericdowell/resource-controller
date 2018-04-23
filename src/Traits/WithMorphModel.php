@@ -122,7 +122,7 @@ trait WithMorphModel
      */
     public function destroy($id)
     {
-        $this->findModel($id, function (Model $instance) {
+        tap($this->findModel($id), function (Model $instance) {
             /** @var Model $model */
             $model = $instance->{$this->getMorphType()};
             $model->delete();

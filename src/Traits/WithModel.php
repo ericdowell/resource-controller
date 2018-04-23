@@ -137,17 +137,16 @@ trait WithModel
 
     /**
      * @param mixed $id
-     * @param callable|null $callback
      *
      * @return Model
      */
-    protected function findModel($id, $callback = null): Model
+    protected function findModel($id): Model
     {
         if (! $this->withUser()) {
-            return tap(forward_static_call([$this->modelClass(), 'findOrFail'], $id), $callback);
+            return forward_static_call([$this->modelClass(), 'findOrFail'], $id);
         }
 
-        return tap(forward_static_call([$this->modelClass(), 'with'], 'user')->findOrFail($id), $callback);
+        return forward_static_call([$this->modelClass(), 'with'], 'user')->findOrFail($id);
     }
 
     /**
