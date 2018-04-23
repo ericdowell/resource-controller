@@ -105,7 +105,7 @@ trait WithModel
             return $this->modelInstance;
         }
 
-        return new $this->modelClass();
+        return $this->modelInstance = new $this->modelClass();
     }
 
     /**
