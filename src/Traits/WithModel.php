@@ -246,7 +246,7 @@ trait WithModel
      */
     protected function setTypeAndFormAction(array &$context)
     {
-        $actionMap = ['create' => 'store', 'edit' => 'update',];
+        $actionMap = ['create' => 'store', 'edit' => 'update'];
         $nameParts = explode('.', $this->template);
 
         $action = array_pop($nameParts);

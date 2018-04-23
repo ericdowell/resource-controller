@@ -8,8 +8,8 @@ use Faker\Generator;
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use EricDowell\ResourceController\Tests\Models\TestPost;
-use EricDowell\ResourceController\Tests\Models\TestUser;
 use EricDowell\ResourceController\Tests\Models\TestText;
+use EricDowell\ResourceController\Tests\Models\TestUser;
 
 class PostTest extends TestCase
 {
