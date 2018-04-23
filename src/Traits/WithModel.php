@@ -214,9 +214,9 @@ trait WithModel
      *
      * @return array
      */
-    protected function generateDefaults(CurrentRoute $route): array
+    protected function generateDefaults(CurrentRoute $route = null): array
     {
-        if (! method_exists($route, 'getName') || empty($route->getName())) {
+        if (! $route || ! method_exists($route, 'getName') || empty($route->getName())) {
             return [];
         }
         $context = [];
