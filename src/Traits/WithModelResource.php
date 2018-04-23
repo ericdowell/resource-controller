@@ -160,7 +160,7 @@ trait WithModelResource
 
         $this->setUserIdAttribute($attributes, __FUNCTION__);
 
-        return $this->modelInstance->create($attributes);
+        return $this->modelInstance()->create($attributes);
     }
 
     /**

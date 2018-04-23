@@ -73,6 +73,24 @@ trait WithModel
     /**
      * @return string
      */
+    protected function findModelClass()
+    {
+        return $this->modelClass();
+    }
+
+    /**
+     * @return Builder|Model
+     */
+    protected function findModelInstance()
+    {
+        $class = $this->findModelClass();
+
+        return new $class();
+    }
+
+    /**
+     * @return string
+     */
     protected function modelClass()
     {
         return $this->modelClass;
@@ -83,7 +101,11 @@ trait WithModel
      */
     protected function modelInstance()
     {
-        return $this->modelInstance;
+        if ($this->modelInstance instanceof $this->modelClass) {
+            return $this->modelInstance;
+        }
+
+        return new $this->modelClass();
     }
 
     /**
@@ -113,7 +135,7 @@ trait WithModel
      */
     protected function allModels(): Builder
     {
-        $query = $this->modelInstance()->newQuery();
+        $query = $this->findModelInstance()->newQuery();
 
         if (! $this->withUser()) {
             return $query;
@@ -140,10 +162,10 @@ trait WithModel
     protected function findModel($id): Model
     {
         if (! $this->withUser()) {
-            return forward_static_call([$this->modelClass(), 'findOrFail'], $id);
+            return forward_static_call([$this->findModelClass(), 'findOrFail'], $id);
         }
 
-        return forward_static_call([$this->modelClass(), 'with'], 'user')->findOrFail($id);
+        return forward_static_call([$this->findModelClass(), 'with'], 'user')->findOrFail($id);
     }
 
     /**
@@ -155,9 +177,9 @@ trait WithModel
     {
         $modelAttributes = [];
 
-        foreach ($this->modelInstance->getFillable() as $key) {
+        foreach ($this->modelInstance()->getFillable() as $key) {
             $input = $request->input($key);
-            if (is_null($input) && $this->modelInstance->hasCast($key, 'boolean')) {
+            if (is_null($input) && $this->modelInstance()->hasCast($key, 'boolean')) {
                 $input = false;
             }
             $modelAttributes[$key] = $input;
@@ -280,7 +302,7 @@ trait WithModel
      */
     protected function setModelInstance(array &$context)
     {
-        $this->modelInstance = $instance = new $this->modelClass();
+        $instance = $this->findModelInstance();
 
         return $this->mergeContext($context, compact('instance'));
     }

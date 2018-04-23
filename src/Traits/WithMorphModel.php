@@ -49,23 +49,11 @@ trait WithMorphModel
     abstract public function middleware($middleware, array $options = []);
 
     /**
-     * Eloquent Model ::class.
-     *
      * @return string
      */
-    protected function modelClass()
+    protected function findModelClass()
     {
         return $this->morphModelClass();
-    }
-
-    /**
-     * Eloquent Model instance.
-     *
-     * @return Builder|Model
-     */
-    protected function modelInstance()
-    {
-        return $this->morphModelInstance();
     }
 
     /**
@@ -113,13 +101,13 @@ trait WithMorphModel
         $model = $this->callStoreAction($request);
 
         $attributes = array_merge($this->beforeStoreMorphModel($request), [
-            "{$this->morphType()}_type" => $this->type,
             "{$this->morphType()}_id" => $model->id,
+            "{$this->morphType()}_type" => $this->type,
         ]);
 
         $this->setUserIdAttribute($attributes, __FUNCTION__);
 
-        return $this->morphModelInstance->create($attributes);
+        return $this->morphModelInstance()->create($attributes);
     }
 
     /**
