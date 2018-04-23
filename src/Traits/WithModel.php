@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Routing\Route as CurrentRoute;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
 
 trait WithModel
 {
@@ -212,17 +212,17 @@ trait WithModel
     }
 
     /**
-     * @param string $model
+     * @param string|null $model
      *
      * @return $this
-     * @throws ModelNotFoundException
+     * @throws ModelClassCheckException
      */
-    protected function checkModelExists(string $model)
+    protected function checkModelExists(string $model = null)
     {
-        /** @var ModelNotFoundException $modelNotFound */
-        $modelNotFound = with(new ModelNotFoundException())->setModel($model);
-        if (! class_exists($modelNotFound->getModel())) {
-            throw $modelNotFound;
+        /** @var ModelClassCheckException $modelClassCheck */
+        $modelClassCheck = with(new ModelClassCheckException())->setModel($model);
+        if (! $modelClassCheck->classExists()) {
+            throw $modelClassCheck;
         }
 
         return $this;

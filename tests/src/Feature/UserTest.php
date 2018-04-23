@@ -15,6 +15,7 @@ class UserTest extends TestCase
 
     /**
      * @test
+     * @group feature
      * @group single-model
      */
     public function testModelIndex()
@@ -24,6 +25,7 @@ class UserTest extends TestCase
 
     /**
      * @test
+     * @group feature
      * @group single-model
      */
     public function testModelCreate()
@@ -34,6 +36,7 @@ class UserTest extends TestCase
 
     /**
      * @test
+     * @group feature
      * @group single-model
      *
      * @returns TestUser|null
@@ -65,6 +68,7 @@ class UserTest extends TestCase
 
     /**
      * @test
+     * @group feature
      * @group single-model
      */
     public function testModelUpdateAndDestroy()

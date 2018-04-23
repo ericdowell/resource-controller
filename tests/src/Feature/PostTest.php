@@ -17,6 +17,7 @@ class PostTest extends TestCase
 
     /**
      * @test
+     * @group feature
      * @group morph-model
      */
     public function testModelIndex()
@@ -26,6 +27,7 @@ class PostTest extends TestCase
 
     /**
      * @test
+     * @group feature
      * @group morph-model
      */
     public function testModelCreate()
@@ -36,6 +38,7 @@ class PostTest extends TestCase
 
     /**
      * @test
+     * @group feature
      * @group morph-model
      *
      * @returns TestPost|null
@@ -63,6 +66,7 @@ class PostTest extends TestCase
 
     /**
      * @test
+     * @group feature
      * @group morph-model
      */
     public function testModelUpdateAndDestroy()
