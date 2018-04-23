@@ -79,9 +79,10 @@ class PostTest extends TestCase
 
         $body = $faker->paragraph();
         $title = $faker->words(3, true);
+        $is_published = true;
 
         $authUser = factory(TestUser::class)->create();
-        $response = $this->actingAs($authUser)->put(route('post.update', $textPost->id), compact('title', 'body'));
+        $response = $this->actingAs($authUser)->put(route('post.update', $textPost->id), compact('title', 'body', 'is_published'));
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
         $response->assertRedirect(url(route('post.index')));
 
@@ -89,6 +90,7 @@ class PostTest extends TestCase
 
         $this->assertSame($title, $textPost->text->title);
         $this->assertSame($body, $textPost->text->body);
+        $this->assertTrue($textPost->text->is_published);
 
         $response = $this->actingAs($authUser)->delete(route('post.destroy', $textPost->id));
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
