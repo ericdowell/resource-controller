@@ -59,7 +59,7 @@ trait WithModelResource
      *
      * @param Router $router
      */
-    final public function __construct(Router $router)
+    public function __construct(Router $router)
     {
         $middleware = $this->modelMiddleware;
         $this->mergeData = $this->checkModels()->generateDefaults($router->current());
@@ -221,6 +221,19 @@ trait WithModelResource
     protected function updateAction(Request $request, Model $instance): bool
     {
         return $instance->update($this->getModelRequestAttributes($request)) ?? false;
+    }
+
+    /**
+     * Updates attributes based on request for Eloquent Model.
+     *
+     * @param Request $request
+     * @param Model $instance
+     *
+     * @return bool
+     */
+    protected function upsertAction(Request $request, Model $instance): bool
+    {
+        return $instance->update($this->getModelAttributes($instance, $request->all(), true)) ?? false;
     }
 
     /**

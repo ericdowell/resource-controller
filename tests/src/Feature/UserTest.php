@@ -85,8 +85,11 @@ class UserTest extends TestCase
         $password = $password_confirmation = 'secret1234';
         $current_password = 'secret';
 
-        $response = $this->actingAs($user)->put(route('user.update', $user->id), compact('name', 'email', 'password'));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+        $response = $this->actingAs($user)->put(route('user.update', $user->id), compact('name', 'email'));
+        $this->assertFunctionFailure($response, __FILE__, __FUNCTION__);
+
+        $response = $this->actingAs($user)->patch(route('user.update', $user->id), compact('name', 'email'));
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'0', 302);
         $response->assertRedirect(url(route('user.index')));
 
         $user->refresh();
@@ -97,7 +100,7 @@ class UserTest extends TestCase
         $this->assertFalse(Hash::check($password, $user->password));
 
         $response = $this->actingAs($user)->put(route('user.password-update', $user->id), compact('password', 'password_confirmation', 'current_password'));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'1', 302);
         $response->assertRedirect(url(route('user.index')));
 
         $user->refresh();
@@ -106,7 +109,7 @@ class UserTest extends TestCase
         $this->assertNull(TestUser::wherePassword($password)->first());
 
         $response = $this->actingAs($user)->delete(route('user.destroy', $user->id));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'2', 302);
         $response->assertRedirect(url(route('user.index')));
     }
 }

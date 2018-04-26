@@ -2,6 +2,7 @@
 
 namespace EricDowell\ResourceController\Tests\Http\Controllers;
 
+use EricDowell\ResourceController\Traits\WithModelResource;
 use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,6 +16,9 @@ use EricDowell\ResourceController\Http\Controllers\ResourceModelController;
 class TestUserController extends ResourceModelController
 {
     use WithoutModelRequest;
+    use WithModelResource {
+        WithModelResource::updateAction as callUpdateAction;
+    }
     /**
      * Given a route action (key) set the form action (value).
      *
@@ -25,16 +29,20 @@ class TestUserController extends ResourceModelController
     ];
 
     /**
-     * @var bool
+     * @return bool
      */
-    protected $withUser = false;
+    protected function withUser(): bool
+    {
+        return false;
+    }
 
     /**
-     * Name of the affected Eloquent model.
-     *
-     * @var string
+     * @return string
      */
-    protected $modelClass = TestUser::class;
+    protected function modelClass()
+    {
+        return TestUser::class;
+    }
 
     /**
      * @param int $id
@@ -77,6 +85,10 @@ class TestUserController extends ResourceModelController
      */
     protected function updateAction(Request $request, Model $instance): bool
     {
-        return $instance->update($this->getModelAttributes($instance, $request->except(['password']), true)) ?? false;
+        if ($request->isMethod('patch')) {
+            return $this->upsertAction($request, $instance);
+        }
+
+        return $this->callUpdateAction($request, $instance);
     }
 }

@@ -73,11 +73,12 @@ trait WithMorphModel
      */
     protected function morphModelInstance()
     {
-        if ($this->morphModelInstance instanceof $this->morphModelClass) {
+        $morphModelClass = $this->morphModelClass();
+        if ($this->morphModelInstance instanceof $morphModelClass) {
             return $this->morphModelInstance;
         }
 
-        return $this->morphModelInstance = new $this->morphModelClass();
+        return $this->morphModelInstance = new $morphModelClass();
     }
 
     /**
@@ -87,7 +88,7 @@ trait WithMorphModel
      */
     protected function modelList(): array
     {
-        return [$this->morphModelClass, $this->modelClass];
+        return [$this->morphModelClass(), $this->modelClass()];
     }
 
     /**

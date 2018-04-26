@@ -43,6 +43,24 @@ class TestCase extends SupportTestCase
     }
 
     /**
+     * @param \Illuminate\Foundation\Testing\TestResponse $response
+     * @param string $file
+     * @param string $function
+     * @param int $statusCode
+     */
+    protected function assertFunctionFailure($response, $file, $function, $statusCode = 500)
+    {
+        $filename = __DIR__.'/error-html/'.basename($file, '.php').'.'.$function.'.html';
+        if (file_exists($filename)) {
+            @unlink($filename);
+        }
+        if ($response->getStatusCode() !== $statusCode) {
+            file_put_contents($filename, $response->getContent());
+        }
+        $response->assertStatus($statusCode);
+    }
+
+    /**
      * @param \Illuminate\Foundation\Application $app
      * @return array
      */

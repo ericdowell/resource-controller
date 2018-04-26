@@ -14,13 +14,6 @@ use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
 trait WithModel
 {
     /**
-     * Given a route action (key) set the form action (value).
-     *
-     * @var array
-     */
-    protected $actionMap = [];
-
-    /**
      * Current form action based on parsed route name.
      *
      * @var string
@@ -108,11 +101,12 @@ trait WithModel
      */
     protected function modelInstance()
     {
-        if ($this->modelInstance instanceof $this->modelClass) {
+        $modelClass = $this->modelClass();
+        if ($this->modelInstance instanceof $modelClass) {
             return $this->modelInstance;
         }
 
-        return $this->modelInstance = new $this->modelClass();
+        return $this->modelInstance = new $modelClass();
     }
 
     /**
@@ -232,7 +226,7 @@ trait WithModel
      */
     protected function modelList(): array
     {
-        return [$this->modelClass];
+        return [$this->modelClass()];
     }
 
     /**
@@ -298,13 +292,27 @@ trait WithModel
     }
 
     /**
+     * Given a route action (key) set the form action (value).
+     *
+     * @return array
+     */
+    protected function actionMap(): array
+    {
+        if (isset($this->actionMap) && is_array($this->actionMap)) {
+            return $this->actionMap;
+        }
+
+        return [];
+    }
+
+    /**
      * @param array $context
      *
      * @return $this
      */
     protected function setTypeAndFormAction(array &$context)
     {
-        $actionMap = array_merge(['create' => 'store', 'edit' => 'update'], $this->actionMap);
+        $actionMap = array_merge(['create' => 'store', 'edit' => 'update'], $this->actionMap());
         $nameParts = explode('.', $this->template);
 
         $action = array_pop($nameParts);
