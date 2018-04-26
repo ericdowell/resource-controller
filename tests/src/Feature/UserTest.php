@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EricDowell\ResourceController\Tests\Feature;
 
 use Faker\Generator;
+use Illuminate\Support\Facades\Hash;
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use EricDowell\ResourceController\Tests\Models\TestUser;
@@ -81,7 +82,8 @@ class UserTest extends TestCase
 
         $name = $faker->name;
         $email = $faker->unique()->safeEmail;
-        $password = 'secret';
+        $password = $password_confirmation = 'secret1234';
+        $current_password = 'secret';
 
         $response = $this->actingAs($user)->put(route('user.update', $user->id), compact('name', 'email', 'password'));
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
@@ -91,6 +93,17 @@ class UserTest extends TestCase
 
         $this->assertSame($name, $user->name);
         $this->assertSame($email, $user->email);
+        $this->assertNull(TestUser::wherePassword($password)->first());
+        $this->assertFalse(Hash::check($password, $user->password));
+
+        $response = $this->actingAs($user)->put(route('user.password-update', $user->id), compact('password', 'password_confirmation', 'current_password'));
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+        $response->assertRedirect(url(route('user.index')));
+
+        $user->refresh();
+
+        $this->assertTrue(Hash::check($password, $user->password));
+        $this->assertNull(TestUser::wherePassword($password)->first());
 
         $response = $this->actingAs($user)->delete(route('user.destroy', $user->id));
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);

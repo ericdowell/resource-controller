@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Traits;
 
+use Closure;
 use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -232,13 +233,22 @@ trait WithModelResource
      */
     public function updateModel(Request $request, $id)
     {
-        tap($this->findModel($id), function (Model $instance) use ($request) {
+        tap($this->findModel($id), $this->updateModelCallback($request));
+
+        return $this->finishAction('update');
+    }
+
+    /**
+     * @param Request $request
+     * @return Closure
+     */
+    protected function updateModelCallback(Request $request)
+    {
+        return function (Model $instance) use ($request) {
             $this->beforeModelUpdate($request, $instance);
             $this->setUserIdAttribute($instance, 'updateModel');
             $this->updateAction($request, $instance);
-        });
-
-        return $this->finishAction('update');
+        };
     }
 
     /**
