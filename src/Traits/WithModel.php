@@ -197,21 +197,34 @@ trait WithModel
         $modelAttributes = [];
 
         foreach ($model->getFillable() as $key) {
-            $value = array_get($data, $key);
-            if (is_null($value) && $model->exists && ! array_has($data, $key) && $modelFill) {
-                $modelAttributes[$key] = $model->getAttribute($key);
-                continue;
-            }
-            if (is_null($value) && $model->hasCast($key, 'boolean')) {
-                $value = false;
-            }
-            $modelAttributes[$key] = $value;
+            $modelAttributes[$key] = $this->getModelAttributeValue($model, $data, $key, $modelFill);
         }
         if (isset($modelAttributes['password'])) {
             $modelAttributes['password'] = Hash::make($modelAttributes['password']);
         }
 
         return $modelAttributes;
+    }
+
+    /**
+     * @param Model $model
+     * @param array $data
+     * @param $key
+     * @param bool|null $modelFill
+     *
+     * @return bool|mixed
+     */
+    private function getModelAttributeValue(Model $model, array $data, $key, bool $modelFill = null)
+    {
+        $value = array_get($data, $key);
+        if (is_null($value) && $model->exists && ! array_has($data, $key) && $modelFill) {
+            return $model->getAttribute($key);
+        }
+        if (is_null($value) && $model->hasCast($key, 'boolean')) {
+            return false;
+        }
+
+        return $value;
     }
 
     /**
