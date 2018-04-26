@@ -199,7 +199,7 @@ trait WithModel
         foreach ($model->getFillable() as $key) {
             $modelAttributes[$key] = $this->getModelAttributeValue($model, $data, $key, $modelFill);
         }
-        if (isset($modelAttributes['password'])) {
+        if (! $modelFill && isset($modelAttributes['password'])) {
             $modelAttributes['password'] = Hash::make($modelAttributes['password']);
         }
 
