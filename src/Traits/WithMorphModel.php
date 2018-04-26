@@ -134,7 +134,7 @@ trait WithMorphModel
     {
         $instance->save();
 
-        $attributes = $this->getModelAttributes($request);
+        $attributes = $this->getModelRequestAttributes($request);
         $this->setUserIdAttribute($attributes, __FUNCTION__);
 
         return $instance->{$this->morphType()}->update($attributes) ?? false;

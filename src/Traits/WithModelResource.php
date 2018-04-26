@@ -156,7 +156,7 @@ trait WithModelResource
      */
     protected function storeAction(Request $request): Model
     {
-        $attributes = array_merge($this->getModelAttributes($request), $this->beforeStoreModel($request));
+        $attributes = array_merge($this->getModelRequestAttributes($request), $this->beforeStoreModel($request));
 
         $this->setUserIdAttribute($attributes, __FUNCTION__);
 
@@ -219,7 +219,7 @@ trait WithModelResource
      */
     protected function updateAction(Request $request, Model $instance): bool
     {
-        return $instance->update($this->getModelAttributes($request)) ?? false;
+        return $instance->update($this->getModelRequestAttributes($request)) ?? false;
     }
 
     /**

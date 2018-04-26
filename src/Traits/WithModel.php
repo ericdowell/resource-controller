@@ -14,6 +14,13 @@ use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
 trait WithModel
 {
     /**
+     * Given a route action (key) set the form action (value).
+     *
+     * @var array
+     */
+    protected $actionMap = [];
+
+    /**
      * Current form action based on parsed route name.
      *
      * @var string
@@ -173,16 +180,32 @@ trait WithModel
      *
      * @return array
      */
-    protected function getModelAttributes(Request $request): array
+    protected function getModelRequestAttributes(Request $request): array
+    {
+        return $this->getModelAttributes($this->modelInstance(), $request->all());
+    }
+
+    /**
+     * @param Model $model
+     * @param array $data
+     * @param null|bool $modelFill
+     *
+     * @return array
+     */
+    protected function getModelAttributes(Model $model, array $data, bool $modelFill = null): array
     {
         $modelAttributes = [];
 
-        foreach ($this->modelInstance()->getFillable() as $key) {
-            $input = $request->input($key);
-            if (is_null($input) && $this->modelInstance()->hasCast($key, 'boolean')) {
-                $input = false;
+        foreach ($model->getFillable() as $key) {
+            $value = array_get($data, $key);
+            if (is_null($value) && $model->exists && ! array_has($data, $key) && $modelFill) {
+                $modelAttributes[$key] = $model->getAttribute($key);
+                continue;
             }
-            $modelAttributes[$key] = $input;
+            if (is_null($value) && $model->hasCast($key, 'boolean')) {
+                $value = false;
+            }
+            $modelAttributes[$key] = $value;
         }
         if (isset($modelAttributes['password'])) {
             $modelAttributes['password'] = Hash::make($modelAttributes['password']);
@@ -268,7 +291,7 @@ trait WithModel
      */
     protected function setTypeAndFormAction(array &$context)
     {
-        $actionMap = ['create' => 'store', 'edit' => 'update'];
+        $actionMap = array_merge(['create' => 'store', 'edit' => 'update'], $this->actionMap);
         $nameParts = explode('.', $this->template);
 
         $action = array_pop($nameParts);
@@ -302,9 +325,9 @@ trait WithModel
      */
     protected function setModelInstance(array &$context)
     {
-        $instance = $this->findModelInstance();
+        $instance = ${$this->type} = $this->findModelInstance();
 
-        return $this->mergeContext($context, compact('instance'));
+        return $this->mergeContext($context, compact($this->type, 'instance'));
     }
 
     /**
