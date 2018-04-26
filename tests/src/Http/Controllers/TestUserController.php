@@ -2,6 +2,12 @@
 
 namespace EricDowell\ResourceController\Tests\Http\Controllers;
 
+use Throwable;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Model;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 use EricDowell\ResourceController\Traits\WithoutModelRequest;
 use EricDowell\ResourceController\Http\Controllers\ResourceModelController;
@@ -42,17 +48,15 @@ class TestUserController extends ResourceModelController
     }
 
     /**
-     * @param UserRequest $request
+     * @param Request $request
      * @param int $id
      *
      * @return RedirectResponse
      */
-    public function passwordUpdate(UserRequest $request, $id): RedirectResponse
+    public function passwordUpdate(Request $request, $id): RedirectResponse
     {
         $user = $this->findModel($id);
-        $currentPassword = $request->input('current_password');
-
-        if (! Hash::check($currentPassword, $user->password)) {
+        if (! Hash::check($request->input('current_password'), $user->password)) {
             return redirect()->back()->withErrors(['current_password' => 'Current password provided is incorrect.']);
         }
         $attributes = $request->all();
@@ -60,7 +64,7 @@ class TestUserController extends ResourceModelController
 
         $user->update($this->getModelAttributes($user, $attributes, true));
 
-        return $this->finishAction('update');
+        return $this->finishAction(__FUNCTION__);
     }
 
     /**
@@ -73,6 +77,6 @@ class TestUserController extends ResourceModelController
      */
     protected function updateAction(Request $request, Model $instance): bool
     {
-        return $instance->update($this->getModelAttributes($instance, $request->all(), true)) ?? false;
+        return $instance->update($this->getModelAttributes($instance, $request->except(['password']), true)) ?? false;
     }
 }

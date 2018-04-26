@@ -233,7 +233,7 @@ trait WithModelResource
      */
     public function updateModel(Request $request, $id)
     {
-        tap($this->findModel($id), $this->updateModelCallback());
+        tap($this->findModel($id), $this->updateModelCallback($request));
 
         return $this->finishAction('update');
     }

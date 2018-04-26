@@ -1,8 +1,6 @@
 <?php
 
 Route::resource('post', 'TestPostController');
-Route::group(['prefix' => 'user/password', 'group' => 'user.'], function () {
-    Route::get('{user}/edit', ['as' => 'password-edit', 'uses' => 'UserController@passwordEdit']);
-    Route::put('{user}', ['as' => 'password-update', 'uses' => 'UserController@passwordUpdate']);
-});
+Route::get('user/password/{user}/edit', ['as' => 'user.password-edit', 'uses' => 'TestUserController@passwordEdit']);
+Route::put('user/password/{user}', ['as' => 'user.password-update', 'uses' => 'TestUserController@passwordUpdate']);
 Route::resource('user', 'TestUserController');
