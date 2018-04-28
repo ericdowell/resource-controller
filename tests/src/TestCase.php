@@ -34,7 +34,7 @@ class TestCase extends SupportTestCase
      */
     protected function assertFunctionSuccess($response, $file, $function, $statusCode = 200)
     {
-       $this->assertFunctionWithStatus($response, $file, $function, $statusCode);
+        $this->assertFunctionWithStatus($response, $file, $function, $statusCode);
     }
 
     /**
