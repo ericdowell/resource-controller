@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Foundation\Http\FormRequest;
 
 trait WithMorphModel
 {
@@ -154,7 +155,7 @@ trait WithMorphModel
         $instance->save();
 
         $data = $request->except($this->upsertExcept());
-        if (method_exists($request, 'validated')) {
+        if ($request instanceof FormRequest) {
             $data = array_except($request->validated(), $this->upsertExcept());
         }
         $attributes = $this->getModelAttributes($instance->{$this->morphType()}, $data, true);
