@@ -289,7 +289,7 @@ trait WithModelResource
      */
     protected function upsertExcept(): array
     {
-        if (isset($this->upsertExcept) && is_array($this->upsertExcept)) {
+        if (isset($this->upsertExcept)) {
             return $this->upsertExcept;
         }
 
