@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Tests;
 
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Testing\TestResponse;
 use Orchestra\Testbench\TestCase as SupportTestCase;
 use EricDowell\ResourceController\Tests\Traits\LoadTestConfiguration;
 
@@ -25,12 +27,34 @@ class TestCase extends SupportTestCase
     }
 
     /**
-     * @param \Illuminate\Foundation\Testing\TestResponse $response
+     * @param TestResponse $response
      * @param string $file
      * @param string $function
      * @param int $statusCode
      */
     protected function assertFunctionSuccess($response, $file, $function, $statusCode = 200)
+    {
+        $this->assertFunctionWithStatus($response, $file, $function, $statusCode);
+    }
+
+    /**
+     * @param TestResponse $response
+     * @param string $file
+     * @param string $function
+     * @param int $statusCode
+     */
+    protected function assertFunctionFailure($response, $file, $function, $statusCode = 500)
+    {
+        $this->assertFunctionSuccess($response, $file, $function, $statusCode);
+    }
+
+    /**
+     * @param TestResponse $response
+     * @param string $file
+     * @param string $function
+     * @param int $statusCode
+     */
+    private function assertFunctionWithStatus($response, $file, $function, $statusCode = null)
     {
         $filename = __DIR__.'/error-html/'.basename($file, '.php').'.'.$function.'.html';
         if (file_exists($filename)) {
@@ -43,7 +67,7 @@ class TestCase extends SupportTestCase
     }
 
     /**
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
      * @return array
      */
     protected function getPackageProviders($app)

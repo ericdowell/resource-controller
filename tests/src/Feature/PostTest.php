@@ -53,15 +53,15 @@ class PostTest extends TestCase
 
         $authUser = factory(TestUser::class)->create();
         $response = $this->actingAs($authUser)->post(route('post.store'), compact('title', 'body'));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.store', 302);
         $response->assertRedirect(url(route('post.index')));
 
         $model = TestPost::whereTitle($title)->first();
 
         $this->assertInstanceOf(TestPost::class, $model);
 
-        $this->assertFunctionSuccess($this->get(route('post.show', $model->id)), __FILE__, __FUNCTION__);
-        $this->assertFunctionSuccess($this->get(route('post.edit', $model->id)), __FILE__, __FUNCTION__);
+        $this->assertFunctionSuccess($this->get(route('post.show', $model->id)), __FILE__, __FUNCTION__.'.show');
+        $this->assertFunctionSuccess($this->get(route('post.edit', $model->id)), __FILE__, __FUNCTION__.'.edit');
     }
 
     /**
@@ -83,7 +83,7 @@ class PostTest extends TestCase
 
         $authUser = factory(TestUser::class)->create();
         $response = $this->actingAs($authUser)->put(route('post.update', $textPost->id), compact('title', 'body', 'is_published'));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.update.put', 302);
         $response->assertRedirect(url(route('post.index')));
 
         $textPost->refresh();
@@ -92,8 +92,20 @@ class PostTest extends TestCase
         $this->assertSame($body, $textPost->text->body);
         $this->assertTrue($textPost->text->is_published);
 
+        $is_published = false;
+
+        $response = $this->actingAs($authUser)->patch(route('post.update', $textPost->id), compact('is_published'));
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.update.patch', 302);
+        $response->assertRedirect(url(route('post.index')));
+
+        $textPost->refresh();
+
+        $this->assertSame($title, $textPost->text->title);
+        $this->assertSame($body, $textPost->text->body);
+        $this->assertFalse($textPost->text->is_published);
+
         $response = $this->actingAs($authUser)->delete(route('post.destroy', $textPost->id));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.destroy', 302);
         $response->assertRedirect(url(route('post.index')));
     }
 }

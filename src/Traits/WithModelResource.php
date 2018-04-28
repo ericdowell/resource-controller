@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Http\FormRequest;
 
 trait WithModelResource
 {
@@ -192,10 +193,22 @@ trait WithModelResource
         ${$this->type} = $instance = $this->findModel($id);
         $options = [
             'route' => [sprintf('%s.%s', $this->type, $this->formAction), $instance->getKey()],
-            'method' => 'put',
+            'method' => $this->editMethod(),
         ];
 
         return $this->finish(compact($this->type, 'instance', 'options'));
+    }
+
+    /**
+     * @return string
+     */
+    protected function editMethod()
+    {
+        if (isset($this->editMethod)) {
+            return $this->editMethod;
+        }
+
+        return $this->allowUpsert() ? 'patch' : 'put';
     }
 
     /**
@@ -211,6 +224,35 @@ trait WithModelResource
     }
 
     /**
+     * Updates/Upserts attributes based on request for Eloquent Model.
+     *
+     * @param Request $request
+     * @param Model $instance
+     *
+     * @return bool
+     */
+    protected function updateUpsertAction(Request $request, Model $instance): bool
+    {
+        if ($this->allowUpsert() && $request->isMethod('patch')) {
+            return $this->upsertAction($request, $instance);
+        }
+
+        return $this->updateAction($request, $instance);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function allowUpsert(): bool
+    {
+        if (isset($this->allowUpsert)) {
+            return $this->allowUpsert;
+        }
+
+        return true;
+    }
+
+    /**
      * Updates attributes based on request for Eloquent Model.
      *
      * @param Request $request
@@ -220,7 +262,38 @@ trait WithModelResource
      */
     protected function updateAction(Request $request, Model $instance): bool
     {
-        return $instance->update($this->getModelRequestAttributes($request)) ?? false;
+        return $instance->update($this->getModelRequestAttributes($request, $instance)) ?? false;
+    }
+
+    /**
+     * Upsert attributes based on request for Eloquent Model.
+     *
+     * @param Request $request
+     * @param Model $instance
+     *
+     * @return bool
+     */
+    protected function upsertAction(Request $request, Model $instance): bool
+    {
+        $data = $request->except($this->upsertExcept());
+        if ($request instanceof FormRequest) {
+            $data = array_except($request->validated(), $this->upsertExcept());
+        }
+        $attributes = $this->getModelAttributes($instance, $data, true);
+
+        return $instance->update($attributes) ?? false;
+    }
+
+    /**
+     * @return array
+     */
+    protected function upsertExcept(): array
+    {
+        if (isset($this->upsertExcept) && is_array($this->upsertExcept)) {
+            return $this->upsertExcept;
+        }
+
+        return [];
     }
 
     /**
@@ -247,7 +320,7 @@ trait WithModelResource
         return function (Model $instance) use ($request) {
             $this->beforeModelUpdate($request, $instance);
             $this->setUserIdAttribute($instance, 'updateModel');
-            $this->updateAction($request, $instance);
+            $this->updateUpsertAction($request, $instance);
         };
     }
 
