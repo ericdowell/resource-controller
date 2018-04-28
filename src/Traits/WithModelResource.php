@@ -192,10 +192,22 @@ trait WithModelResource
         ${$this->type} = $instance = $this->findModel($id);
         $options = [
             'route' => [sprintf('%s.%s', $this->type, $this->formAction), $instance->getKey()],
-            'method' => 'put',
+            'method' => $this->editMethod(),
         ];
 
         return $this->finish(compact($this->type, 'instance', 'options'));
+    }
+
+    /**
+     * @return string
+     */
+    protected function editMethod()
+    {
+        if (isset($this->editMethod)) {
+            return $this->editMethod;
+        }
+
+        return $this->allowUpsert() ? 'patch' : 'put';
     }
 
     /**
@@ -220,7 +232,7 @@ trait WithModelResource
      */
     protected function updateUpsertAction(Request $request, Model $instance): bool
     {
-        if (! $this->noUpsert() && $request->isMethod('patch')) {
+        if ($this->allowUpsert() && $request->isMethod('patch')) {
             return $this->upsertAction($request, $instance);
         }
 
@@ -230,13 +242,13 @@ trait WithModelResource
     /**
      * @return bool
      */
-    protected function noUpsert(): bool
+    protected function allowUpsert(): bool
     {
-        if (isset($this->noUpsert)) {
-            return $this->noUpsert;
+        if (isset($this->allowUpsert)) {
+            return $this->allowUpsert;
         }
 
-        return false;
+        return true;
     }
 
     /**
