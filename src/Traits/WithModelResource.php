@@ -59,7 +59,7 @@ trait WithModelResource
      *
      * @param Router $router
      */
-    public function __construct(Router $router)
+    final public function __construct(Router $router)
     {
         $middleware = $this->modelMiddleware;
         $this->mergeData = $this->checkModels()->generateDefaults($router->current());
@@ -218,6 +218,35 @@ trait WithModelResource
      *
      * @return bool
      */
+    protected function updateUpsertAction(Request $request, Model $instance): bool
+    {
+        if (! $this->noUpsert() && $request->isMethod('patch')) {
+            return $this->upsertAction($request, $instance);
+        }
+
+        return $this->updateAction($request, $instance);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function noUpsert(): bool
+    {
+        if (isset($this->noUpsert)) {
+            return $this->noUpsert;
+        }
+
+        return false;
+    }
+
+    /**
+     * Updates attributes based on request for Eloquent Model.
+     *
+     * @param Request $request
+     * @param Model $instance
+     *
+     * @return bool
+     */
     protected function updateAction(Request $request, Model $instance): bool
     {
         return $instance->update($this->getModelRequestAttributes($request)) ?? false;
@@ -233,7 +262,19 @@ trait WithModelResource
      */
     protected function upsertAction(Request $request, Model $instance): bool
     {
-        return $instance->update($this->getModelAttributes($instance, $request->all(), true)) ?? false;
+        return $instance->update($this->getModelAttributes($instance, $request->except($this->upsertExcept()), true)) ?? false;
+    }
+
+    /**
+     * @return array
+     */
+    protected function upsertExcept(): array
+    {
+        if (isset($this->upsertExcept) && is_array($this->upsertExcept)) {
+            return $this->upsertExcept;
+        }
+
+        return [];
     }
 
     /**
@@ -260,7 +301,7 @@ trait WithModelResource
         return function (Model $instance) use ($request) {
             $this->beforeModelUpdate($request, $instance);
             $this->setUserIdAttribute($instance, 'updateModel');
-            $this->updateAction($request, $instance);
+            $this->updateUpsertAction($request, $instance);
         };
     }
 

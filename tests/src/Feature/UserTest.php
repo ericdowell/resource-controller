@@ -88,7 +88,7 @@ class UserTest extends TestCase
         $response = $this->actingAs($user)->put(route('user.update', $user->id), compact('name', 'email'));
         $this->assertFunctionFailure($response, __FILE__, __FUNCTION__);
 
-        $response = $this->actingAs($user)->patch(route('user.update', $user->id), compact('name', 'email'));
+        $response = $this->actingAs($user)->patch(route('user.update', $user->id), compact('name', 'email', 'password'));
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'0', 302);
         $response->assertRedirect(url(route('user.index')));
 

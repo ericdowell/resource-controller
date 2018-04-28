@@ -2,13 +2,11 @@
 
 namespace EricDowell\ResourceController\Tests\Http\Controllers;
 
-use EricDowell\ResourceController\Traits\WithModelResource;
 use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Database\Eloquent\Model;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 use EricDowell\ResourceController\Traits\WithoutModelRequest;
 use EricDowell\ResourceController\Http\Controllers\ResourceModelController;
@@ -16,9 +14,7 @@ use EricDowell\ResourceController\Http\Controllers\ResourceModelController;
 class TestUserController extends ResourceModelController
 {
     use WithoutModelRequest;
-    use WithModelResource {
-        WithModelResource::updateAction as callUpdateAction;
-    }
+
     /**
      * Given a route action (key) set the form action (value).
      *
@@ -29,20 +25,21 @@ class TestUserController extends ResourceModelController
     ];
 
     /**
-     * @return bool
+     * @var string
      */
-    protected function withUser(): bool
-    {
-        return false;
-    }
+    protected $modelClass = TestUser::class;
 
     /**
-     * @return string
+     * @var array
      */
-    protected function modelClass()
-    {
-        return TestUser::class;
-    }
+    protected $upsertExcept = [
+        'password',
+    ];
+
+    /**
+     * @var bool
+     */
+    protected $withUser = false;
 
     /**
      * @param int $id
@@ -73,22 +70,5 @@ class TestUserController extends ResourceModelController
         $user->update($this->getModelAttributes($user, $attributes, true));
 
         return $this->finishAction(__FUNCTION__);
-    }
-
-    /**
-     * Updates attributes based on request for Eloquent Model.
-     *
-     * @param Request $request
-     * @param Model $instance
-     *
-     * @return bool
-     */
-    protected function updateAction(Request $request, Model $instance): bool
-    {
-        if ($request->isMethod('patch')) {
-            return $this->upsertAction($request, $instance);
-        }
-
-        return $this->callUpdateAction($request, $instance);
     }
 }
