@@ -202,7 +202,7 @@ trait WithModelResource
     /**
      * @return string
      */
-    protected function editMethod()
+    protected function editMethod(): string
     {
         if (isset($this->editMethod)) {
             return $this->editMethod;
@@ -315,7 +315,7 @@ trait WithModelResource
      * @param Request $request
      * @return Closure
      */
-    protected function updateModelCallback(Request $request)
+    protected function updateModelCallback(Request $request): Closure
     {
         return function (Model $instance) use ($request) {
             $this->beforeModelUpdate($request, $instance);
