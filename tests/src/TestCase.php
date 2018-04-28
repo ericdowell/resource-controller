@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Tests;
 
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Testing\TestResponse;
 use Orchestra\Testbench\TestCase as SupportTestCase;
 use EricDowell\ResourceController\Tests\Traits\LoadTestConfiguration;
 
@@ -25,7 +27,7 @@ class TestCase extends SupportTestCase
     }
 
     /**
-     * @param \Illuminate\Foundation\Testing\TestResponse $response
+     * @param TestResponse $response
      * @param string $file
      * @param string $function
      * @param int $statusCode
@@ -36,7 +38,7 @@ class TestCase extends SupportTestCase
     }
 
     /**
-     * @param \Illuminate\Foundation\Testing\TestResponse $response
+     * @param TestResponse $response
      * @param string $file
      * @param string $function
      * @param int $statusCode
@@ -47,7 +49,7 @@ class TestCase extends SupportTestCase
     }
 
     /**
-     * @param \Illuminate\Foundation\Testing\TestResponse $response
+     * @param TestResponse $response
      * @param string $file
      * @param string $function
      * @param int $statusCode
@@ -65,7 +67,7 @@ class TestCase extends SupportTestCase
     }
 
     /**
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
      * @return array
      */
     protected function getPackageProviders($app)
