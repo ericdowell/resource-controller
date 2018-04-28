@@ -274,7 +274,10 @@ trait WithModelResource
      */
     protected function upsertAction(Request $request, Model $instance): bool
     {
-        return $instance->update($this->getModelAttributes($instance, $request->except($this->upsertExcept()), true)) ?? false;
+        $data = $request->except($this->upsertExcept());
+        $attributes = $this->getModelAttributes($instance, $data, true);
+
+        return $instance->update($attributes) ?? false;
     }
 
     /**
