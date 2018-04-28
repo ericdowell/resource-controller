@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Http\FormRequest;
 
 trait WithModelResource
 {
@@ -261,7 +262,7 @@ trait WithModelResource
      */
     protected function updateAction(Request $request, Model $instance): bool
     {
-        return $instance->update($this->getModelRequestAttributes($request)) ?? false;
+        return $instance->update($this->getModelRequestAttributes($request, $instance)) ?? false;
     }
 
     /**
@@ -275,6 +276,9 @@ trait WithModelResource
     protected function upsertAction(Request $request, Model $instance): bool
     {
         $data = $request->except($this->upsertExcept());
+        if ($request instanceof FormRequest) {
+            $data = array_except($request->validated(), $this->upsertExcept());
+        }
         $attributes = $this->getModelAttributes($instance, $data, true);
 
         return $instance->update($attributes) ?? false;

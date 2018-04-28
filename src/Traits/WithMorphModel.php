@@ -135,7 +135,29 @@ trait WithMorphModel
     {
         $instance->save();
 
-        $attributes = $this->getModelRequestAttributes($request);
+        $attributes = $this->getModelRequestAttributes($request, $instance->{$this->morphType()});
+        $this->setUserIdAttribute($attributes, __FUNCTION__);
+
+        return $instance->{$this->morphType()}->update($attributes) ?? false;
+    }
+
+    /**
+     * Updates attributes based on request for Eloquent Model.
+     *
+     * @param Request $request
+     * @param Model $instance
+     *
+     * @return bool
+     */
+    protected function upsertAction(Request $request, Model $instance): bool
+    {
+        $instance->save();
+
+        $data = $request->except($this->upsertExcept());
+        if (method_exists($request, 'validated')) {
+            $data = array_except($request->validated(), $this->upsertExcept());
+        }
+        $attributes = $this->getModelAttributes($instance->{$this->morphType()}, $data, true);
         $this->setUserIdAttribute($attributes, __FUNCTION__);
 
         return $instance->{$this->morphType()}->update($attributes) ?? false;

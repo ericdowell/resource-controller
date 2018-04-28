@@ -53,7 +53,7 @@ class UserTest extends TestCase
         $password = 'secret';
 
         $response = $this->actingAs($user)->post(route('user.store'), compact('name', 'email', 'password'));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__, 302);
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.store', 302);
 
         $response->assertRedirect(url(route('user.index')));
 
@@ -63,8 +63,9 @@ class UserTest extends TestCase
 
         $this->assertInstanceOf(TestUser::class, $model);
 
-        $this->assertFunctionSuccess($this->get(route('user.show', $model->id)), __FILE__, __FUNCTION__);
-        $this->assertFunctionSuccess($this->get(route('user.edit', $model->id)), __FILE__, __FUNCTION__);
+        $this->assertFunctionSuccess($this->get(route('user.show', $model->id)), __FILE__, __FUNCTION__.'.show');
+        $this->assertFunctionSuccess($this->get(route('user.edit', $model->id)), __FILE__, __FUNCTION__.'.edit');
+        $this->assertFunctionSuccess($this->get(route('user-update.edit', $model->id)), __FILE__, __FUNCTION__.'.edit.put');
     }
 
     /**
@@ -86,10 +87,13 @@ class UserTest extends TestCase
         $current_password = 'secret';
 
         $response = $this->actingAs($user)->put(route('user.update', $user->id), compact('name', 'email'));
-        $this->assertFunctionFailure($response, __FILE__, __FUNCTION__);
+        $this->assertFunctionFailure($response, __FILE__, __FUNCTION__.'.update.put');
+
+        $response = $this->actingAs($user)->put(route('user-update.update', $user->id), compact('name', 'email'));
+        $this->assertFunctionFailure($response, __FILE__, __FUNCTION__.'.update.put.edit-method-property');
 
         $response = $this->actingAs($user)->patch(route('user.update', $user->id), compact('name', 'email', 'password'));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'0', 302);
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.update.patch', 302);
         $response->assertRedirect(url(route('user.index')));
 
         $user->refresh();
@@ -100,7 +104,7 @@ class UserTest extends TestCase
         $this->assertFalse(Hash::check($password, $user->password));
 
         $response = $this->actingAs($user)->put(route('user.password-update', $user->id), compact('password', 'password_confirmation', 'current_password'));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'1', 302);
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.password-update', 302);
         $response->assertRedirect(url(route('user.index')));
 
         $user->refresh();
@@ -109,7 +113,7 @@ class UserTest extends TestCase
         $this->assertNull(TestUser::wherePassword($password)->first());
 
         $response = $this->actingAs($user)->delete(route('user.destroy', $user->id));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'2', 302);
+        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.destroy', 302);
         $response->assertRedirect(url(route('user.index')));
     }
 }

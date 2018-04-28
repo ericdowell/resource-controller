@@ -22,8 +22,9 @@ class TestPostRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
-            'body' => 'required',
+            'title' => 'sometimes|required',
+            'body' => 'sometimes|required',
+            'is_published' => 'sometimes|required',
         ];
     }
 

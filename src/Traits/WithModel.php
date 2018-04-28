@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Route as CurrentRoute;
 use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
 
@@ -171,12 +172,18 @@ trait WithModel
 
     /**
      * @param Request $request
+     * @param Model|null $instance
      *
      * @return array
      */
-    protected function getModelRequestAttributes(Request $request): array
+    protected function getModelRequestAttributes(Request $request, Model $instance = null): array
     {
-        return $this->getModelAttributes($this->modelInstance(), $request->all());
+        $data = $request->all();
+        if ($request instanceof FormRequest) {
+            $data = $request->validated();
+        }
+
+        return $this->getModelAttributes($instance ?? $this->modelInstance(), $data);
     }
 
     /**
