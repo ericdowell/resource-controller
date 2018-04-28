@@ -32,14 +32,7 @@ class TestCase extends SupportTestCase
      */
     protected function assertFunctionSuccess($response, $file, $function, $statusCode = 200)
     {
-        $filename = __DIR__.'/error-html/'.basename($file, '.php').'.'.$function.'.html';
-        if (file_exists($filename)) {
-            @unlink($filename);
-        }
-        if ($response->getStatusCode() !== $statusCode) {
-            file_put_contents($filename, $response->getContent());
-        }
-        $response->assertStatus($statusCode);
+       $this->assertFunctionWithStatus($response, $file, $function, $statusCode);
     }
 
     /**
@@ -49,6 +42,17 @@ class TestCase extends SupportTestCase
      * @param int $statusCode
      */
     protected function assertFunctionFailure($response, $file, $function, $statusCode = 500)
+    {
+        $this->assertFunctionSuccess($response, $file, $function, $statusCode);
+    }
+
+    /**
+     * @param \Illuminate\Foundation\Testing\TestResponse $response
+     * @param string $file
+     * @param string $function
+     * @param int $statusCode
+     */
+    private function assertFunctionWithStatus($response, $file, $function, $statusCode = null)
     {
         $filename = __DIR__.'/error-html/'.basename($file, '.php').'.'.$function.'.html';
         if (file_exists($filename)) {
