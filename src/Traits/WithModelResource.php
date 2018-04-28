@@ -266,7 +266,7 @@ trait WithModelResource
     }
 
     /**
-     * Updates attributes based on request for Eloquent Model.
+     * Upsert attributes based on request for Eloquent Model.
      *
      * @param Request $request
      * @param Model $instance

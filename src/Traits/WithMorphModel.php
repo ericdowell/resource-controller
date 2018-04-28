@@ -142,7 +142,7 @@ trait WithMorphModel
     }
 
     /**
-     * Updates attributes based on request for Eloquent Model.
+     * Saves parent morph Eloquent Model and upsert attributes based on request for Eloquent Model.
      *
      * @param Request $request
      * @param Model $instance
