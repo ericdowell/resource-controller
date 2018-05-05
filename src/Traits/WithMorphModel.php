@@ -9,35 +9,15 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Foundation\Http\FormRequest;
+use EricDowell\ResourceController\Traits\MorphModel\WithProperties;
 
 trait WithMorphModel
 {
+    use WithProperties;
     use WithModelResource {
         WithModelResource::allModels as callAllModels;
         WithModelResource::storeAction as callStoreAction;
     }
-
-    /**
-     * Parent morph Eloquent Model ::class string output.
-     *
-     * @var string
-     */
-    protected $morphModelClass;
-
-    /**
-     * Instance of parent morph Eloquent Model.
-     *
-     * @var Model|Builder
-     */
-    protected $morphModelInstance;
-
-    /**
-     * Property name used to access model instance from parent morph Eloquent Model.
-     *
-     * @var string
-     */
-    protected $morphType;
 
     /**
      * Register middleware on the controller.
@@ -54,6 +34,10 @@ trait WithMorphModel
      */
     protected function findModelClass()
     {
+        if (isset($this->findModelClass)) {
+            return $this->findModelClass;
+        }
+
         return $this->morphModelClass();
     }
 
@@ -153,12 +137,7 @@ trait WithMorphModel
     protected function upsertAction(Request $request, Model $instance): bool
     {
         $instance->save();
-
-        $data = $request->except($this->upsertExcept());
-        if ($request instanceof FormRequest) {
-            $data = array_except($request->validated(), $this->upsertExcept());
-        }
-        $attributes = $this->getModelAttributes($instance->{$this->morphType()}, $data, true);
+        $attributes = $this->upsertAttributes($request, $instance->{$this->morphType()});
         $this->setUserIdAttribute($attributes, __FUNCTION__);
 
         return $instance->{$this->morphType()}->update($attributes) ?? false;

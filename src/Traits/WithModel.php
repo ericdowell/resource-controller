@@ -10,58 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Route as CurrentRoute;
+use EricDowell\ResourceController\Traits\Model\WithProperties;
 use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
 
 trait WithModel
 {
-    /**
-     * Current form action based on parsed route name.
-     *
-     * @var string
-     */
-    protected $formAction;
-
-    /**
-     * Eloquent Model ::class string output.
-     *
-     * @var string
-     */
-    protected $modelClass;
-
-    /**
-     * Instance of the Eloquent Model.
-     *
-     * @var Model|Builder
-     */
-    protected $modelInstance;
-
-    /**
-     * Matches the current route name.
-     *
-     * @var string
-     */
-    protected $template;
-
-    /**
-     * Model type based on parsed route name.
-     *
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * Plural version of '$type' property, first letter is uppercase.
-     *
-     * @var string
-     */
-    protected $typeName;
-
-    /**
-     * Flag for setting/updating 'user_id' as attribute of Eloquent Model.
-     *
-     * @var bool
-     */
-    protected $withUser = true;
+    use WithProperties;
 
     /**
      * @return bool
@@ -72,10 +26,22 @@ trait WithModel
     }
 
     /**
+     * @return bool
+     */
+    protected function withoutUser(): bool
+    {
+        return ! $this->withUser();
+    }
+
+    /**
      * @return string
      */
     protected function findModelClass()
     {
+        if (isset($this->findModelClass)) {
+            return $this->findModelClass;
+        }
+
         return $this->modelClass();
     }
 
@@ -115,6 +81,10 @@ trait WithModel
      */
     protected function userId()
     {
+        if (isset($this->userId)) {
+            return $this->userId;
+        }
+
         return request()->input('user_id') ?? data_get(auth()->user(), 'id');
     }
 
@@ -126,7 +96,7 @@ trait WithModel
      */
     protected function setUserIdAttribute(&$data, $method): void
     {
-        if (! $this->withUser()) {
+        if ($this->withoutUser()) {
             return;
         }
         data_set($data, 'user_id', $this->userId());
@@ -139,7 +109,7 @@ trait WithModel
     {
         $query = $this->findModelInstance()->newQuery();
 
-        if (! $this->withUser()) {
+        if ($this->withoutUser()) {
             return $query;
         }
 
@@ -163,7 +133,7 @@ trait WithModel
      */
     protected function findModel($id): Model
     {
-        if (! $this->withUser()) {
+        if ($this->withoutUser()) {
             return forward_static_call([$this->findModelClass(), 'findOrFail'], $id);
         }
 
@@ -239,7 +209,7 @@ trait WithModel
     /**
      * @return $this
      */
-    protected function checkModels()
+    protected function checkModels(): self
     {
         foreach ($this->modelList() as $model) {
             $this->checkModelExists($model);
@@ -254,7 +224,7 @@ trait WithModel
      * @return $this
      * @throws ModelClassCheckException
      */
-    protected function checkModelExists(string $model = null)
+    protected function checkModelExists(string $model = null): self
     {
         /** @var ModelClassCheckException $modelClassCheck */
         $modelClassCheck = with(new ModelClassCheckException())->setModel($model);
@@ -279,7 +249,7 @@ trait WithModel
         $template = $this->template = $this->template ?? $route->getName();
 
         $this->mergeContext($context, compact('template'))->setTypeAndFormAction($context)->setTypeName($context);
-        $this->setModelInstance($context)->setMessageAndHeader($context);
+        $this->createModelInstance($context)->setMessageAndHeader($context);
         $this->setUserIdAttribute($context, __FUNCTION__);
 
         return $context;
@@ -290,7 +260,7 @@ trait WithModel
      *
      * @return $this
      */
-    protected function setMessageAndHeader(array &$context)
+    protected function setMessageAndHeader(array &$context): self
     {
         $btnMessage = sprintf('%s %s', ucfirst($this->formAction), ucfirst($this->type));
         $formHeader = ($this->formAction === 'update' ? ucfirst($this->formAction) : 'Create').' '.ucfirst($this->type);
@@ -317,7 +287,7 @@ trait WithModel
      *
      * @return $this
      */
-    protected function setTypeAndFormAction(array &$context)
+    protected function setTypeAndFormAction(array &$context): self
     {
         $actionMap = array_merge(['create' => 'store', 'edit' => 'update'], $this->actionMap());
         $nameParts = explode('.', $this->template);
@@ -339,7 +309,7 @@ trait WithModel
      *
      * @return $this
      */
-    protected function setTypeName(array &$context)
+    protected function setTypeName(array &$context): self
     {
         $this->typeName = $typeName = str_plural(ucfirst($this->type));
 
@@ -351,25 +321,10 @@ trait WithModel
      *
      * @return $this
      */
-    protected function setModelInstance(array &$context)
+    protected function createModelInstance(array &$context): self
     {
         $instance = ${$this->type} = $this->findModelInstance();
 
         return $this->mergeContext($context, compact($this->type, 'instance'));
-    }
-
-    /**
-     * @param $context
-     * @param mixed ...$merge
-     *
-     * @return $this
-     */
-    protected function mergeContext(&$context, ...$merge)
-    {
-        array_unshift($merge, $context);
-
-        $context = call_user_func_array('array_merge', $merge);
-
-        return $this;
     }
 }

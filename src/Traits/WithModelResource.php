@@ -12,48 +12,12 @@ use Illuminate\Routing\Router;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
+use EricDowell\ResourceController\Traits\Resource\WithProperties;
 
 trait WithModelResource
 {
     use WithModel;
-
-    /**
-     * Auth Middleware to apply to non-public routes.
-     *
-     * @var array
-     */
-    protected $authMiddleware = ['auth'];
-
-    /**
-     * The data passed to the view.
-     *
-     * @var array
-     */
-    protected $mergeData = [];
-
-    /**
-     * Default Middleware to apply to all routes.
-     *
-     * @var array
-     */
-    protected $modelMiddleware = [];
-
-    /**
-     * Values used for index pagination.
-     *
-     * @var array
-     */
-    protected $paginate = [];
-
-    /**
-     * Route names of public actions, Auth Middleware are not applied to these.
-     *
-     * @var array
-     */
-    protected $publicActions = [
-        'index',
-        'show',
-    ];
+    use WithProperties;
 
     /**
      * Create a new controller instance.
@@ -275,13 +239,25 @@ trait WithModelResource
      */
     protected function upsertAction(Request $request, Model $instance): bool
     {
+        $attributes = $this->upsertAttributes($request, $instance);
+
+        return $instance->update($attributes) ?? false;
+    }
+
+    /**
+     * @param Request $request
+     * @param Model $instance
+     *
+     * @return array
+     */
+    protected function upsertAttributes(Request $request, Model $instance): array
+    {
         $data = $request->except($this->upsertExcept());
         if ($request instanceof FormRequest) {
             $data = array_except($request->validated(), $this->upsertExcept());
         }
-        $attributes = $this->getModelAttributes($instance, $data, true);
 
-        return $instance->update($attributes) ?? false;
+        return $this->getModelAttributes($instance, $data, true);
     }
 
     /**
