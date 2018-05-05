@@ -212,6 +212,38 @@ trait WithModelResource
     }
 
     /**
+     * @param string $method
+     *
+     * @return $this
+     */
+    protected function editMethodPatch(): self
+    {
+        return $this->setEditMethod('patch');
+    }
+
+    /**
+     * @param string $method
+     *
+     * @return $this
+     */
+    protected function editMethodPut(): self
+    {
+        return $this->setEditMethod('put');
+    }
+
+    /**
+     * @param string $method
+     *
+     * @return $this
+     */
+    protected function setEditMethod(string $method): self
+    {
+        $this->editMethod = $method;
+
+        return $this;
+    }
+
+    /**
      * Method useful to add/update attributes for Eloquent Model before storage update.
      *
      * @param Request $request
