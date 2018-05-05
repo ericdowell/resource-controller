@@ -12,48 +12,12 @@ use Illuminate\Routing\Router;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
+use EricDowell\ResourceController\Traits\Resource\WithProperties;
 
 trait WithModelResource
 {
     use WithModel;
-
-    /**
-     * Auth Middleware to apply to non-public routes.
-     *
-     * @var array
-     */
-    protected $authMiddleware = ['auth'];
-
-    /**
-     * The data passed to the view.
-     *
-     * @var array
-     */
-    protected $mergeData = [];
-
-    /**
-     * Default Middleware to apply to all routes.
-     *
-     * @var array
-     */
-    protected $modelMiddleware = [];
-
-    /**
-     * Values used for index pagination.
-     *
-     * @var array
-     */
-    protected $paginate = [];
-
-    /**
-     * Route names of public actions, Auth Middleware are not applied to these.
-     *
-     * @var array
-     */
-    protected $publicActions = [
-        'index',
-        'show',
-    ];
+    use WithProperties;
 
     /**
      * Create a new controller instance.
@@ -212,38 +176,6 @@ trait WithModelResource
     }
 
     /**
-     * @param string $method
-     *
-     * @return $this
-     */
-    protected function editMethodPatch(): self
-    {
-        return $this->setEditMethod('patch');
-    }
-
-    /**
-     * @param string $method
-     *
-     * @return $this
-     */
-    protected function editMethodPut(): self
-    {
-        return $this->setEditMethod('put');
-    }
-
-    /**
-     * @param string $method
-     *
-     * @return $this
-     */
-    protected function setEditMethod(string $method): self
-    {
-        $this->editMethod = $method;
-
-        return $this;
-    }
-
-    /**
      * Method useful to add/update attributes for Eloquent Model before storage update.
      *
      * @param Request $request
@@ -282,18 +214,6 @@ trait WithModelResource
         }
 
         return true;
-    }
-
-    /**
-     * @param bool $allowUpsert
-     *
-     * @return $this
-     */
-    protected function setAllowUpsert(bool $allowUpsert): self
-    {
-        $this->allowUpsert = $allowUpsert;
-
-        return $this;
     }
 
     /**
@@ -338,18 +258,6 @@ trait WithModelResource
         }
 
         return [];
-    }
-
-    /**
-     * @param array $upsertExcept
-     *
-     * @return $this
-     */
-    protected function setUpsertExcept(array $upsertExcept): self
-    {
-        $this->upsertExcept = $upsertExcept;
-
-        return $this;
     }
 
     /**

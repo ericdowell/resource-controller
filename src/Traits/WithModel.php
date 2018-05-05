@@ -10,58 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Route as CurrentRoute;
+use EricDowell\ResourceController\Traits\Model\WithProperties;
 use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
 
 trait WithModel
 {
-    /**
-     * Current form action based on parsed route name.
-     *
-     * @var string
-     */
-    protected $formAction;
-
-    /**
-     * Eloquent Model ::class string output.
-     *
-     * @var string
-     */
-    protected $modelClass;
-
-    /**
-     * Instance of the Eloquent Model.
-     *
-     * @var Model|Builder
-     */
-    protected $modelInstance;
-
-    /**
-     * Matches the current route name.
-     *
-     * @var string
-     */
-    protected $template;
-
-    /**
-     * Model type based on parsed route name.
-     *
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * Plural version of '$type' property, first letter is uppercase.
-     *
-     * @var string
-     */
-    protected $typeName;
-
-    /**
-     * Flag for setting/updating 'user_id' as attribute of Eloquent Model.
-     *
-     * @var bool
-     */
-    protected $withUser = true;
+    use WithProperties;
 
     /**
      * @return bool
@@ -72,13 +26,11 @@ trait WithModel
     }
 
     /**
-     * @return $this
+     * @return bool
      */
-    protected function withoutUser(): self
+    protected function withoutUser(): bool
     {
-        $this->withUser = false;
-
-        return $this;
+        return ! $this->withUser();
     }
 
     /**
@@ -108,18 +60,6 @@ trait WithModel
     }
 
     /**
-     * @param string $modelClass
-     *
-     * @return $this
-     */
-    protected function setModelClass(string $modelClass): self
-    {
-        $this->modelClass = $modelClass;
-
-        return $this;
-    }
-
-    /**
      * @return Builder|Model
      */
     protected function modelInstance()
@@ -130,18 +70,6 @@ trait WithModel
         }
 
         return $this->modelInstance = new $modelClass();
-    }
-
-    /**
-     * @param Model $modelInstance
-     *
-     * @return $this
-     */
-    protected function setModelInstance(Model $modelInstance): self
-    {
-        $this->modelInstance = $modelInstance;
-
-        return $this->setModelClass(get_class($modelInstance));
     }
 
     /**
@@ -157,18 +85,6 @@ trait WithModel
     }
 
     /**
-     * @param string|int $id
-     *
-     * @return $this
-     */
-    protected function setUserId($id): self
-    {
-        $this->userId = $id;
-
-        return $this;
-    }
-
-    /**
      * @param $data
      * @param string $method
      *
@@ -176,7 +92,7 @@ trait WithModel
      */
     protected function setUserIdAttribute(&$data, $method): void
     {
-        if (! $this->withUser()) {
+        if ($this->withoutUser()) {
             return;
         }
         data_set($data, 'user_id', $this->userId());
@@ -189,7 +105,7 @@ trait WithModel
     {
         $query = $this->findModelInstance()->newQuery();
 
-        if (! $this->withUser()) {
+        if ($this->withoutUser()) {
             return $query;
         }
 
@@ -213,7 +129,7 @@ trait WithModel
      */
     protected function findModel($id): Model
     {
-        if (! $this->withUser()) {
+        if ($this->withoutUser()) {
             return forward_static_call([$this->findModelClass(), 'findOrFail'], $id);
         }
 
@@ -401,26 +317,10 @@ trait WithModel
      *
      * @return $this
      */
-    protected function creatModelInstance(array &$context): self
+    protected function createModelInstance(array &$context): self
     {
         $instance = ${$this->type} = $this->findModelInstance();
 
         return $this->mergeContext($context, compact($this->type, 'instance'));
-    }
-
-    /**
-     * @param array $context
-     * @param mixed ...$merge
-     *
-     * @return $this
-     */
-    protected function mergeContext(array &$context, ...$merge): self
-    {
-        // Place $context as first arg when calling array_merge.
-        array_unshift($merge, $context);
-
-        $context = call_user_func_array('array_merge', $merge);
-
-        return $this;
     }
 }
