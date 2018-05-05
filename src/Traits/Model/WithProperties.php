@@ -131,5 +131,4 @@ trait WithProperties
 
         return $this;
     }
-
 }
