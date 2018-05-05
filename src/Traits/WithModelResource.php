@@ -228,6 +228,7 @@ trait WithModelResource
     {
         return $instance->update($this->getModelRequestAttributes($request, $instance)) ?? false;
     }
+
     /**
      * Upsert attributes based on request for Eloquent Model.
      *
