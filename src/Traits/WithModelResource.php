@@ -285,6 +285,18 @@ trait WithModelResource
     }
 
     /**
+     * @param bool $allowUpsert
+     *
+     * @return $this
+     */
+    protected function setAllowUpsert(bool $allowUpsert): self
+    {
+        $this->allowUpsert = $allowUpsert;
+
+        return $this;
+    }
+
+    /**
      * Updates attributes based on request for Eloquent Model.
      *
      * @param Request $request
@@ -326,6 +338,18 @@ trait WithModelResource
         }
 
         return [];
+    }
+
+    /**
+     * @param array $upsertExcept
+     *
+     * @return $this
+     */
+    protected function setUpsertExcept(array $upsertExcept): self
+    {
+        $this->upsertExcept = $upsertExcept;
+
+        return $this;
     }
 
     /**

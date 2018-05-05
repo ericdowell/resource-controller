@@ -72,6 +72,16 @@ trait WithModel
     }
 
     /**
+     * @return $this
+     */
+    protected function withoutUser(): self
+    {
+        $this->withUser = false;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     protected function findModelClass()
@@ -98,6 +108,18 @@ trait WithModel
     }
 
     /**
+     * @param string $modelClass
+     *
+     * @return $this
+     */
+    protected function setModelClass(string $modelClass): self
+    {
+        $this->modelClass = $modelClass;
+
+        return $this;
+    }
+
+    /**
      * @return Builder|Model
      */
     protected function modelInstance()
@@ -111,11 +133,39 @@ trait WithModel
     }
 
     /**
+     * @param Model $modelInstance
+     *
+     * @return $this
+     */
+    protected function setModelInstance(Model $modelInstance): self
+    {
+        $this->modelInstance = $modelInstance;
+
+        return $this->setModelClass(get_class($modelInstance));
+    }
+
+    /**
      * @return null|int
      */
     protected function userId()
     {
+        if (isset($this->userId)) {
+            return $this->userId;
+        }
+
         return request()->input('user_id') ?? data_get(auth()->user(), 'id');
+    }
+
+    /**
+     * @param string|int $id
+     *
+     * @return $this
+     */
+    protected function setUserId($id): self
+    {
+        $this->userId = $id;
+
+        return $this;
     }
 
     /**
@@ -239,7 +289,7 @@ trait WithModel
     /**
      * @return $this
      */
-    protected function checkModels()
+    protected function checkModels(): self
     {
         foreach ($this->modelList() as $model) {
             $this->checkModelExists($model);
@@ -254,7 +304,7 @@ trait WithModel
      * @return $this
      * @throws ModelClassCheckException
      */
-    protected function checkModelExists(string $model = null)
+    protected function checkModelExists(string $model = null): self
     {
         /** @var ModelClassCheckException $modelClassCheck */
         $modelClassCheck = with(new ModelClassCheckException())->setModel($model);
@@ -279,7 +329,7 @@ trait WithModel
         $template = $this->template = $this->template ?? $route->getName();
 
         $this->mergeContext($context, compact('template'))->setTypeAndFormAction($context)->setTypeName($context);
-        $this->setModelInstance($context)->setMessageAndHeader($context);
+        $this->createModelInstance($context)->setMessageAndHeader($context);
         $this->setUserIdAttribute($context, __FUNCTION__);
 
         return $context;
@@ -290,7 +340,7 @@ trait WithModel
      *
      * @return $this
      */
-    protected function setMessageAndHeader(array &$context)
+    protected function setMessageAndHeader(array &$context): self
     {
         $btnMessage = sprintf('%s %s', ucfirst($this->formAction), ucfirst($this->type));
         $formHeader = ($this->formAction === 'update' ? ucfirst($this->formAction) : 'Create').' '.ucfirst($this->type);
@@ -317,7 +367,7 @@ trait WithModel
      *
      * @return $this
      */
-    protected function setTypeAndFormAction(array &$context)
+    protected function setTypeAndFormAction(array &$context): self
     {
         $actionMap = array_merge(['create' => 'store', 'edit' => 'update'], $this->actionMap());
         $nameParts = explode('.', $this->template);
@@ -339,7 +389,7 @@ trait WithModel
      *
      * @return $this
      */
-    protected function setTypeName(array &$context)
+    protected function setTypeName(array &$context): self
     {
         $this->typeName = $typeName = str_plural(ucfirst($this->type));
 
@@ -351,7 +401,7 @@ trait WithModel
      *
      * @return $this
      */
-    protected function setModelInstance(array &$context)
+    protected function creatModelInstance(array &$context): self
     {
         $instance = ${$this->type} = $this->findModelInstance();
 
@@ -359,13 +409,14 @@ trait WithModel
     }
 
     /**
-     * @param $context
+     * @param array $context
      * @param mixed ...$merge
      *
      * @return $this
      */
-    protected function mergeContext(&$context, ...$merge)
+    protected function mergeContext(array &$context, ...$merge): self
     {
+        // Place $context as first arg when calling array_merge.
         array_unshift($merge, $context);
 
         $context = call_user_func_array('array_merge', $merge);

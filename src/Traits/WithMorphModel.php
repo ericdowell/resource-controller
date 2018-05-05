@@ -68,6 +68,18 @@ trait WithMorphModel
     }
 
     /**
+     * Set parent morph Eloquent Model ::class.
+     *
+     * @return string
+     */
+    protected function setMorphModelClass(string $morphModelClass): self
+    {
+        $this->morphModelClass = $morphModelClass;
+
+        return $this;
+    }
+
+    /**
      * Parent morph Eloquent Model instance.
      *
      * @return Builder|Model
@@ -80,6 +92,20 @@ trait WithMorphModel
         }
 
         return $this->morphModelInstance = new $morphModelClass();
+    }
+
+    /**
+     * Set parent morph Eloquent Model instance.
+     *
+     * @param Model $morphModelInstance
+     *
+     * @return $this
+     */
+    protected function setMorphModelInstance(Model $morphModelInstance): self
+    {
+        $this->morphModelInstance = $morphModelInstance;
+
+        return $this->setMorphModelClass(get_class($morphModelInstance));
     }
 
     /**
@@ -192,6 +218,18 @@ trait WithMorphModel
     protected function morphType(): string
     {
         return $this->morphType ?? str_singular($this->morphModelInstance()->getTable());
+    }
+
+    /**
+     * @param string $morphType
+     *
+     * @return $this
+     */
+    protected function setMorphType(string $morphType): self
+    {
+        $this->morphType = $morphType;
+
+        return $this;
     }
 
     /**
