@@ -38,6 +38,10 @@ trait WithModel
      */
     protected function findModelClass()
     {
+        if (isset($this->findModelClass)) {
+            return $this->findModelClass;
+        }
+
         return $this->modelClass();
     }
 

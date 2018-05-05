@@ -228,7 +228,6 @@ trait WithModelResource
     {
         return $instance->update($this->getModelRequestAttributes($request, $instance)) ?? false;
     }
-
     /**
      * Upsert attributes based on request for Eloquent Model.
      *
@@ -239,13 +238,25 @@ trait WithModelResource
      */
     protected function upsertAction(Request $request, Model $instance): bool
     {
+        $attributes = $this->upsertAttributes($request, $instance);
+
+        return $instance->update($attributes) ?? false;
+    }
+
+    /**
+     * @param Request $request
+     * @param Model $instance
+     *
+     * @return array
+     */
+    protected function upsertAttributes(Request $request, Model $instance): array
+    {
         $data = $request->except($this->upsertExcept());
         if ($request instanceof FormRequest) {
             $data = array_except($request->validated(), $this->upsertExcept());
         }
-        $attributes = $this->getModelAttributes($instance, $data, true);
 
-        return $instance->update($attributes) ?? false;
+        return $this->getModelAttributes($instance, $data, true);
     }
 
     /**

@@ -59,11 +59,84 @@ trait WithProperties
     protected $withUser = true;
 
     /**
+     * @param string $action
+     *
+     * @return $this
+     */
+    protected function setFormAction(string $action): self
+    {
+        $this->formAction = $action;
+
+        return $this->mergeContext($this->mergeData, compact('action'));
+    }
+
+    /**
+     * @param string $template
+     *
+     * @return $this
+     */
+    protected function setTemplate(string $template): self
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return $this
+     */
+    protected function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this->mergeContext($this->mergeData, compact('type'));
+    }
+
+    /**
+     * @param string typeName
+     *
+     * @return $this
+     */
+    protected function setTypeName(string $typeName): self
+    {
+        $this->typeName = $typeName;
+
+        return $this->mergeContext($this->mergeData, compact('typeName'));
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return $this
+     */
+    protected function setTypeAndTypeName(string $type): self
+    {
+        $this->type = $type;
+        $this->typeName = $typeName = str_plural(ucfirst($type));
+
+        return $this->mergeContext($this->mergeData, compact('type', 'typeName'));
+    }
+
+    /**
      * @return $this
      */
     protected function noUser(): self
     {
         $this->withUser = false;
+
+        return $this;
+    }
+
+    /**
+     * @param string $findModelClass
+     *
+     * @return $this
+     */
+    protected function setFindModelClass(string $findModelClass): self
+    {
+        $this->findModelClass = $findModelClass;
 
         return $this;
     }
@@ -87,9 +160,10 @@ trait WithProperties
      */
     protected function setModelInstance(Model $modelInstance): self
     {
-        $this->modelInstance = $modelInstance;
+        $this->modelInstance = $instance = ${$this->type} = $modelInstance;
 
-        return $this->setModelClass(get_class($modelInstance));
+        return $this->setModelClass(get_class($modelInstance))
+                    ->mergeContext($this->mergeData, compact($this->type, 'instance'));
     }
 
     /**
