@@ -49,7 +49,7 @@ class UserController extends ResourceModelController
         if (! Hash::check($request->input('current_password'), $user->password)) {
             $errors = ['current_password' => 'Current password provided is incorrect.'];
 
-            return redirect()->back()->withErrors($errors);
+            return $this->finishFailure(__FUNCTION__, $errors, []);
         }
         $user->update(['password' => Hash::make($request->input('password'))]);
 
@@ -82,9 +82,10 @@ class UserController extends ResourceModelController
         $currentPassword = $request->input('current_password');
 
         if (! Hash::check($currentPassword, $user->password)) {
+            $inputs = request()->except('current_password');
             $errors = ['current_password' => 'Current password provided is incorrect.'];
 
-            return redirect()->back()->withInput()->withErrors($errors);
+            return $this->finishFailure(__FUNCTION__, $errors, $inputs);
         }
 
         return $this->updateModel($request, $id);
