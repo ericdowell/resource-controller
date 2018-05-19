@@ -107,7 +107,17 @@ trait WithModel
      */
     protected function allModels(): Builder
     {
+        return $this->basicModelQuery();
+    }
+
+    /**
+     * @return Builder
+     */
+    protected function basicModelQuery(): Builder
+    {
         $query = $this->findModelInstance()->newQuery();
+
+        $this->queryWith($query);
 
         if ($this->withoutUser()) {
             return $query;
@@ -121,7 +131,17 @@ trait WithModel
      *
      * @return Builder
      */
-    protected function queryWithUser(Builder $query): Builder
+    protected function queryWith(Builder &$query): Builder
+    {
+        return $query;
+    }
+
+    /**
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    protected function queryWithUser(Builder &$query): Builder
     {
         return $query->with('user');
     }
@@ -133,11 +153,7 @@ trait WithModel
      */
     protected function findModel($id): Model
     {
-        if ($this->withoutUser()) {
-            return forward_static_call([$this->findModelClass(), 'findOrFail'], $id);
-        }
-
-        return forward_static_call([$this->findModelClass(), 'with'], 'user')->findOrFail($id);
+        return $this->basicModelQuery()->findOrFail($id);
     }
 
     /**

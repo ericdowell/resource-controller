@@ -56,7 +56,7 @@ trait WithProperties
      *
      * @var bool
      */
-    protected $withUser = true;
+    protected $withUser = false;
 
     /**
      * @param string $action
@@ -117,6 +117,16 @@ trait WithProperties
         $this->typeName = $typeName = str_plural(ucfirst($type));
 
         return $this->mergeContext($this->mergeData, compact('type', 'typeName'));
+    }
+
+    /**
+     * @return $this
+     */
+    protected function includeUser(): self
+    {
+        $this->withUser = true;
+
+        return $this;
     }
 
     /**
