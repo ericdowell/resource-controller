@@ -27,6 +27,13 @@ class TestPostController extends ModelMorphController
     protected $morphModelClass = TestText::class;
 
     /**
+     * Flag for setting/updating 'user_id' as attribute of Eloquent Model.
+     *
+     * @var bool
+     */
+    protected $withUser = true;
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  TestPostRequest $request
