@@ -32,7 +32,7 @@ class UserController extends ResourceModelController
      * @return Response
      * @throws Throwable
      */
-    public function passwordEdit($id): Response
+    public function passwordEdit($id)
     {
         return $this->edit($id);
     }
@@ -43,7 +43,7 @@ class UserController extends ResourceModelController
      *
      * @return RedirectResponse
      */
-    public function passwordUpdate(UserRequest $request, $id): RedirectResponse
+    public function passwordUpdate(UserRequest $request, $id)
     {
         $user = $this->findModel($id);
         if (! Hash::check($request->input('current_password'), $user->password)) {
@@ -63,7 +63,7 @@ class UserController extends ResourceModelController
      *
      * @return RedirectResponse
      */
-    public function store(UserRequest $request): RedirectResponse
+    public function store(UserRequest $request)
     {
         return $this->storeModel($request);
     }
@@ -76,7 +76,7 @@ class UserController extends ResourceModelController
      *
      * @return RedirectResponse
      */
-    public function update(UserRequest $request, $id): RedirectResponse
+    public function update(UserRequest $request, $id)
     {
         $user = $this->findModel($id);
         $currentPassword = $request->input('current_password');
