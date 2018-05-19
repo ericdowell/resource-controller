@@ -353,7 +353,7 @@ trait WithModelResource
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function finishFailure($action,  array $errors = [], array $inputs = null, $key = 'default')
+    protected function finishFailure($action, array $errors = [], array $inputs = null, $key = 'default')
     {
         return redirect()->back()->withInput($inputs)->withErrors($errors, $key);
     }
