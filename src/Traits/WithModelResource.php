@@ -346,6 +346,18 @@ trait WithModelResource
     }
 
     /**
+     * @param array $errors
+     * @param array|null $inputs - pass empty array for none, null for all or array of inputs.
+     * @param string $key
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function redirectBack(array $errors = [], array $inputs = null, $key = 'default')
+    {
+        return redirect()->back()->withInput($inputs)->withErrors($errors, $key);
+    }
+
+    /**
      * Returns redirects back to index route.
      *
      * @param string $action
