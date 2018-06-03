@@ -116,7 +116,7 @@ class RegisterUser extends Command
         if (! $file) {
             return [];
         } elseif (! File::exists($file)) {
-            throw new RuntimeException("File: '{$file}' does NOT exist.");
+            throw new RuntimeException("File: [{$file}] does NOT exist.");
         }
         $contents = File::get($file);
 
