@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Console\Commands;
 
-use Exception;
+use RuntimeException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
 
 class RegisterUser extends Command
 {
@@ -29,7 +30,7 @@ class RegisterUser extends Command
      * Get the Laravel application instance.
      *
      * @return string
-     * @throws \Exception
+     * @throws ModelClassCheckException
      */
     public function getUserModelClassName(): string
     {
@@ -37,19 +38,21 @@ class RegisterUser extends Command
         $laravel = $this->laravel;
         $fallback = $laravel->getNamespace().'\\User';
 
-        $userModel = $this->option('model') ?? config('auth.providers.users.model', $fallback);
-        if (! class_exists($userModel)) {
-            throw new Exception($userModel.' does not exist.');
+        $className = $this->option('model') ?? config('auth.providers.users.model', $fallback);
+
+        $userClassCheck = (new ModelClassCheckException())->setModel($className);
+        if (! $userClassCheck->classExists()) {
+            throw $userClassCheck;
         }
 
-        return $userModel;
+        return $userClassCheck->getModel();
     }
 
     /**
      * Execute the console command.
      *
      * @return mixed
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function handle(): int
     {
@@ -71,7 +74,7 @@ class RegisterUser extends Command
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     protected function getUserAttributes(): array
     {
@@ -95,7 +98,7 @@ class RegisterUser extends Command
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     protected function getAttributesFromFile(): array
     {
@@ -103,7 +106,7 @@ class RegisterUser extends Command
         if (! $file) {
             return [];
         } elseif (! File::exists($file)) {
-            throw new Exception($file.' does NOT exist.');
+            throw new RuntimeException("File: '{$file}' does NOT exist.");
         }
         $contents = File::get($file);
 
