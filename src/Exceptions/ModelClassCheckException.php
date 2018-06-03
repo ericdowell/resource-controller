@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace EricDowell\ResourceController\Exceptions;
 
 use RuntimeException;
+use Illuminate\Database\Eloquent\Model;
 
 class ModelClassCheckException extends RuntimeException
 {
     /**
-     * Name of the affected Eloquent model.
+     * Full classname of the Eloquent model.
      *
      * @var string
      */
     protected $model;
 
     /**
+     * Return classname of Eloquent model.
+     *
      * @return string
      */
     public function getModel(): string
@@ -24,9 +27,20 @@ class ModelClassCheckException extends RuntimeException
     }
 
     /**
-     * Set the affected Eloquent model.
+     * Return instance of Eloquent model.
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModelInstance(): Model
+    {
+        return new $this->model();
+    }
+
+    /**
+     * Set the Eloquent model to check.
      *
      * @param string $model
+     *
      * @return $this
      */
     public function setModel($model): self
@@ -37,6 +51,8 @@ class ModelClassCheckException extends RuntimeException
     }
 
     /**
+     * Check if model property is null and update error message.
+     *
      * @return bool
      */
     protected function isNull(): bool
@@ -47,6 +63,8 @@ class ModelClassCheckException extends RuntimeException
     }
 
     /**
+     * Check if model exists and extends Eloquent model base class.
+     *
      * @return bool
      */
     public function classExists(): bool
@@ -56,6 +74,6 @@ class ModelClassCheckException extends RuntimeException
         }
         $this->message = "Model [{$this->model}] does not exist.";
 
-        return class_exists($this->model);
+        return class_exists($this->model) && in_array(Model::class, class_parents($this->model));
     }
 }

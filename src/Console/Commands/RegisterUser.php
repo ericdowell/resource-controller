@@ -8,6 +8,7 @@ use RuntimeException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Model;
 use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
 
 class RegisterUser extends Command
@@ -17,7 +18,9 @@ class RegisterUser extends Command
      *
      * @var string
      */
-    protected $signature = 'register:user {--M|model=} {--F|file=}';
+    protected $signature = 'register:user
+                            {--M|model= : Optional, exact user classname, must extend Eloquent Model class}
+                            {--F|file= : Optional, exact path to json file containing user information}';
 
     /**
      * The console command description.
@@ -27,28 +30,6 @@ class RegisterUser extends Command
     protected $description = 'Register a new user account.';
 
     /**
-     * Get the Laravel application instance.
-     *
-     * @return string
-     * @throws ModelClassCheckException
-     */
-    public function getUserModelClassName(): string
-    {
-        /** @var \Illuminate\Foundation\Application $laravel */
-        $laravel = $this->laravel;
-        $fallback = $laravel->getNamespace().'\\User';
-
-        $className = $this->option('model') ?? config('auth.providers.users.model', $fallback);
-
-        $userClassCheck = (new ModelClassCheckException())->setModel($className);
-        if (! $userClassCheck->classExists()) {
-            throw $userClassCheck;
-        }
-
-        return $userClassCheck->getModel();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -56,10 +37,10 @@ class RegisterUser extends Command
      */
     public function handle(): int
     {
-        $userModel = $this->getUserModelClassName();
-        $attributes = $this->getUserAttributes();
+        $userInstance = $this->getUserInstance();
+        $attributes = $this->getUserAttributes($userInstance);
 
-        $created = forward_static_call([$userModel, 'create'], $attributes);
+        $created = $userInstance->create($attributes);
         if ($created) {
             $outputSafe = array_except($attributes, ['password']);
             $this->info('User successfully created!');
@@ -73,10 +54,35 @@ class RegisterUser extends Command
     }
 
     /**
-     * @return array
-     * @throws \RuntimeException
+     * Get the User model instance.
+     *
+     * @return Model|\Illuminate\Database\Eloquent\Builder
+     * @throws ModelClassCheckException
      */
-    protected function getUserAttributes(): array
+    protected function getUserInstance(): Model
+    {
+        /** @var \Illuminate\Foundation\Application $laravel */
+        $laravel = $this->laravel;
+        $fallback = $laravel->getNamespace().'\\User';
+
+        $className = $this->option('model') ?? config('auth.providers.users.model', $fallback);
+
+        $userClassCheck = (new ModelClassCheckException())->setModel($className);
+        if (! $userClassCheck->classExists()) {
+            throw $userClassCheck;
+        }
+
+        return $userClassCheck->getModelInstance();
+    }
+
+    /**
+     * Get all the attributes to create the User model with.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $userInstance
+     *
+     * @return array
+     */
+    protected function getUserAttributes(Model $userInstance): array
     {
         $attributes = $this->getAttributesFromFile();
         if (! empty($attributes)) {
@@ -86,7 +92,9 @@ class RegisterUser extends Command
 
         $this->askForEmail($attributes);
 
-        $inputUsername = $this->confirm('Do you want to set a username?');
+        $isUsernameFillable = in_array('username', $userInstance->getFillable()) || $userInstance->isUnguarded();
+
+        $inputUsername = $isUsernameFillable ? $this->confirm('Do you want to set a username?') : false;
         if ($inputUsername) {
             $attributes['username'] = $this->ask('Enter in username');
         }
@@ -97,6 +105,8 @@ class RegisterUser extends Command
     }
 
     /**
+     * Return contents of json file if option is present.
+     *
      * @return array
      * @throws \RuntimeException
      */
@@ -114,7 +124,11 @@ class RegisterUser extends Command
     }
 
     /**
+     * Make sure email is valid, set email as part of attributes.
+     *
      * @param array $attributes
+     *
+     * @return void
      */
     protected function askForEmail(array &$attributes)
     {
@@ -124,13 +138,17 @@ class RegisterUser extends Command
 
             return;
         }
-        $this->info("Email '{$email}' is not valid, please try again.'");
+        $this->info("Email: '{$email}' is NOT valid, please try again.'");
 
         $this->askForEmail($attributes);
     }
 
     /**
+     * Make sure password and confirmation password match, set hashed password as part of attributes.
+     *
      * @param array $attributes
+     *
+     * @return void
      */
     protected function askForPassword(array &$attributes)
     {
