@@ -6,8 +6,8 @@ namespace EricDowell\ResourceController\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterUser extends Command
 {
