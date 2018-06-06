@@ -26,6 +26,8 @@ trait WithModelResource
      */
     final public function __construct(Router $router)
     {
+        $this->beginningConstruct();
+
         $middleware = $this->modelMiddleware;
         $this->mergeData = $this->checkModels()->generateDefaults($router->current());
 
@@ -46,6 +48,13 @@ trait WithModelResource
      * @return \Illuminate\Routing\ControllerMiddlewareOptions
      */
     abstract public function middleware($middleware, array $options = []);
+
+    /**
+     * A place to complete any addition constructor required logic.
+     */
+    protected function beginningConstruct(): void
+    {
+    }
 
     /**
      * A place to complete any addition constructor required logic.

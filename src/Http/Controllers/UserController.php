@@ -34,7 +34,7 @@ class UserController extends ResourceModelController
     /**
      * A place to complete any addition constructor required logic.
      */
-    protected function finishConstruct(): void
+    protected function beginningConstruct(): void
     {
         if (empty($this->modelClass)) {
             $this->setModelClass(get_class($this->getUserInstance()));
