@@ -85,12 +85,13 @@ trait UserResource
             return $className;
         }
         $fallback = rtrim(app()->getNamespace(), '\\').'\\User';
+        $authUserModel = config('auth.providers.users.model', $fallback);
 
-        if ($this instanceof Controller && isset($this->modelClass)) {
-            $className = $this->modelClass;
+        if ($this instanceof Controller) {
+            $className = isset($this->modelClass) ? $this->modelClass : $authUserModel;
         }
         if (! $className && $this instanceof Command) {
-            $className = $this->option('model') ?? config('auth.providers.users.model', $fallback);
+            $className = $this->option('model') ?? $authUserModel;
         }
         if (! $className || ! is_string($className)) {
             return $fallback;
