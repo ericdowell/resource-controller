@@ -42,20 +42,13 @@ trait UserResource
 
     /**
      * @param string|null $name
-     * @param string|null $controller
      * @param array $options
      *
      * @return \Illuminate\Routing\PendingResourceRegistration
      */
-    public static function userResource(string $name = null, string $controller = null, array $options = [])
+    public static function userResource(string $name = null, array $options = [])
     {
-        $name = 'user' ?? $name;
-        if ($controller) {
-            return Route::resource($name, $controller, $options);
-        }
-        $namespace = 'EricDowell\ResourceController\Http\Controllers';
-
-        return Route::namespace($namespace)->resource($name, 'UserController', $options);
+        return Route::resource('user' ?? $name, 'UserController', $options);
     }
 
     /**
