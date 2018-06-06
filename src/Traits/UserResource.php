@@ -28,7 +28,7 @@ trait UserResource
      */
     public static function passwordRoutes(string $controller = null)
     {
-        $uri = "user/password/{user}";
+        $uri = 'user/password/{user}';
         $controller = $controller ?? 'UserController';
 
         Route::get("{$uri}/edit", "{$controller}@passwordEdit")->name('user.password-edit');
