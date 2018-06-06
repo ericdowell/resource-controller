@@ -84,7 +84,7 @@ trait UserResource
         if (is_string($className)) {
             return $className;
         }
-        $fallback = app()->getNamespace().'\\User';
+        $fallback = rtrim(app()->getNamespace(), '\\').'\\User';
 
         if ($this instanceof Controller && isset($this->modelClass)) {
             $className = $this->modelClass;
