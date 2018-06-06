@@ -9,10 +9,12 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
-use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
+use EricDowell\ResourceController\Traits\UserResource;
 
 class RegisterUser extends Command
 {
+    use UserResource;
+
     /**
      * The name and signature of the console command.
      *
@@ -51,28 +53,6 @@ class RegisterUser extends Command
         $this->info('Sorry, user was NOT created. Please try again.');
 
         return 1;
-    }
-
-    /**
-     * Get the User model instance.
-     *
-     * @return Model|\Illuminate\Database\Eloquent\Builder
-     * @throws ModelClassCheckException
-     */
-    protected function getUserInstance(): Model
-    {
-        /** @var \Illuminate\Foundation\Application $laravel */
-        $laravel = $this->laravel;
-        $fallback = $laravel->getNamespace().'\\User';
-
-        $className = $this->option('model') ?? config('auth.providers.users.model', $fallback);
-
-        $userClassCheck = (new ModelClassCheckException())->setModel($className);
-        if (! $userClassCheck->classExists()) {
-            throw $userClassCheck;
-        }
-
-        return $userClassCheck->getModelInstance();
     }
 
     /**
