@@ -87,11 +87,10 @@ trait UserResource
         $fallback = rtrim(app()->getNamespace(), '\\').'\\User';
         $authUserModel = config('auth.providers.users.model', $fallback);
 
-        if ($this instanceof Controller) {
-            $className = isset($this->modelClass) ? $this->modelClass : $authUserModel;
-        }
-        if (! $className && $this instanceof Command) {
+        if ($this instanceof Command) {
             $className = $this->option('model') ?? $authUserModel;
+        } elseif ($this instanceof Controller) {
+            $className = isset($this->modelClass) ? $this->modelClass : $authUserModel;
         }
         if (! $className || ! is_string($className)) {
             return $fallback;
