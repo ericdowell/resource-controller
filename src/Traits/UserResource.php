@@ -14,41 +14,39 @@ trait UserResource
 {
     /**
      * @param string|null $name
-     *
+     * @param string|null $controller
      * @return void
      */
-    public static function routes(string $name = null)
+    public static function routes(string $name = null, string $controller = null)
     {
-        static::passwordRoutes($name);
-        static::userResource($name);
+        static::passwordRoutes($name, $controller);
+        static::userResource($name, $controller);
     }
 
     /**
      * @param string|null $name
+     * @param string|null $controller
      * @return void
      */
-    public static function passwordRoutes(string $name = null)
+    public static function passwordRoutes(string $name = null, string $controller = null)
     {
         $name = $name ?? 'user';
-        Route::get("{$name}/password/{user}/edit", [
-            'as' => 'user.password-edit',
-            'uses' => 'UserController@passwordEdit',
-        ]);
-        Route::patch("{$name}/password/{user}", [
-            'as' => 'user.password-update',
-            'uses' => 'UserController@passwordUpdate',
-        ]);
+        $uri = "{$name}/password/{user}";
+
+        Route::get("{$uri}/edit", "{$controller}@passwordEdit")->name("{$name}.password-edit");
+        Route::patch($uri, "{$controller}@passwordUpdate")->name("{$name}.password-update");
     }
 
     /**
      * @param string|null $name
+     * @param string|null $controller
      * @param array $options
      *
      * @return \Illuminate\Routing\PendingResourceRegistration
      */
-    public static function userResource(string $name = null, array $options = [])
+    public static function userResource(string $name = null, string $controller = null, array $options = [])
     {
-        return Route::resource('user' ?? $name, 'UserController', $options);
+        return Route::resource('user' ?? $name, $controller ?? 'UserController', $options);
     }
 
     /**
