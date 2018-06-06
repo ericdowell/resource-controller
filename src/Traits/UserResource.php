@@ -13,40 +13,37 @@ use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
 trait UserResource
 {
     /**
-     * @param string|null $name
      * @param string|null $controller
      * @return void
      */
-    public static function routes(string $name = null, string $controller = null)
+    public static function routes(string $controller = null)
     {
-        static::passwordRoutes($name, $controller);
-        static::userResource($name, $controller);
+        static::passwordRoutes($controller);
+        static::userResource($controller);
     }
 
     /**
-     * @param string|null $name
      * @param string|null $controller
      * @return void
      */
-    public static function passwordRoutes(string $name = null, string $controller = null)
+    public static function passwordRoutes(string $controller = null)
     {
-        $name = $name ?? 'user';
-        $uri = "{$name}/password/{user}";
+        $uri = "user/password/{user}";
+        $controller = $controller ?? 'UserController';
 
-        Route::get("{$uri}/edit", "{$controller}@passwordEdit")->name("{$name}.password-edit");
-        Route::patch($uri, "{$controller}@passwordUpdate")->name("{$name}.password-update");
+        Route::get("{$uri}/edit", "{$controller}@passwordEdit")->name('user.password-edit');
+        Route::patch($uri, "{$controller}@passwordUpdate")->name('user.password-update');
     }
 
     /**
-     * @param string|null $name
      * @param string|null $controller
      * @param array $options
      *
      * @return \Illuminate\Routing\PendingResourceRegistration
      */
-    public static function userResource(string $name = null, string $controller = null, array $options = [])
+    public static function userResource(string $controller = null, array $options = [])
     {
-        return Route::resource('user' ?? $name, $controller ?? 'UserController', $options);
+        return Route::resource('user', $controller ?? 'UserController', $options);
     }
 
     /**
