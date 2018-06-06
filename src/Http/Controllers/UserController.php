@@ -8,10 +8,13 @@ use Throwable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
+use EricDowell\ResourceController\Traits\UserResource;
 use EricDowell\ResourceController\Http\Requests\UserRequest;
 
 class UserController extends ResourceModelController
 {
+    use UserResource;
+
     /**
      * Given a route action (key) set the form action (value).
      *
@@ -27,6 +30,16 @@ class UserController extends ResourceModelController
      * @var array
      */
     protected $publicActions = [];
+
+    /**
+     * A place to complete any addition constructor required logic.
+     */
+    protected function beginningConstruct(): void
+    {
+        if (empty($this->modelClass)) {
+            $this->setModelClass(get_class($this->getUserInstance()));
+        }
+    }
 
     /**
      * @param int $id
