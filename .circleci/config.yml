@@ -30,7 +30,7 @@ jobs:
             if [ -z ${CC_TEST_REPORTER_ID+x} ]; then
               echo "CC_TEST_REPORTER_ID not set";
             else
-              ./cc-test-reporter after-build --coverage-input-type clover --exit-code $? || echo 'Nothing sent, failed';
+              ./cc-test-reporter after-build --coverage-input-type clover || echo 'Nothing sent, failed';
             fi
       - store_test_results:
           path: build/junit
