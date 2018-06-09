@@ -15,15 +15,14 @@ jobs:
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
-      - run:
-          name: Run Unit Tests and Generate Code Coverage XML File
-          command: |
             if [ -z ${CC_TEST_REPORTER_ID+x} ]; then
               echo "CC_TEST_REPORTER_ID not set";
             else
               ./cc-test-reporter before-build;
             fi
-            composer test;
+      - run:
+          name: Run Unit Tests and Generate Code Coverage XML File
+          command: composer test;
       - run:
           name: Send clover.xml Using Reporter
           command: |
