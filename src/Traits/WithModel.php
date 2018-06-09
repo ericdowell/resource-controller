@@ -58,8 +58,27 @@ trait WithModel
     /**
      * @return string
      */
+    protected function modelClassNamespace()
+    {
+        if (isset($this->modelClassNamespace)) {
+            return $this->modelClassNamespace;
+        }
+
+        return rtrim(app()->getNamespace(), '\\');
+    }
+
+    /**
+     * @return string
+     */
     protected function modelClass()
     {
+        if (empty($this->modelClass)) {
+            $modelClass = $this->modelClassNamespace().'\\';
+            $modelClass .= str_replace(['\\', 'Controller'], '', studly_case(class_basename($this)));
+
+            return $modelClass;
+        }
+
         return $this->modelClass;
     }
 

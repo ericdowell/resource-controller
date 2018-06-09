@@ -2,6 +2,7 @@
 
 namespace EricDowell\ResourceController\Tests\Unit;
 
+use Illuminate\Database\Eloquent\Model;
 use EricDowell\ResourceController\Tests\TestCase;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 use EricDowell\ResourceController\Http\Controllers\ResourceModelController;
@@ -24,13 +25,13 @@ class WithModelResourceTest extends TestCase
      * @test
      * @group unit
      * @group model-resource-trait
-     *
-     * @expectedException \EricDowell\ResourceController\Exceptions\ModelClassCheckException
-     * @expectedExceptionMessage Model property is empty.
      */
-    public function testExceptionThrownClassPropertyEmpty()
+    public function testAutoFindModelClassWhenClassPropertyEmpty()
     {
-        app(NoModelClassProperty::class);
+        /** @var NoModelClassPropertyController $noModelClassProperty */
+        $noModelClassProperty = app(NoModelClassPropertyController::class);
+
+        $this->assertSame(NoModelClassProperty::class, $noModelClassProperty->getModelClass());
     }
 
     /**
@@ -55,8 +56,24 @@ class NoModelClassDoesNotExist extends ResourceModelController
     protected $modelClass = 'FakeRandomClassNameDoesNotExist';
 }
 
-class NoModelClassProperty extends ResourceModelController
+class NoModelClassProperty extends Model
 {
+}
+
+class NoModelClassPropertyController extends ResourceModelController
+{
+    /**
+     * @var string
+     */
+    protected $modelClassNamespace = 'EricDowell\ResourceController\Tests\Unit';
+
+    /**
+     * @return string
+     */
+    public function getModelClass()
+    {
+        return $this->modelClass();
+    }
 }
 
 class NoRouteAvailable extends ResourceModelController
