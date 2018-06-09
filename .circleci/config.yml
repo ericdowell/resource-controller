@@ -24,7 +24,7 @@ jobs:
           name: Run Unit Tests and Generate Code Coverage XML File
           command: composer test;
       - run:
-          name: Send clover.xml Using Reporter
+          name: Sending clover.xml to Code Climate via test-reporter
           command: |
             if [ -z ${CC_TEST_REPORTER_ID+x} ]; then
               echo "CC_TEST_REPORTER_ID not set";
