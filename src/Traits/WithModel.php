@@ -58,7 +58,7 @@ trait WithModel
     /**
      * @return string
      */
-    protected function modelNamespace()
+    protected function modelClassNamespace()
     {
         if (isset($this->modelClassNamespace)) {
             return $this->modelClassNamespace;
@@ -73,7 +73,7 @@ trait WithModel
     protected function modelClass()
     {
         if (empty($this->modelClass)) {
-            $modelClass = $this->modelNamespace().'\\';
+            $modelClass = $this->modelClassNamespace().'\\';
             $modelClass .= str_replace(['\\', 'Controller'], '', studly_case(class_basename($this)));
 
             return $modelClass;
