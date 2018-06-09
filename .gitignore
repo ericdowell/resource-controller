@@ -6,6 +6,7 @@ vendor/
 .env
 .DS_Store
 .idea
+clover.xml
 composer.lock
 composer.phar
 Thumbs.db

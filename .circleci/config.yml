@@ -11,10 +11,27 @@ jobs:
           name: Install PHP Dependencies
           command: composer install --no-interaction --optimize-autoloader --prefer-dist
       - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+            if [ -z ${CC_TEST_REPORTER_ID+x} ]; then
+              echo "CC_TEST_REPORTER_ID not set";
+            else
+              ./cc-test-reporter before-build;
+            fi
+      - run:
           name: Run Unit Tests and Generate Code Coverage XML File
-          command: composer test
+          command: composer test;
+      - run:
+          name: Sending clover.xml to Code Climate via test-reporter
+          command: |
+            if [ -z ${CC_TEST_REPORTER_ID+x} ]; then
+              echo "CC_TEST_REPORTER_ID not set";
+            else
+              ./cc-test-reporter after-build --coverage-input-type clover || echo 'Nothing sent, failed';
+            fi
       - store_test_results:
           path: build/junit
       - store_artifacts:
           path: build/junit
-      - run: if [ -z ${CODECLIMATE_REPO_TOKEN+x} ]; then echo "CODECLIMATE_REPO_TOKEN not set"; else ./vendor/bin/test-reporter || echo 'Nothing sent, failed'; fi
