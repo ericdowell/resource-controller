@@ -18,11 +18,19 @@ jobs:
       - run:
           name: Run Unit Tests and Generate Code Coverage XML File
           command: |
-            ./cc-test-reporter before-build;
-            composer test;
             if [ -z ${CC_TEST_REPORTER_ID+x} ]; then
               echo "CC_TEST_REPORTER_ID not set";
-            else ./cc-test-reporter after-build --coverage-input-type clover --exit-code $? || echo 'Nothing sent, failed';
+            else
+              ./cc-test-reporter before-build;
+            fi
+            composer test;
+      - run:
+          name: Send clover.xml Using Reporter
+          command: |
+            if [ -z ${CC_TEST_REPORTER_ID+x} ]; then
+              echo "CC_TEST_REPORTER_ID not set";
+            else
+              ./cc-test-reporter after-build --coverage-input-type clover --exit-code $? || echo 'Nothing sent, failed';
             fi
       - store_test_results:
           path: build/junit
