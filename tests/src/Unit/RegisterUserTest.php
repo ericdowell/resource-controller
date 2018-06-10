@@ -49,17 +49,4 @@ class RegisterUserTest extends TestCase
         //$this->assertTrue(Hash::check($password, $user->password), $message);
         $this->assertSame($name, $user->name);
     }
-
-    /**
-     * Call artisan command and return code.
-     *
-     * @param  string  $command
-     * @param  array  $parameters
-     *
-     * @return int
-     */
-    public function artisan($command, $parameters = [])
-    {
-        return parent::artisan($command, array_merge($parameters, ['--no-interaction' => true]));
-    }
 }

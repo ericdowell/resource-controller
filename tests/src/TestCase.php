@@ -125,6 +125,19 @@ class TestCase extends SupportTestCase
     }
 
     /**
+     * Call artisan command and return code.
+     *
+     * @param  string  $command
+     * @param  array  $parameters
+     *
+     * @return int
+     */
+    public function artisan($command, $parameters = [])
+    {
+        return parent::artisan($command, array_merge($parameters, ['--no-interaction' => true]));
+    }
+
+    /**
      * @param $command
      */
     protected function addCommand($command)
