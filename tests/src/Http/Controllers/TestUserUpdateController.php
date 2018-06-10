@@ -33,9 +33,4 @@ class TestUserUpdateController extends ResourceModelController
      * @var string
      */
     protected $modelClass = TestUser::class;
-
-    /**
-     * @var bool
-     */
-    protected $withUser = false;
 }

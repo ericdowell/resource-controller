@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Tests;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\TestResponse;
 use Orchestra\Testbench\TestCase as SupportTestCase;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use EricDowell\ResourceController\Tests\Models\TestPost;
 use EricDowell\ResourceController\Tests\Traits\LoadTestConfiguration;
 
 class TestCase extends SupportTestCase
@@ -24,6 +25,10 @@ class TestCase extends SupportTestCase
 
         $this->loadMigrationsFrom($basePath.'/database/migrations');
         $this->withFactories($basePath.'/database/factories');
+
+        Relation::morphMap([
+            'post' => TestPost::class,
+        ]);
     }
 
     /**
@@ -64,14 +69,5 @@ class TestCase extends SupportTestCase
             file_put_contents($filename, $response->getContent());
         }
         $response->assertStatus($statusCode);
-    }
-
-    /**
-     * @param Application $app
-     * @return array
-     */
-    protected function getPackageProviders($app)
-    {
-        return [TestServiceProvider::class];
     }
 }

@@ -6,6 +6,7 @@ namespace EricDowell\ResourceController\Tests\Feature;
 
 use Faker\Generator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use EricDowell\ResourceController\Tests\Models\TestUser;
@@ -13,6 +14,21 @@ use EricDowell\ResourceController\Tests\Models\TestUser;
 class UserTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * Setup the test environment.
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        Route::group(['namespace' => 'EricDowell\ResourceController\Tests\Http\Controllers'], function() {
+            Route::get('user/password/{user}/edit', ['as' => 'user.password-edit', 'uses' => 'TestUserController@passwordEdit']);
+            Route::put('user/password/{user}', ['as' => 'user.password-update', 'uses' => 'TestUserController@passwordUpdate']);
+            Route::resource('user', 'TestUserController');
+            Route::resource('user-update', 'TestUserUpdateController');
+        });
+    }
 
     /**
      * @test
@@ -50,9 +66,9 @@ class UserTest extends TestCase
 
         $name = $faker->name;
         $email = $faker->unique()->safeEmail;
-        $password = 'secret';
+        $password = $password_confirmation = 'secret';
 
-        $response = $this->actingAs($user)->post(route('user.store'), compact('name', 'email', 'password'));
+        $response = $this->actingAs($user)->post(route('user.store'), compact('name', 'email', 'password', 'password_confirmation'));
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.store', 302);
 
         $response->assertRedirect(url(route('user.index')));
@@ -87,21 +103,13 @@ class UserTest extends TestCase
         $current_password = 'secret';
 
         $response = $this->actingAs($user)->put(route('user.update', $user->id), compact('name', 'email'));
-        $this->assertFunctionFailure($response, __FILE__, __FUNCTION__.'.update.put');
+        // Would in normal cases be 'edit', but there's no 'back'/'previous', so home.index is what is used.
+        $response->assertRedirect(url('/'));
 
         $response = $this->actingAs($user)->put(route('user-update.update', $user->id), compact('name', 'email'));
         $this->assertFunctionFailure($response, __FILE__, __FUNCTION__.'.update.put.edit-method-property');
 
-        $response = $this->actingAs($user)->patch(route('user.update', $user->id), compact('name', 'email', 'password'));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.update.patch', 302);
-        $response->assertRedirect(url(route('user.index')));
-
         $user->refresh();
-
-        $this->assertSame($name, $user->name);
-        $this->assertSame($email, $user->email);
-        $this->assertNull(TestUser::wherePassword($password)->first());
-        $this->assertFalse(Hash::check($password, $user->password));
 
         $response = $this->actingAs($user)->put(route('user.password-update', $user->id), compact('password', 'password_confirmation', 'current_password'));
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.password-update', 302);
@@ -109,8 +117,8 @@ class UserTest extends TestCase
 
         $user->refresh();
 
-        $this->assertTrue(Hash::check($password, $user->password));
-        $this->assertNull(TestUser::wherePassword($password)->first());
+        $this->assertTrue(Hash::check($password, $user->password), 'Password was NOT updated, when it should have been.');
+        $this->assertNull(TestUser::wherePassword($password)->first(), 'The password was saved in the database as plaintext!');
 
         $response = $this->actingAs($user)->delete(route('user.destroy', $user->id));
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.destroy', 302);

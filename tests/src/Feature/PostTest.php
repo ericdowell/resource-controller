@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EricDowell\ResourceController\Tests\Feature;
 
 use Faker\Generator;
+use Illuminate\Support\Facades\Route;
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use EricDowell\ResourceController\Tests\Models\TestPost;
@@ -14,6 +15,18 @@ use EricDowell\ResourceController\Tests\Models\TestUser;
 class PostTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * Setup the test environment.
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        Route::group(['namespace' => 'EricDowell\ResourceController\Tests\Http\Controllers'], function() {
+            Route::resource('post', 'TestPostController');
+        });
+    }
 
     /**
      * @test
