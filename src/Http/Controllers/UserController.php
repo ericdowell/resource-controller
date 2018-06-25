@@ -32,6 +32,13 @@ class UserController extends ResourceModelController
     protected $publicActions = [];
 
     /**
+     * @var array
+     */
+    protected $upsertExcept = [
+        'password',
+    ];
+
+    /**
      * A place to complete any addition constructor required logic.
      */
     protected function beginningConstruct(): void

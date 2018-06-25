@@ -4,14 +4,25 @@ declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Tests;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\TestResponse;
+use EricDowell\ResourceController\ServiceProvider;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Orchestra\Testbench\TestCase as SupportTestCase;
+use EricDowell\ResourceController\Tests\Models\TestPost;
+use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
+use EricDowell\ResourceController\Tests\Console\TestKernel;
 use EricDowell\ResourceController\Tests\Traits\LoadTestConfiguration;
 
 class TestCase extends SupportTestCase
 {
     use LoadTestConfiguration;
+
+    /**
+     * Output of Console.
+     *
+     * @var string
+     */
+    protected $consoleOutput;
 
     /**
      * Setup the test environment.
@@ -24,6 +35,22 @@ class TestCase extends SupportTestCase
 
         $this->loadMigrationsFrom($basePath.'/database/migrations');
         $this->withFactories($basePath.'/database/factories');
+
+        Relation::morphMap([
+            'post' => TestPost::class,
+        ]);
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->consoleOutput = '';
     }
 
     /**
@@ -67,11 +94,79 @@ class TestCase extends SupportTestCase
     }
 
     /**
-     * @param Application $app
+     * @param string $needle
+     * @param string $message
+     */
+    protected function assertOutputContains($needle, string $message = '')
+    {
+        $this->assertContains($needle, $this->consoleOutput());
+    }
+
+    /**
+     * @param string $needle
+     * @param string $message
+     */
+    protected function assertOutputDoesNotContains($needle, string $message = '')
+    {
+        $this->assertNotContains($needle, $this->consoleOutput());
+    }
+
+    /**
+     * Get package providers.
+     *
+     * @param \Illuminate\Foundation\Application $app
+     *
      * @return array
      */
     protected function getPackageProviders($app)
     {
-        return [TestServiceProvider::class];
+        return [ServiceProvider::class];
+    }
+
+    /**
+     * Resolve application Console TestKernel implementation.
+     *
+     * @param  \Illuminate\Foundation\Application $app
+     *
+     * @return void
+     */
+    protected function resolveApplicationConsoleKernel($app)
+    {
+        $app->singleton('artisan', function ($app) {
+            return new \Illuminate\Console\Application($app, $app['events'], $app->version());
+        });
+
+        $app->singleton(ConsoleKernel::class, TestKernel::class);
+    }
+
+    /**
+     * Call artisan command and return code.
+     *
+     * @param  string $command
+     * @param  array $parameters
+     *
+     * @return int
+     */
+    public function artisan($command, $parameters = [])
+    {
+        return parent::artisan($command, array_merge($parameters, ['--no-interaction' => true]));
+    }
+
+    /**
+     * @param $command
+     */
+    protected function addCommand($command)
+    {
+        $this->app['artisan']->add($command);
+    }
+
+    /**
+     * Output of Console.
+     *
+     * @return mixed
+     */
+    public function consoleOutput()
+    {
+        return $this->consoleOutput ?: $this->consoleOutput = $this->app[ConsoleKernel::class]->output();
     }
 }

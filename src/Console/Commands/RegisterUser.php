@@ -133,6 +133,12 @@ class RegisterUser extends Command
     protected function askForPassword(array &$attributes)
     {
         $password = $this->secret('Enter password');
+        if (is_null($password) || empty(trim($password))) {
+            $this->info('The password can NOT be empty, please try again.');
+            $this->askForPassword($attributes);
+
+            return;
+        }
         $confirm = $this->secret('Confirm password');
         if ($password === $confirm) {
             $attributes['password'] = Hash::make($password);
