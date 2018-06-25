@@ -27,15 +27,15 @@ class RegisterUserTest extends TestCase
 
         $this->artisan('register:user', ['--model' => TestUser::class]);
 
-        $this->assertOutputContains('hi@example.com');
-        $this->assertOutputDoesNotContains(TestRegisterUser::PASSWORD);
+        $this->assertOutputContains(TestRegisterUser::EMAIL, sprintf('Email "%s" not found in output.', TestRegisterUser::EMAIL));
+        $this->assertOutputDoesNotContains(TestRegisterUser::PASSWORD, 'Password was found as part of the output!');
 
         $user = TestUser::whereEmail(TestRegisterUser::EMAIL)->first();
-
         $this->assertInstanceOf(TestUser::class, $user);
+        $this->assertSame(TestRegisterUser::NAME, $user->name);
+
         $message = sprintf('Password \'%s\' doesn\'t pass hash check with user password hash %s.', TestRegisterUser::PASSWORD, $user->password);
         $this->assertTrue(Hash::check(TestRegisterUser::PASSWORD, $user->password), $message);
-        $this->assertSame(TestRegisterUser::NAME, $user->name);
     }
 }
 

@@ -95,16 +95,18 @@ class TestCase extends SupportTestCase
 
     /**
      * @param string $needle
+     * @param string $message
      */
-    protected function assertOutputContains($needle)
+    protected function assertOutputContains($needle, string $message = '')
     {
         $this->assertContains($needle, $this->consoleOutput());
     }
 
     /**
      * @param string $needle
+     * @param string $message
      */
-    protected function assertOutputDoesNotContains($needle)
+    protected function assertOutputDoesNotContains($needle, string $message = '')
     {
         $this->assertNotContains($needle, $this->consoleOutput());
     }
