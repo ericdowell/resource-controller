@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EricDowell\ResourceController\Tests;
 
 use Illuminate\Foundation\Testing\TestResponse;
+use EricDowell\ResourceController\ServiceProvider;
 use Orchestra\Testbench\TestCase as SupportTestCase;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use EricDowell\ResourceController\Tests\Models\TestPost;
@@ -109,6 +110,18 @@ class TestCase extends SupportTestCase
     }
 
     /**
+     * Get package providers.
+     *
+     * @param \Illuminate\Foundation\Application $app
+     *
+     * @return array
+     */
+    protected function getPackageProviders($app)
+    {
+        return [ServiceProvider::class];
+    }
+
+    /**
      * Resolve application Console TestKernel implementation.
      *
      * @param  \Illuminate\Foundation\Application $app
@@ -127,8 +140,8 @@ class TestCase extends SupportTestCase
     /**
      * Call artisan command and return code.
      *
-     * @param  string  $command
-     * @param  array  $parameters
+     * @param  string $command
+     * @param  array $parameters
      *
      * @return int
      */
@@ -142,11 +155,12 @@ class TestCase extends SupportTestCase
      */
     protected function addCommand($command)
     {
-        $this->app['Illuminate\Contracts\Console\Kernel']->registerCommand($command);
+        $this->app['artisan']->add($command);
     }
 
     /**
      * Output of Console
+     *
      * @return mixed
      */
     public function consoleOutput()

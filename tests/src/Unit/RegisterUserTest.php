@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace EricDowell\ResourceController\Tests\Unit;
 
 use Mockery as m;
-use Illuminate\Support\Facades\Hash;
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\Console\Tester\CommandTester;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 use EricDowell\ResourceController\Console\Commands\RegisterUser;
 
@@ -25,15 +25,16 @@ class RegisterUserTest extends TestCase
         $name = 'Tester';
         $email = 'hi@example.com';
         $password = 'secret';
-        $command = m::mock(RegisterUser::class.'[ask]');
-
         $this->assertNull(TestUser::whereEmail($email)->first(), 'User model exists when it should NOT.');
 
-        $command->shouldReceive('ask')->with('Enter name')->once()->andReturn($name);
-        $command->shouldReceive('ask')->with('Enter in an email')->once()->andReturn($email);
-        $command->shouldReceive('confirm')->never();
-        $command->shouldReceive('secret')->with('Enter password')->once()->andReturn($password);
-        $command->shouldReceive('secret')->with('Confirm password')->once()->andReturn($password);
+        /** @var RegisterUser|\Mockery\MockInterface $command */
+        $command = m::mock('\\'.RegisterUser::class.'[ask]');
+
+        $command->shouldReceive('ask')->once()->with('Enter name')->andReturn($name);
+        $command->shouldReceive('ask')->once()->with('Enter in an email')->andReturn($email);
+        $command->shouldNotReceive('confirm')->never();
+        $command->shouldReceive('secret')->once()->with('Enter password', null)->andReturn($password);
+        $command->shouldReceive('secret')->once()->with('Confirm password')->andReturn($password);
 
         $this->addCommand($command);
 

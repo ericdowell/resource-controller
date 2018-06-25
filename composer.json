@@ -35,6 +35,11 @@
         "test": "phpunit"
     },
     "extra": {
+        "laravel": {
+            "providers": [
+                "EricDowell\\ResourceController\\ServiceProvider"
+            ]
+        },
         "branch-alias": {
             "dev-master": "1.4-dev"
         }
