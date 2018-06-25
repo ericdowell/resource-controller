@@ -8,7 +8,9 @@ use Illuminate\Support\ServiceProvider as SupportServiceProvider;
 class ServiceProvider extends SupportServiceProvider
 {
     /**
+     * Register Resource Controller services.
      *
+     * @return void
      */
     public function register()
     {

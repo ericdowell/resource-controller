@@ -23,7 +23,7 @@ class PostTest extends TestCase
     {
         parent::setUp();
 
-        Route::group(['namespace' => 'EricDowell\ResourceController\Tests\Http\Controllers'], function() {
+        Route::group(['namespace' => 'EricDowell\ResourceController\Tests\Http\Controllers'], function () {
             Route::resource('post', 'TestPostController');
         });
     }

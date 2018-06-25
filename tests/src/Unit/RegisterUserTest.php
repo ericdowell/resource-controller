@@ -71,7 +71,7 @@ class TestRegisterUser extends RegisterUser
             case 'Enter in an email':
                 return self::EMAIL;
             default:
-                return null;
+                return;
         }
     }
 
@@ -89,7 +89,7 @@ class TestRegisterUser extends RegisterUser
             case 'Confirm password':
                 return self::PASSWORD;
             default:
-                return null;
+                return;
         }
     }
 }

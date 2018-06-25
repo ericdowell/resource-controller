@@ -22,9 +22,15 @@ class UserTest extends TestCase
     {
         parent::setUp();
 
-        Route::group(['namespace' => 'EricDowell\ResourceController\Tests\Http\Controllers'], function() {
-            Route::get('user/password/{user}/edit', ['as' => 'user.password-edit', 'uses' => 'TestUserController@passwordEdit']);
-            Route::put('user/password/{user}', ['as' => 'user.password-update', 'uses' => 'TestUserController@passwordUpdate']);
+        Route::group(['namespace' => 'EricDowell\ResourceController\Tests\Http\Controllers'], function () {
+            Route::get('user/password/{user}/edit', [
+                'as' => 'user.password-edit',
+                'uses' => 'TestUserController@passwordEdit',
+            ]);
+            Route::put('user/password/{user}', [
+                'as' => 'user.password-update',
+                'uses' => 'TestUserController@passwordUpdate',
+            ]);
             Route::resource('user', 'TestUserController');
             Route::resource('user-update', 'TestUserUpdateController');
         });

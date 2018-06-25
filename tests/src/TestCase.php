@@ -6,8 +6,8 @@ namespace EricDowell\ResourceController\Tests;
 
 use Illuminate\Foundation\Testing\TestResponse;
 use EricDowell\ResourceController\ServiceProvider;
-use Orchestra\Testbench\TestCase as SupportTestCase;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Orchestra\Testbench\TestCase as SupportTestCase;
 use EricDowell\ResourceController\Tests\Models\TestPost;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use EricDowell\ResourceController\Tests\Console\TestKernel;
@@ -18,7 +18,7 @@ class TestCase extends SupportTestCase
     use LoadTestConfiguration;
 
     /**
-     * Output of Console
+     * Output of Console.
      *
      * @var string
      */
@@ -159,7 +159,7 @@ class TestCase extends SupportTestCase
     }
 
     /**
-     * Output of Console
+     * Output of Console.
      *
      * @return mixed
      */
