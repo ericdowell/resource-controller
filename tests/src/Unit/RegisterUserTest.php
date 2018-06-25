@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace EricDowell\ResourceController\Tests\Unit;
 
-use Mockery as m;
+use Illuminate\Support\Facades\Hash;
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\Console\Tester\CommandTester;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 use EricDowell\ResourceController\Console\Commands\RegisterUser;
 
@@ -22,32 +21,75 @@ class RegisterUserTest extends TestCase
      */
     public function testRegisterUserWithPassingModel()
     {
-        $name = 'Tester';
-        $email = 'hi@example.com';
-        $password = 'secret';
-        $this->assertNull(TestUser::whereEmail($email)->first(), 'User model exists when it should NOT.');
+        $this->assertNull(TestUser::whereEmail(TestRegisterUser::EMAIL)->first(), 'User model exists when it should NOT.');
 
-        /** @var RegisterUser|\Mockery\MockInterface $command */
-        $command = m::mock('\\'.RegisterUser::class.'[ask]');
-
-        $command->shouldReceive('ask')->once()->with('Enter name')->andReturn($name);
-        $command->shouldReceive('ask')->once()->with('Enter in an email')->andReturn($email);
-        $command->shouldNotReceive('confirm')->never();
-        $command->shouldReceive('secret')->once()->with('Enter password', null)->andReturn($password);
-        $command->shouldReceive('secret')->once()->with('Confirm password')->andReturn($password);
-
-        $this->addCommand($command);
+        $this->addCommand(new TestRegisterUser());
 
         $this->artisan('register:user', ['--model' => TestUser::class]);
 
         $this->assertOutputContains('hi@example.com');
-        $this->assertOutputDoesNotContains($password);
+        $this->assertOutputDoesNotContains(TestRegisterUser::PASSWORD);
 
-        $user = TestUser::whereEmail($email)->first();
+        $user = TestUser::whereEmail(TestRegisterUser::EMAIL)->first();
 
         $this->assertInstanceOf(TestUser::class, $user);
-        //$message = sprintf('Password \'%s\' doesn\'t pass hash check with user password hash %s.', $password, $user->password);
-        //$this->assertTrue(Hash::check($password, $user->password), $message);
-        $this->assertSame($name, $user->name);
+        $message = sprintf('Password \'%s\' doesn\'t pass hash check with user password hash %s.', TestRegisterUser::PASSWORD, $user->password);
+        $this->assertTrue(Hash::check(TestRegisterUser::PASSWORD, $user->password), $message);
+        $this->assertSame(TestRegisterUser::NAME, $user->name);
+    }
+}
+
+class TestRegisterUser extends RegisterUser
+{
+    /**
+     * @var string
+     */
+    const NAME = 'Tester';
+
+    /**
+     * @var string
+     */
+    const EMAIL = 'hi@example.com';
+
+    /**
+     * @var string
+     */
+    const PASSWORD = 'secret';
+
+    /**
+     * Prompt the user for input.
+     *
+     * @param  string $question
+     * @param  string|null $default
+     * @return string
+     */
+    public function ask($question, $default = null)
+    {
+        switch ($question) {
+            case 'Enter name':
+                return self::NAME;
+            case 'Enter in an email':
+                return self::EMAIL;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Prompt the user for input but hide the answer from the console.
+     *
+     * @param  string $question
+     * @param  bool $fallback
+     * @return string
+     */
+    public function secret($question, $fallback = true)
+    {
+        switch ($question) {
+            case 'Enter password':
+            case 'Confirm password':
+                return self::PASSWORD;
+            default:
+                return null;
+        }
     }
 }
