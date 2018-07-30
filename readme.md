@@ -14,7 +14,7 @@
 ## Installation
 Install using composer by running:
 ```bash
-composer require ericdowell/resource-controller ^1.4
+composer require ericdowell/resource-controller ^1.5
 ```
 
 Full Documentation can be found in the [Wiki](https://github.com/ericdowell/resource-controller/wiki/Index)
