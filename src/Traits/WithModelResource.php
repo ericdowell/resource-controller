@@ -12,7 +12,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
-use EricDowell\ResourceController\Traits\Resource\WithProperties;
+use EricDowell\ResourceController\Traits\ModelResource\WithProperties;
 
 trait WithModelResource
 {

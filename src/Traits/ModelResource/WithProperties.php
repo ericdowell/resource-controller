@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Traits\Resource;
+namespace EricDowell\ResourceController\Traits\ModelResource;
 
 trait WithProperties
 {
