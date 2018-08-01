@@ -328,7 +328,7 @@ trait WithModel
         $actionMap = array_merge(['create' => 'store', 'edit' => 'update'], $this->actionMap());
         $nameParts = explode('.', $this->template);
 
-        $action = array_pop($nameParts);
+        $action = $this->action = array_pop($nameParts);
         $type = array_pop($nameParts);
 
         if (array_key_exists($action, $actionMap)) {

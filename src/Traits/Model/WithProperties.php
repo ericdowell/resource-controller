@@ -10,6 +10,13 @@ use Illuminate\Database\Eloquent\Builder;
 trait WithProperties
 {
     /**
+     * Current route action based on parsed route name.
+     *
+     * @var string
+     */
+    protected $action;
+
+    /**
      * Current form action based on parsed route name.
      *
      * @var string
