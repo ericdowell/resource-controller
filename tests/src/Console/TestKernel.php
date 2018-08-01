@@ -26,17 +26,22 @@ class TestKernel extends ConsoleKernel
     /**
      * Report the exception to the exception handler.
      *
-     * @param  \Exception $e
+     * @param  \Exception $exception
      *
      * @return void
      *
      * @throws \Exception
      */
-    protected function reportException(Exception $e)
+    protected function reportException(Exception $exception)
     {
-        throw $e;
+        throw $exception;
     }
 
+    /**
+     * Get the Artisan application instance.
+     *
+     * @return \Illuminate\Console\Application
+     */
     public function getArtisan()
     {
         return $this->app['artisan'];

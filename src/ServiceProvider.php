@@ -2,7 +2,7 @@
 
 namespace EricDowell\ResourceController;
 
-use EricDowell\ResourceController\Console\Commands\RegisterUser;
+use EricDowell\ResourceController\Commands\RegisterUser;
 use Illuminate\Support\ServiceProvider as SupportServiceProvider;
 
 class ServiceProvider extends SupportServiceProvider

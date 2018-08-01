@@ -5,7 +5,7 @@ namespace EricDowell\ResourceController\Tests\Unit;
 use Illuminate\Database\Eloquent\Model;
 use EricDowell\ResourceController\Tests\TestCase;
 use EricDowell\ResourceController\Tests\Models\TestUser;
-use EricDowell\ResourceController\Http\Controllers\ResourceModelController;
+use EricDowell\ResourceController\Controllers\ResourceModelController;
 
 class WithModelResourceTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace EricDowell\ResourceController\Http\Requests;
+namespace EricDowell\ResourceController\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use EricDowell\ResourceController\Tests\Models\TestPost;
 use EricDowell\ResourceController\Tests\Models\TestText;
 use EricDowell\ResourceController\Tests\Http\Requests\TestPostRequest;
-use EricDowell\ResourceController\Http\Controllers\ModelMorphController;
+use EricDowell\ResourceController\Controllers\ModelMorphController;
 
 class TestPostController extends ModelMorphController
 {

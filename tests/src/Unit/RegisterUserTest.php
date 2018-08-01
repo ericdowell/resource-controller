@@ -7,8 +7,8 @@ namespace EricDowell\ResourceController\Tests\Unit;
 use Illuminate\Support\Facades\Hash;
 use EricDowell\ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use EricDowell\ResourceController\Commands\RegisterUser;
 use EricDowell\ResourceController\Tests\Models\TestUser;
-use EricDowell\ResourceController\Console\Commands\RegisterUser;
 
 class RegisterUserTest extends TestCase
 {

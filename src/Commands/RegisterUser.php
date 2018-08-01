@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Console\Commands;
+namespace EricDowell\ResourceController\Commands;
 
 use RuntimeException;
 use Illuminate\Console\Command;
