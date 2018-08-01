@@ -4,7 +4,7 @@ namespace EricDowell\ResourceController\Tests\Http\Controllers;
 
 use EricDowell\ResourceController\Tests\Models\TestUser;
 use EricDowell\ResourceController\Traits\WithoutModelRequest;
-use EricDowell\ResourceController\Http\Controllers\ResourceModelController;
+use EricDowell\ResourceController\Controllers\ResourceModelController;
 
 class TestUserUpdateController extends ResourceModelController
 {

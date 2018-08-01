@@ -3,7 +3,7 @@
 namespace EricDowell\ResourceController\Tests\Http\Controllers;
 
 use EricDowell\ResourceController\Tests\Models\TestUser;
-use EricDowell\ResourceController\Http\Controllers\UserController;
+use EricDowell\ResourceController\Controllers\UserController;
 
 class TestUserController extends UserController
 {

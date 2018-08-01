@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Http\Controllers;
+namespace EricDowell\ResourceController\Controllers;
 
 use Throwable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use EricDowell\ResourceController\Traits\UserResource;
-use EricDowell\ResourceController\Http\Requests\UserRequest;
+use EricDowell\ResourceController\Requests\UserRequest;
 
 class UserController extends ResourceModelController
 {

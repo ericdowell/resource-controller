@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Http\Controllers;
+namespace EricDowell\ResourceController\Controllers;
 
 use EricDowell\ResourceController\Traits\WithModelResource;
 
