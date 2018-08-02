@@ -191,7 +191,7 @@ trait Model
     protected function getModelRequestAttributes(Request $request, Eloquent $instance = null): array
     {
         $data = $request->all();
-        if ($request instanceof FormRequest) {
+        if ($request instanceof FormRequest && $this->useRequestValidated) {
             $data = $request->validated();
         }
 

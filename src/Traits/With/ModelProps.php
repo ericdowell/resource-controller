@@ -59,6 +59,13 @@ trait ModelProps
     protected $typeName;
 
     /**
+     * Flag for allowing FormRequest requests to return all fields.
+     *
+     * @var bool
+     */
+    protected $useRequestValidated = false;
+
+    /**
      * Flag for setting/updating 'user_id' as attribute of Eloquent Model.
      *
      * @var bool
