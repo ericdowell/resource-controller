@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Traits\Model;
+namespace EricDowell\ResourceController\Traits\With;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-trait WithProperties
+trait ModelProps
 {
     /**
      * Current route action based on parsed route name.

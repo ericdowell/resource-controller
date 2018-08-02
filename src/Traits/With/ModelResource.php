@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Traits;
+namespace EricDowell\ResourceController\Traits\With;
 
 use Closure;
 use Throwable;
@@ -10,14 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
-use EricDowell\ResourceController\Traits\ModelResource\WithProperties;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
-trait WithModelResource
+trait ModelResource
 {
-    use WithModel;
-    use WithProperties;
+    use Model;
+    use ModelResourceProps;
 
     /**
      * Create a new controller instance.
@@ -127,9 +126,9 @@ trait WithModelResource
      *
      * @param Request $request
      *
-     * @return Model
+     * @return Eloquent
      */
-    protected function storeAction(Request $request): Model
+    protected function storeAction(Request $request): Eloquent
     {
         $attributes = array_merge($this->getModelRequestAttributes($request), $this->beforeStoreModel($request));
 
@@ -188,11 +187,11 @@ trait WithModelResource
      * Method useful to add/update attributes for Eloquent Model before storage update.
      *
      * @param Request $request
-     * @param Model $instance
+     * @param Eloquent $instance
      *
      * @return void
      */
-    protected function beforeModelUpdate(Request $request, Model &$instance): void
+    protected function beforeModelUpdate(Request $request, Eloquent &$instance): void
     {
     }
 
@@ -200,11 +199,11 @@ trait WithModelResource
      * Updates/Upserts attributes based on request for Eloquent Model.
      *
      * @param Request $request
-     * @param Model $instance
+     * @param Eloquent $instance
      *
      * @return bool
      */
-    protected function updateUpsertAction(Request $request, Model $instance): bool
+    protected function updateUpsertAction(Request $request, Eloquent $instance): bool
     {
         if ($this->allowUpsert() && $request->isMethod('patch')) {
             return $this->upsertAction($request, $instance);
@@ -229,11 +228,11 @@ trait WithModelResource
      * Updates attributes based on request for Eloquent Model.
      *
      * @param Request $request
-     * @param Model $instance
+     * @param Eloquent $instance
      *
      * @return bool
      */
-    protected function updateAction(Request $request, Model $instance): bool
+    protected function updateAction(Request $request, Eloquent $instance): bool
     {
         return $instance->update($this->getModelRequestAttributes($request, $instance)) ?? false;
     }
@@ -242,11 +241,11 @@ trait WithModelResource
      * Upsert attributes based on request for Eloquent Model.
      *
      * @param Request $request
-     * @param Model $instance
+     * @param Eloquent $instance
      *
      * @return bool
      */
-    protected function upsertAction(Request $request, Model $instance): bool
+    protected function upsertAction(Request $request, Eloquent $instance): bool
     {
         $attributes = $this->upsertAttributes($request, $instance);
 
@@ -255,11 +254,11 @@ trait WithModelResource
 
     /**
      * @param Request $request
-     * @param Model $instance
+     * @param Eloquent $instance
      *
      * @return array
      */
-    protected function upsertAttributes(Request $request, Model $instance): array
+    protected function upsertAttributes(Request $request, Eloquent $instance): array
     {
         $data = $request->except($this->upsertExcept());
         if ($request instanceof FormRequest) {
@@ -302,7 +301,7 @@ trait WithModelResource
      */
     protected function updateModelCallback(Request $request): Closure
     {
-        return function (Model $instance) use ($request) {
+        return function (Eloquent $instance) use ($request) {
             $this->beforeModelUpdate($request, $instance);
             $this->setUserIdAttribute($instance, 'updateModel');
             $this->updateUpsertAction($request, $instance);
@@ -319,7 +318,7 @@ trait WithModelResource
      */
     public function destroy($id)
     {
-        tap($this->findModel($id), function (Model $instance) {
+        tap($this->findModel($id), function (Eloquent $instance) {
             $instance->delete();
         });
 

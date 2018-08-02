@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Traits\MorphModel;
+namespace EricDowell\ResourceController\Traits\With;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
-trait WithProperties
+trait MorphModelProps
 {
     /**
      * Parent morph Eloquent Model ::class string output.
@@ -19,7 +19,7 @@ trait WithProperties
     /**
      * Instance of parent morph Eloquent Model.
      *
-     * @var Model|Builder
+     * @var Eloquent|Builder
      */
     protected $morphModelInstance;
 
@@ -47,11 +47,11 @@ trait WithProperties
     /**
      * Set parent morph Eloquent Model instance.
      *
-     * @param Model $morphModelInstance
+     * @param Eloquent $morphModelInstance
      *
      * @return $this
      */
-    protected function setMorphModelInstance(Model $morphModelInstance): self
+    protected function setMorphModelInstance(Eloquent $morphModelInstance): self
     {
         $this->morphModelInstance = $morphModelInstance;
 
