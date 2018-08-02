@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Traits;
+namespace EricDowell\ResourceController\Traits\With;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Route as CurrentRoute;
-use EricDowell\ResourceController\Traits\Model\WithProperties;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 use EricDowell\ResourceController\Exceptions\ModelClassCheckException;
 
-trait WithModel
+trait Model
 {
-    use WithProperties;
+    use ModelProps;
 
     /**
      * @return bool
@@ -46,7 +45,7 @@ trait WithModel
     }
 
     /**
-     * @return Builder|Model
+     * @return Builder|Eloquent
      */
     protected function findModelInstance()
     {
@@ -83,7 +82,7 @@ trait WithModel
     }
 
     /**
-     * @return Builder|Model
+     * @return Builder|Eloquent
      */
     protected function modelInstance()
     {
@@ -168,20 +167,20 @@ trait WithModel
     /**
      * @param mixed $id
      *
-     * @return Model
+     * @return Eloquent
      */
-    protected function findModel($id): Model
+    protected function findModel($id): Eloquent
     {
         return $this->basicModelQuery()->findOrFail($id);
     }
 
     /**
      * @param Request $request
-     * @param Model|null $instance
+     * @param Eloquent|null $instance
      *
      * @return array
      */
-    protected function getModelRequestAttributes(Request $request, Model $instance = null): array
+    protected function getModelRequestAttributes(Request $request, Eloquent $instance = null): array
     {
         $data = $request->all();
         if ($request instanceof FormRequest) {
@@ -192,13 +191,13 @@ trait WithModel
     }
 
     /**
-     * @param Model $model
+     * @param Eloquent $model
      * @param array $data
      * @param null|bool $modelFill
      *
      * @return array
      */
-    protected function getModelAttributes(Model $model, array $data, bool $modelFill = null): array
+    protected function getModelAttributes(Eloquent $model, array $data, bool $modelFill = null): array
     {
         $modelAttributes = [];
 
@@ -213,14 +212,14 @@ trait WithModel
     }
 
     /**
-     * @param Model $model
+     * @param Eloquent $model
      * @param array $data
      * @param $key
      * @param bool|null $modelFill
      *
      * @return bool|mixed
      */
-    private function getModelAttributeValue(Model $model, array $data, $key, bool $modelFill = null)
+    private function getModelAttributeValue(Eloquent $model, array $data, $key, bool $modelFill = null)
     {
         $value = array_get($data, $key);
         if (is_null($value) && $model->exists && ! array_has($data, $key) && $modelFill) {

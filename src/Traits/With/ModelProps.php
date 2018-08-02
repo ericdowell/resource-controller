@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Traits\Model;
+namespace EricDowell\ResourceController\Traits\With;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
-trait WithProperties
+trait ModelProps
 {
     /**
      * Current route action based on parsed route name.
@@ -33,7 +33,7 @@ trait WithProperties
     /**
      * Instance of the Eloquent Model.
      *
-     * @var Model|Builder
+     * @var Eloquent|Builder
      */
     protected $modelInstance;
 
@@ -171,11 +171,11 @@ trait WithProperties
     }
 
     /**
-     * @param Model $modelInstance
+     * @param Eloquent $modelInstance
      *
      * @return $this
      */
-    protected function setModelInstance(Model $modelInstance): self
+    protected function setModelInstance(Eloquent $modelInstance): self
     {
         $this->modelInstance = $instance = ${$this->type} = $modelInstance;
 

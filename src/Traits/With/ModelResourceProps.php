@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Traits\ModelResource;
+namespace EricDowell\ResourceController\Traits\With;
 
-trait WithProperties
+trait ModelResourceProps
 {
     /**
      * Auth Middleware to apply to non-public routes.

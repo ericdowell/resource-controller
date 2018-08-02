@@ -2,21 +2,20 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Traits;
+namespace EricDowell\ResourceController\Traits\With;
 
 use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use EricDowell\ResourceController\Traits\MorphModel\WithProperties;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
-trait WithMorphModel
+trait MorphModel
 {
-    use WithProperties;
-    use WithModelResource {
-        WithModelResource::allModels as callAllModels;
-        WithModelResource::storeAction as callStoreAction;
+    use MorphModelProps;
+    use ModelResource {
+        ModelResource::allModels as callAllModels;
+        ModelResource::storeAction as callStoreAction;
     }
 
     /**
@@ -54,7 +53,7 @@ trait WithMorphModel
     /**
      * Parent morph Eloquent Model instance.
      *
-     * @return Builder|Model
+     * @return Builder|Eloquent
      */
     protected function morphModelInstance()
     {
@@ -80,9 +79,9 @@ trait WithMorphModel
      * Connects Eloquent Model to parent morph Eloquent Model.
      *
      * @param Request $request
-     * @return Model
+     * @return Eloquent
      */
-    protected function storeAction(Request $request): Model
+    protected function storeAction(Request $request): Eloquent
     {
         $model = $this->callStoreAction($request);
 
@@ -112,11 +111,11 @@ trait WithMorphModel
      * Saves parent morph Eloquent Model and updates connected Eloquent Model attributes.
      *
      * @param Request $request
-     * @param Model $instance
+     * @param Eloquent $instance
      *
      * @return bool
      */
-    protected function updateAction(Request $request, Model $instance): bool
+    protected function updateAction(Request $request, Eloquent $instance): bool
     {
         $instance->save();
 
@@ -130,11 +129,11 @@ trait WithMorphModel
      * Saves parent morph Eloquent Model and upsert attributes based on request for Eloquent Model.
      *
      * @param Request $request
-     * @param Model $instance
+     * @param Eloquent $instance
      *
      * @return bool
      */
-    protected function upsertAction(Request $request, Model $instance): bool
+    protected function upsertAction(Request $request, Eloquent $instance): bool
     {
         $instance->save();
         $attributes = $this->upsertAttributes($request, $instance->{$this->morphType()});
@@ -153,8 +152,8 @@ trait WithMorphModel
      */
     public function destroy($id)
     {
-        tap($this->findModel($id), function (Model $instance) {
-            /** @var Model $model */
+        tap($this->findModel($id), function (Eloquent $instance) {
+            /** @var Eloquent $model */
             $model = $instance->{$this->morphType()};
             $model->delete();
             $instance->delete();
