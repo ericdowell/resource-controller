@@ -133,6 +133,14 @@ trait Model
      */
     protected function basicModelQuery(): Builder
     {
+        return $this->getModelQuery();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function getModelQuery(): Builder
+    {
         $query = $this->findModelInstance()->newQuery();
 
         $this->queryWith($query);

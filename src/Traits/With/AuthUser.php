@@ -9,12 +9,23 @@ use Illuminate\Database\Eloquent\Builder;
 trait AuthUser
 {
     /**
-     * @param Builder $query
-     *
      * @return Builder
      */
-    protected function queryWithUser(Builder &$query): Builder
+    protected function basicModelQuery(): Builder
     {
-        return $query->with('user')->where('user_id', '=', auth()->user()->getAuthIdentifier());
+        if (isset($this->allowUserAccess)) {
+            return $this->getModelQuery();
+        }
+        $userKey = 'user_id';
+        if (isset($this->userKey)) {
+            $userKey = $this->userKey;
+        }
+
+        return $this->getModelQuery()->where($userKey, '=', auth()->user()->getAuthIdentifier());
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    abstract protected function getModelQuery(): Builder;
 }
