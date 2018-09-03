@@ -261,7 +261,7 @@ trait ModelResource
     protected function upsertAttributes(Request $request, Eloquent $instance): array
     {
         $data = $request->except($this->upsertExcept());
-        if ($request instanceof FormRequest) {
+        if ($request instanceof FormRequest && $this->useRequestValidated === true) {
             $data = array_except($request->validated(), $this->upsertExcept());
         }
 
