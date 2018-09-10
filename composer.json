@@ -32,7 +32,10 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": [
+            "@php vendor/orchestra/testbench-core/create-sqlite-db",
+            "phpunit --colors=always"
+        ]
     },
     "extra": {
         "laravel": {
