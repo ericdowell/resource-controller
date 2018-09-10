@@ -39,6 +39,11 @@ class UserController extends ResourceModelController
     ];
 
     /**
+     * @var string
+     */
+    protected $userPrimaryKey = 'id';
+
+    /**
      * A place to complete any addition constructor required logic.
      */
     protected function beginningConstruct(): void
