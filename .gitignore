@@ -9,4 +9,5 @@ vendor/
 clover.xml
 composer.lock
 composer.phar
+junit.xml
 Thumbs.db
