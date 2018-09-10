@@ -16,13 +16,6 @@ class TestCase extends SupportTestCase
     use LoadTestConfiguration;
 
     /**
-     * Output of Console.
-     *
-     * @var string
-     */
-    protected $consoleOutput;
-
-    /**
      * Setup the test environment.
      */
     protected function setUp()
@@ -37,18 +30,6 @@ class TestCase extends SupportTestCase
         Relation::morphMap([
             'post' => TestPost::class,
         ]);
-    }
-
-    /**
-     * Clean up the testing environment before the next test.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->consoleOutput = '';
     }
 
     /**
