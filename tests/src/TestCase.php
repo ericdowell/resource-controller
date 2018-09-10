@@ -9,8 +9,6 @@ use EricDowell\ResourceController\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Orchestra\Testbench\TestCase as SupportTestCase;
 use EricDowell\ResourceController\Tests\Models\TestPost;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
-use EricDowell\ResourceController\Tests\Console\TestKernel;
 use EricDowell\ResourceController\Tests\Traits\LoadTestConfiguration;
 
 class TestCase extends SupportTestCase
@@ -94,24 +92,6 @@ class TestCase extends SupportTestCase
     }
 
     /**
-     * @param string $needle
-     * @param string $message
-     */
-    protected function assertOutputContains($needle, string $message = '')
-    {
-        $this->assertContains($needle, $this->consoleOutput());
-    }
-
-    /**
-     * @param string $needle
-     * @param string $message
-     */
-    protected function assertOutputDoesNotContains($needle, string $message = '')
-    {
-        $this->assertNotContains($needle, $this->consoleOutput());
-    }
-
-    /**
      * Get package providers.
      *
      * @param \Illuminate\Foundation\Application $app
@@ -121,52 +101,5 @@ class TestCase extends SupportTestCase
     protected function getPackageProviders($app)
     {
         return [ServiceProvider::class];
-    }
-
-    /**
-     * Resolve application Console TestKernel implementation.
-     *
-     * @param  \Illuminate\Foundation\Application $app
-     *
-     * @return void
-     */
-    protected function resolveApplicationConsoleKernel($app)
-    {
-        $app->singleton('artisan', function ($app) {
-            return new \Illuminate\Console\Application($app, $app['events'], $app->version());
-        });
-
-        $app->singleton(ConsoleKernel::class, TestKernel::class);
-    }
-
-    /**
-     * Call artisan command and return code.
-     *
-     * @param  string $command
-     * @param  array $parameters
-     *
-     * @return int
-     */
-    public function artisan($command, $parameters = [])
-    {
-        return parent::artisan($command, array_merge($parameters, ['--no-interaction' => true]));
-    }
-
-    /**
-     * @param $command
-     */
-    protected function addCommand($command)
-    {
-        $this->app['artisan']->add($command);
-    }
-
-    /**
-     * Output of Console.
-     *
-     * @return mixed
-     */
-    public function consoleOutput()
-    {
-        return $this->consoleOutput ?: $this->consoleOutput = $this->app[ConsoleKernel::class]->output();
     }
 }
