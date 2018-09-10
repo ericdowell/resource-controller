@@ -16,6 +16,13 @@ class TestCase extends SupportTestCase
     use LoadTestConfiguration;
 
     /**
+     * @var array
+     */
+    protected $morphMap = [
+        'post' => TestPost::class,
+    ];
+
+    /**
      * Setup the test environment.
      */
     protected function setUp()
@@ -27,9 +34,7 @@ class TestCase extends SupportTestCase
         $this->loadMigrationsFrom($basePath.'/database/migrations');
         $this->withFactories($basePath.'/database/factories');
 
-        Relation::morphMap([
-            'post' => TestPost::class,
-        ]);
+        Relation::morphMap($this->morphMap);
     }
 
     /**
