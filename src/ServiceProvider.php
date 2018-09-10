@@ -18,7 +18,7 @@ class ServiceProvider extends SupportServiceProvider
 
         $this->publishes([
             $basePath.'/config/resource-controller.php' => config_path('resource-controller.php'),
-        ]);
+        ], 'resource-controller');
 
         $this->loadViewsFrom($basePath.'/views', 'resource-controller');
     }
