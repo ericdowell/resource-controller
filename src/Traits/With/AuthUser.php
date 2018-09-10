@@ -13,15 +13,15 @@ trait AuthUser
      */
     protected function basicModelQuery(): Builder
     {
-        if (isset($this->allowUserAccess)) {
+        if (isset($this->allowUserAccess) && $this->allowUserAccess === true) {
             return $this->getModelQuery();
         }
-        $userKey = 'user_id';
-        if (isset($this->userKey)) {
-            $userKey = $this->userKey;
+        $userPrimaryKey = 'user_id';
+        if (isset($this->userPrimaryKey)) {
+            $userPrimaryKey = $this->userPrimaryKey;
         }
 
-        return $this->getModelQuery()->where($userKey, '=', auth()->user()->getAuthIdentifier());
+        return $this->getModelQuery()->where($userPrimaryKey, '=', auth()->user()->getAuthIdentifier());
     }
 
     /**

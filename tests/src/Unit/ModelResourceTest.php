@@ -7,7 +7,7 @@ use EricDowell\ResourceController\Tests\TestCase;
 use EricDowell\ResourceController\Tests\Models\TestUser;
 use EricDowell\ResourceController\Controllers\ResourceModelController;
 
-class WithModelResourceTest extends TestCase
+class ModelResourceTest extends TestCase
 {
     /**
      * @test
