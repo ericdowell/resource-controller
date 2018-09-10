@@ -14,13 +14,11 @@ class ServiceProvider extends SupportServiceProvider
      */
     public function boot()
     {
-        $basePath = dirname(__DIR__);
-
         $this->publishes([
-            $basePath.'/config/resource-controller.php' => config_path('resource-controller.php'),
-        ], 'resource-controller');
+            $this->basePath("config/{$this->packageConfig()}") => config_path($this->packageConfig()),
+        ], $this->packageName());
 
-        $this->loadViewsFrom($basePath.'/views', 'resource-controller');
+        $this->loadViewsFrom($this->basePath('/views'), $this->packageName());
     }
 
     /**
@@ -30,10 +28,40 @@ class ServiceProvider extends SupportServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(dirname(__DIR__).'/config/resource-controller.php', 'resource-controller');
-
         $this->commands([
             RegisterUser::class,
         ]);
+
+        $this->mergeConfigFrom($this->basePath("config/{$this->packageConfig()}"), $this->packageName());
+    }
+
+    /**
+     * Name of the package.
+     *
+     * @return string
+     */
+    protected function packageName()
+    {
+        return 'resource-controller';
+    }
+
+    /**
+     * Filename of config for package.
+     *
+     * @return string
+     */
+    protected function packageConfig()
+    {
+        return "{$this->packageName()}.php";
+    }
+
+    /**
+     * Return the base path for this package.
+     *
+     * @return string
+     */
+    protected function basePath(string $path = null)
+    {
+        return dirname(__DIR__).($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 }
