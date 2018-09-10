@@ -295,7 +295,7 @@ trait Model
              ->setTypeAndFormAction($context)
              ->setTypeName($context);
 
-        $this->createModelInstance($context)->setMessageAndHeader($context);
+        $this->createModelInstance($context)->setBtnMessageAndFormHeader($context);
         $this->setUserIdAttribute($context, __FUNCTION__);
 
         return $context;
@@ -306,7 +306,7 @@ trait Model
      *
      * @return $this
      */
-    protected function setMessageAndHeader(array &$context): self
+    protected function setBtnMessageAndFormHeader(array &$context): self
     {
         $btnMessage = sprintf('%s %s', ucfirst($this->formAction), ucfirst($this->type));
         $formHeader = ($this->formAction === 'update' ? ucfirst($this->formAction) : 'Create').' '.ucfirst($this->type);
