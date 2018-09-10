@@ -15,7 +15,7 @@ class ServiceProvider extends SupportServiceProvider
     public function boot()
     {
         $this->publishes([
-            $this->packageBasePath('config'.DIRECTORY_SEPARATOR.$this->packageConfigFilename()) => config_path($this->packageConfigFilename()),
+            $this->packageConfigFilePath() => config_path($this->packageConfigFilename()),
         ], $this->packageName());
 
         $this->loadViewsFrom($this->packageBasePath('views'), $this->packageName());
@@ -32,7 +32,7 @@ class ServiceProvider extends SupportServiceProvider
             RegisterUser::class,
         ]);
 
-        $this->mergeConfigFrom($this->packageBasePath('config'.DIRECTORY_SEPARATOR.$this->packageConfigFilename()), $this->packageName());
+        $this->mergeConfigFrom($this->packageConfigFilePath(), $this->packageName());
     }
 
     /**
@@ -46,6 +46,16 @@ class ServiceProvider extends SupportServiceProvider
     }
 
     /**
+     * Return the base path for this package.
+     *
+     * @return string
+     */
+    protected function packageBasePath(string $path)
+    {
+        return dirname(__DIR__).DIRECTORY_SEPARATOR.$path;
+    }
+
+    /**
      * Filename of config for package.
      *
      * @return string
@@ -56,12 +66,12 @@ class ServiceProvider extends SupportServiceProvider
     }
 
     /**
-     * Return the base path for this package.
+     * File path of config for package.
      *
      * @return string
      */
-    protected function packageBasePath(string $path)
+    protected function packageConfigFilePath()
     {
-        return dirname(__DIR__).DIRECTORY_SEPARATOR.$path;
+        return $this->packageBasePath('config'.DIRECTORY_SEPARATOR.$this->packageConfigFilename());
     }
 }
