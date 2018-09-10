@@ -291,7 +291,10 @@ trait Model
         $withUser = $this->withUser();
         $template = $this->template = $this->template ?? $route->getName();
 
-        $this->mergeContext($context, compact('template', 'withUser'))->setTypeAndFormAction($context)->setTypeName($context);
+        $this->mergeContext($context, compact('template', 'withUser'))
+             ->setTypeAndFormAction($context)
+             ->setTypeName($context);
+
         $this->createModelInstance($context)->setMessageAndHeader($context);
         $this->setUserIdAttribute($context, __FUNCTION__);
 
