@@ -48,6 +48,8 @@ class ServiceProvider extends SupportServiceProvider
     /**
      * Return the base path for this package.
      *
+     * @param string $path
+     *
      * @return string
      */
     protected function packageBasePath(string $path)
