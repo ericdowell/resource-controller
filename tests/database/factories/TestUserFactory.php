@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Faker\Generator as Faker;
-use EricDowell\ResourceController\Tests\Models\TestUser;
+use ResourceController\Tests\Models\TestUser;
 
 /* @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(TestUser::class, function (Faker $faker) {

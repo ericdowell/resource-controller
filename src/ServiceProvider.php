@@ -1,8 +1,8 @@
 <?php
 
-namespace EricDowell\ResourceController;
+namespace ResourceController;
 
-use EricDowell\ResourceController\Commands\RegisterUser;
+use ResourceController\Commands\RegisterUser;
 use Illuminate\Support\ServiceProvider as SupportServiceProvider;
 
 class ServiceProvider extends SupportServiceProvider
@@ -14,11 +14,11 @@ class ServiceProvider extends SupportServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            $this->packageConfigFilePath() => config_path($this->packageConfigFilename()),
-        ], $this->packageName());
+        //$this->publishes([
+        //    $this->packageConfigFilePath() => config_path($this->packageConfigFilename()),
+        //], $this->packageName());
 
-        $this->loadViewsFrom($this->packageBasePath('views'), $this->packageName());
+        //$this->loadViewsFrom($this->packageBasePath('views'), $this->packageName());
     }
 
     /**
@@ -32,7 +32,7 @@ class ServiceProvider extends SupportServiceProvider
             RegisterUser::class,
         ]);
 
-        $this->mergeConfigFrom($this->packageConfigFilePath(), $this->packageName());
+        //$this->mergeConfigFrom($this->packageConfigFilePath(), $this->packageName());
     }
 
     /**

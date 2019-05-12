@@ -1,6 +1,6 @@
 <?php
 
-namespace EricDowell\ResourceController\Controllers;
+namespace ResourceController\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;

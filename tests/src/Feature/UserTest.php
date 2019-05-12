@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Tests\Feature;
+namespace ResourceController\Tests\Feature;
 
 use Faker\Generator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use EricDowell\ResourceController\Tests\TestCase;
+use ResourceController\Tests\TestCase;
+use ResourceController\Tests\Models\TestUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use EricDowell\ResourceController\Tests\Models\TestUser;
 
 class UserTest extends TestCase
 {
@@ -18,11 +18,11 @@ class UserTest extends TestCase
     /**
      * Setup the test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        Route::group(['namespace' => 'EricDowell\ResourceController\Tests\Http\Controllers'], function () {
+        Route::group(['namespace' => 'ResourceController\Tests\Http\Controllers'], function () {
             Route::get('user/password/{user}/edit', [
                 'as' => 'user.password-edit',
                 'uses' => 'TestUserController@passwordEdit',

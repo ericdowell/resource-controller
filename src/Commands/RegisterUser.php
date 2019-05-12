@@ -2,19 +2,16 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Commands;
+namespace ResourceController\Commands;
 
 use RuntimeException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
-use EricDowell\ResourceController\Traits\UserResource;
 
 class RegisterUser extends Command
 {
-    use UserResource;
-
     /**
      * The name and signature of the console command.
      *
