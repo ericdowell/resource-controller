@@ -6,9 +6,9 @@ namespace ResourceController\Tests\Unit;
 
 use Illuminate\Support\Facades\Hash;
 use ResourceController\Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use ResourceController\Commands\RegisterUser;
 use ResourceController\Tests\Models\TestUser;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegisterUserTest extends TestCase
 {
@@ -23,7 +23,7 @@ class RegisterUserTest extends TestCase
     {
         $name = 'Tester';
         $email = 'hi@example.com';
-        $password = 'secret';
+        $password = 'password';
         $this->assertNull(TestUser::whereEmail($email)->first(), 'User model exists when it should NOT.');
 
         $this->artisan(RegisterUser::class, ['--model' => TestUser::class])
