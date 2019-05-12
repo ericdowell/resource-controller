@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ResourceController\Commands;
 
 use RuntimeException;
+use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -41,7 +42,7 @@ class RegisterUser extends Command
 
         $created = $userInstance->create($attributes);
         if ($created) {
-            $outputSafe = array_except($attributes, ['password']);
+            $outputSafe = Arr::except($attributes, ['password']);
             $this->info('User successfully created!');
             $this->table(array_keys($outputSafe), [array_values($outputSafe)]);
 
@@ -145,5 +146,20 @@ class RegisterUser extends Command
         $this->info('The password and confirmation password do NOT match, please try again.');
 
         $this->askForPassword($attributes);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Builder
+     */
+    protected function getUserInstance(): Model
+    {
+        $fallback = rtrim(app()->getNamespace(), '\\').'\\User';
+        $authUserModel = config('auth.providers.users.model', $fallback);
+        $className = $this->option('model') ?? $authUserModel;
+        if (! $className || ! is_string($className)) {
+            return app($fallback);
+        }
+
+        return app($className);
     }
 }
