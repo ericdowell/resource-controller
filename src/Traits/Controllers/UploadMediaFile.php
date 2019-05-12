@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ResourceController\Traits\Http;
+namespace ResourceController\Traits\Controllers;
 
 use RuntimeException;
 use Illuminate\Http\UploadedFile;

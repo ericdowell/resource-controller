@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ResourceController\Controllers\Html;
 
-use ResourceController\Traits\Http\AssignOwner;
-use ResourceController\Traits\Http\UploadMediaFile;
+use ResourceController\Traits\Controllers\AssignOwner;
+use ResourceController\Traits\Controllers\UploadMediaFile;
 
 abstract class AbstractFileUploadController extends AbstractModelController
 {
