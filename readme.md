@@ -18,11 +18,3 @@ composer require ericdowell/resource-controller ^2.0
 ```
 
 Full Documentation can be found in the [Wiki](https://github.com/ericdowell/resource-controller/wiki/Index)
-
-## Planned Improvements
-- [ ] Add resource templates to package, templates will be namespaced.
-- [ ] Add [view()->first()](https://laravel-news.com/viewfirst) support so applications can define overriding top-level templates.
-    - [ ] Add something similar to blade, something like `@include_first` if it doesn't exist yet.
-- [ ] Add optional gate methods in resource methods where applications can add calls to `abort_unless` or similar helper functions.
-    - [ ] Get parameter injection for gate methods working.
-- [ ] Add generators to make setup easier for the morph model resource controller.
