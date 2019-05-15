@@ -40,6 +40,8 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     public function create()
     {
+        $this->setModelAction(__FUNCTION__);
+
         $instance = $this->newModel();
 
         $this->gateCreate($instance);
@@ -62,6 +64,8 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     public function edit()
     {
+        $this->setModelAction(__FUNCTION__);
+
         $instance = $this->getModelInstance();
 
         $this->gateEdit($instance);

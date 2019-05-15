@@ -123,6 +123,17 @@ abstract class AbstractModelController extends Controller
     }
 
     /**
+     * @param  string  $action
+     * @return $this
+     */
+    protected function setModelAction(string $action): self
+    {
+        $this->modelAction = $action;
+
+        return $this;
+    }
+
+    /**
      * @param  string  $name
      * @param  \Illuminate\Http\Request|null  $request
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
@@ -327,6 +338,8 @@ abstract class AbstractModelController extends Controller
      */
     public function modelStore(FormRequest $request)
     {
+        $this->setModelAction('store');
+
         $this->gateStore($request);
 
         $response = $this->checkExistingStore($request);
@@ -414,6 +427,8 @@ abstract class AbstractModelController extends Controller
      */
     public function show()
     {
+        $this->setModelAction(__FUNCTION__);
+
         $instance = $this->getModelInstance();
 
         $this->gateShow($instance);
@@ -440,6 +455,8 @@ abstract class AbstractModelController extends Controller
      */
     public function modelUpdate(FormRequest $request)
     {
+        $this->setModelAction('update');
+
         $instance = $this->getModelInstance();
 
         $this->gateUpdate($request, $instance);
@@ -491,6 +508,8 @@ abstract class AbstractModelController extends Controller
      */
     public function destroy()
     {
+        $this->setModelAction(__FUNCTION__);
+
         $instance = $this->getModelInstance();
 
         $this->gateDestroy($instance);
