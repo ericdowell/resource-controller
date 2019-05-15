@@ -96,6 +96,9 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     protected function additionalViewData(array &$data): void
     {
+        if (! isset($data['modelAction'])) {
+            $data['modelAction'] = $this->modelAction;
+        }
         if (! isset($data['modelKey'])) {
             $data['modelKey'] = $this->getResponseModelKey();
         }
