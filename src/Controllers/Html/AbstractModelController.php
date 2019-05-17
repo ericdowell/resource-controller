@@ -78,16 +78,7 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     protected function getTemplateName(): string
     {
-        $search = [
-            '{',
-            '}',
-        ];
-        $replace = [
-            '',
-            '',
-        ];
-
-        return str_replace($search, $replace, Route::currentRouteName());
+        return Route::currentRouteName();
     }
 
     /**
