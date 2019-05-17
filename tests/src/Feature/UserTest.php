@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Tests\Feature;
+namespace ResourceController\Tests\Feature;
 
 use Faker\Generator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use EricDowell\ResourceController\Tests\TestCase;
+use ResourceController\Tests\TestCase;
+use ResourceController\Tests\Models\TestUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use EricDowell\ResourceController\Tests\Models\TestUser;
 
 class UserTest extends TestCase
 {
@@ -18,21 +18,12 @@ class UserTest extends TestCase
     /**
      * Setup the test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        Route::group(['namespace' => 'EricDowell\ResourceController\Tests\Http\Controllers'], function () {
-            Route::get('user/password/{user}/edit', [
-                'as' => 'user.password-edit',
-                'uses' => 'TestUserController@passwordEdit',
-            ]);
-            Route::put('user/password/{user}', [
-                'as' => 'user.password-update',
-                'uses' => 'TestUserController@passwordUpdate',
-            ]);
+        Route::group(['namespace' => 'ResourceController\Tests\Http\Controllers'], function () {
             Route::resource('user', 'TestUserController');
-            Route::resource('user-update', 'TestUserUpdateController');
         });
     }
 
@@ -72,22 +63,21 @@ class UserTest extends TestCase
 
         $name = $faker->name;
         $email = $faker->unique()->safeEmail;
-        $password = $password_confirmation = 'secret';
+        $password = $password_confirmation = 'password';
 
         $response = $this->actingAs($user)->post(route('user.store'), compact('name', 'email', 'password', 'password_confirmation'));
         $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.store', 302);
 
-        $response->assertRedirect(url(route('user.index')));
+        $model = TestUser::whereEmail($email)->first();
+
+        $response->assertRedirect(url(route('user.show', [$model->id])));
 
         $this->assertNull(TestUser::wherePassword($password)->first());
-
-        $model = TestUser::whereEmail($email)->first();
 
         $this->assertInstanceOf(TestUser::class, $model);
 
         $this->assertFunctionSuccess($this->get(route('user.show', $model->id)), __FILE__, __FUNCTION__.'.show');
         $this->assertFunctionSuccess($this->get(route('user.edit', $model->id)), __FILE__, __FUNCTION__.'.edit');
-        $this->assertFunctionSuccess($this->get(route('user-update.edit', $model->id)), __FILE__, __FUNCTION__.'.edit.put');
     }
 
     /**
@@ -105,21 +95,11 @@ class UserTest extends TestCase
 
         $name = $faker->name;
         $email = $faker->unique()->safeEmail;
-        $password = $password_confirmation = 'secret1234';
-        $current_password = 'secret';
+        $password = $password_confirmation = 'password1234';
 
-        $response = $this->actingAs($user)->put(route('user.update', $user->id), compact('name', 'email'));
+        $response = $this->actingAs($user)->put(route('user.update', $user->id), compact('name', 'email', 'password', 'password_confirmation'));
         // Would in normal cases be 'edit', but there's no 'back'/'previous', so home.index is what is used.
-        $response->assertRedirect(url('/'));
-
-        $response = $this->actingAs($user)->put(route('user-update.update', $user->id), compact('name', 'email'));
-        $this->assertFunctionFailure($response, __FILE__, __FUNCTION__.'.update.put.edit-method-property');
-
-        $user->refresh();
-
-        $response = $this->actingAs($user)->put(route('user.password-update', $user->id), compact('password', 'password_confirmation', 'current_password'));
-        $this->assertFunctionSuccess($response, __FILE__, __FUNCTION__.'.password-update', 302);
-        $response->assertRedirect(url(route('user.index')));
+        $response->assertRedirect(url(route('user.show', [$user->id])));
 
         $user->refresh();
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace EricDowell\ResourceController\Tests\Traits;
+namespace ResourceController\Tests\Traits;
 
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;

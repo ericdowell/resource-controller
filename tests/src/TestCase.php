@@ -2,30 +2,21 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Tests;
+namespace ResourceController\Tests;
 
+use ResourceController\ServiceProvider;
 use Illuminate\Foundation\Testing\TestResponse;
-use EricDowell\ResourceController\ServiceProvider;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Orchestra\Testbench\TestCase as SupportTestCase;
-use EricDowell\ResourceController\Tests\Models\TestPost;
-use EricDowell\ResourceController\Tests\Traits\LoadTestConfiguration;
+use ResourceController\Tests\Traits\LoadTestConfiguration;
 
 class TestCase extends SupportTestCase
 {
     use LoadTestConfiguration;
 
     /**
-     * @var array
-     */
-    protected $morphMap = [
-        'post' => TestPost::class,
-    ];
-
-    /**
      * Setup the test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -33,8 +24,6 @@ class TestCase extends SupportTestCase
 
         $this->loadMigrationsFrom($basePath.'/database/migrations');
         $this->withFactories($basePath.'/database/factories');
-
-        Relation::morphMap($this->morphMap);
     }
 
     /**

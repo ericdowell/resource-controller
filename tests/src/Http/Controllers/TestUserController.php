@@ -1,20 +1,33 @@
 <?php
 
-namespace EricDowell\ResourceController\Tests\Http\Controllers;
+namespace ResourceController\Tests\Http\Controllers;
 
-use EricDowell\ResourceController\Tests\Models\TestUser;
-use EricDowell\ResourceController\Controllers\UserController;
+use ResourceController\Tests\Models\TestUser;
+use ResourceController\Controllers\Html\UserController;
+use ResourceController\Tests\Http\Requests\TestUser as TestUserRequest;
 
 class TestUserController extends UserController
 {
     /**
      * @var string
      */
-    protected $modelClass = TestUser::class;
+    protected $model = TestUser::class;
+
     /**
-     * Auth Middleware to apply to non-public routes.
-     *
-     * @var array
+     * @param  \ResourceController\Tests\Http\Requests\TestUser  $request
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
-    protected $authMiddleware = [];
+    public function store(TestUserRequest $request)
+    {
+        return $this->modelStore($request);
+    }
+
+    /**
+     * @param  \ResourceController\Tests\Http\Requests\TestUser  $request
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function update(TestUserRequest $request)
+    {
+        return $this->modelUpdate($request);
+    }
 }

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Tests\Models;
+namespace ResourceController\Tests\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
- * EricDowell\ResourceController\Tests\Models\TestUser.
+ * ResourceController\Tests\Models\TestUser.
  *
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -20,12 +20,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string|null $remember_token
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestUser whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestUser whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestUser whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestUser whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestUser wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\EricDowell\ResourceController\Tests\Models\TestUser whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestUser whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestUser whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestUser whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestUser whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestUser wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestUser whereUpdatedAt($value)
  */
 class TestUser extends Authenticatable
 {

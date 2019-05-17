@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace EricDowell\ResourceController\Tests\Unit;
+namespace ResourceController\Tests\Unit;
 
 use Illuminate\Support\Facades\Hash;
-use EricDowell\ResourceController\Tests\TestCase;
+use ResourceController\Tests\TestCase;
+use ResourceController\Commands\RegisterUser;
+use ResourceController\Tests\Models\TestUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use EricDowell\ResourceController\Commands\RegisterUser;
-use EricDowell\ResourceController\Tests\Models\TestUser;
 
 class RegisterUserTest extends TestCase
 {
@@ -23,7 +23,7 @@ class RegisterUserTest extends TestCase
     {
         $name = 'Tester';
         $email = 'hi@example.com';
-        $password = 'secret';
+        $password = 'password';
         $this->assertNull(TestUser::whereEmail($email)->first(), 'User model exists when it should NOT.');
 
         $this->artisan(RegisterUser::class, ['--model' => TestUser::class])
