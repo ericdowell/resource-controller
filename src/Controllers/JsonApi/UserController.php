@@ -21,6 +21,7 @@ class UserController extends AbstractModelController
     protected function getRequestAttributes(FormRequest $request): array
     {
         $attributes = parent::getRequestAttributes($request);
+
         if (isset($attributes['password'])) {
             $attributes['password'] = Hash::make($attributes['password']);
         }
