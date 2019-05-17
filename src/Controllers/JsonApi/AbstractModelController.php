@@ -147,9 +147,9 @@ abstract class AbstractModelController extends Controller
             return $model;
         } elseif (is_numeric($model)) {
             $guessNamespaces = [rtrim(app()->getNamespace(), '\\'), $this->guessModelClassNamespace()];
-            foreach($guessNamespaces as $namespace) {
-                $guessModel = $namespace . Str::studly($name);
-                if (class_exists($guessModel))  {
+            foreach ($guessNamespaces as $namespace) {
+                $guessModel = $namespace.Str::studly($name);
+                if (class_exists($guessModel)) {
                     return app($guessModel)->findOrFail($model);
                 }
             }
