@@ -124,7 +124,7 @@ abstract class AbstractModelController extends JsonAbstractModelController
     {
         $instance = Arr::get($data, $this->getResponseModelKey());
         $inputs = Arr::except($data, $this->getResponseModelKey());
-        $to = action([static::class, 'show',], [$this->getResponseModelKey() => $instance->id]);
+        $to = action([static::class, 'show'], [$this->getResponseModelKey() => $instance->id]);
 
         return redirect($to, $status, $headers, $secure)->withInput($inputs);
     }
@@ -138,7 +138,7 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     protected function responseDestroySuccess($data = [], $status = 302, array $headers = [], $secure = null)
     {
-        $to = action([static::class, 'index',]);
+        $to = action([static::class, 'index']);
 
         return redirect($to, $status, $headers, $secure)->withInput($data);
     }
