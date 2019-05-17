@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Filesystem\FilesystemAdapter;
 
 /**
- * ResourceController\Traits\Models\MediaModel
+ * ResourceController\Traits\Models\MediaModel.
  *
  * @property string $path
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -111,7 +111,7 @@ trait MediaModel
     public function createMedia(UploadedFile $file, array $attributes = []): Model
     {
         return tap($this->newModelInstance($attributes), function ($media) use ($file) {
-            /** @var static $media */
+            /* @var static $media */
             $media->fillMedia($file);
             $media->save();
         });
@@ -127,7 +127,7 @@ trait MediaModel
     public function makeMedia(UploadedFile $file, array $attributes = []): Model
     {
         return tap($this->newModelInstance($attributes), function ($media) use ($file) {
-            /** @var static|\Illuminate\Database\Eloquent\Model $media */
+            /* @var static|\Illuminate\Database\Eloquent\Model $media */
             $media->fillMedia($file);
         });
     }

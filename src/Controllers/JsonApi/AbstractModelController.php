@@ -57,7 +57,7 @@ abstract class AbstractModelController extends Controller
     protected $refresh = true;
 
     /**
-     * The string for the Model data to be nested within
+     * The string for the Model data to be nested within.
      *
      * @var string
      */
@@ -145,8 +145,7 @@ abstract class AbstractModelController extends Controller
 
         if ($model instanceof Model) {
             return $model;
-        }
-        elseif (is_numeric($model)) {
+        } elseif (is_numeric($model)) {
             return $this->newModel()->findOrFail($model);
         }
 
@@ -408,7 +407,6 @@ abstract class AbstractModelController extends Controller
      */
     protected function checkExistingStore(FormRequest $request)
     {
-        return null;
     }
 
     /**
