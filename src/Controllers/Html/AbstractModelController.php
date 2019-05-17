@@ -117,7 +117,9 @@ abstract class AbstractModelController extends JsonAbstractModelController
     {
         $this->additionalViewData($data);
 
-        return response()->view($this->getTemplateName(), $data, $status, $headers);
+        $template = $this->getTemplateName();
+
+        return response()->view($template, $data + compact('template'), $status, $headers);
     }
 
     /**

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace ResourceController\Controllers\JsonApi;
 
-use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use ResourceController\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 abstract class AbstractModelController extends Controller
@@ -137,10 +137,20 @@ abstract class AbstractModelController extends Controller
      * @param  string  $name
      * @param  \Illuminate\Http\Request|null  $request
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     protected function getModelParameter(string $name, Request $request = null): Model
     {
-        return ($request ?? request())->route()->parameter($name);
+        $model = ($request ?? request())->route()->parameter($name);
+
+        if ($model instanceof Model) {
+            return $model;
+        }
+        elseif (is_numeric($model)) {
+            return $this->newModel()->findOrFail($model);
+        }
+
+        throw (new ModelNotFoundException)->setModel($this->model);
     }
 
     /**
@@ -207,11 +217,12 @@ abstract class AbstractModelController extends Controller
     /**
      * Get the current model instance of the route parameter.
      *
+     * @param  \Illuminate\Http\Request|null  $request
      * @return \Illuminate\Database\Eloquent\Builder|\Eloquent|\Illuminate\Database\Eloquent\Model
      */
-    protected function getModelInstance()
+    protected function getModelInstance(Request $request = null)
     {
-        return $this->getModelParameter($this->getResponseModelKey());
+        return $this->getModelParameter($this->getResponseModelKey(), $request);
     }
 
     /**
@@ -423,13 +434,14 @@ abstract class AbstractModelController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\JsonResponse
      */
-    public function show()
+    public function show(Request $request)
     {
         $this->setModelAction(__FUNCTION__);
 
-        $instance = $this->getModelInstance();
+        $instance = $this->getModelInstance($request);
 
         $this->gateShow($instance);
 
@@ -457,7 +469,7 @@ abstract class AbstractModelController extends Controller
     {
         $this->setModelAction('update');
 
-        $instance = $this->getModelInstance();
+        $instance = $this->getModelInstance($request);
 
         $this->gateUpdate($request, $instance);
 
@@ -503,14 +515,15 @@ abstract class AbstractModelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\JsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
-    public function destroy()
+    public function destroy(Request $request)
     {
         $this->setModelAction(__FUNCTION__);
 
-        $instance = $this->getModelInstance();
+        $instance = $this->getModelInstance($request);
 
         $this->gateDestroy($instance);
 
