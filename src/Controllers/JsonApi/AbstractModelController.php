@@ -149,15 +149,16 @@ abstract class AbstractModelController extends Controller
             if (Str::singular($this->getResponseModelKey()) === $name) {
                 return $this->newModel()->findOrFail($model);
             }
+            $guessClass = Str::studly($name);
             $guessNamespaces = [rtrim(app()->getNamespace(), '\\'), $this->guessModelClassNamespace()];
             foreach ($guessNamespaces as $namespace) {
-                $modelClass = $namespace.'\\'.Str::studly($name);
+                $modelClass = $namespace.'\\'.$guessClass;
                 if (class_exists($modelClass)) {
                     return app($modelClass)->findOrFail($model);
                 }
             }
         }
-        $message = "No model found when using route parameter '{$name}'' with value: ".print_r($model, true);
+        $message = "No model found when using route parameter '{$name}' with value: ".print_r($model ?? 'null', true);
 
         throw new ModelNotFoundException($message);
     }

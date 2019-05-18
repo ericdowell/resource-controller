@@ -27,36 +27,59 @@ class TestCase extends SupportTestCase
     }
 
     /**
-     * @param TestResponse $response
-     * @param string $file
-     * @param string $function
-     * @param int $statusCode
+     * @param  TestResponse  $response
+     * @param  string  $file
+     * @param  string  $function
+     * @param  int  $statusCode
      */
-    protected function assertFunctionSuccess($response, $file, $function, $statusCode = 200)
+    protected function assertFunctionSuccess(TestResponse $response, string $file, string $function, int $statusCode = 200)
     {
         $this->assertFunctionWithStatus($response, $file, $function, $statusCode);
     }
 
     /**
-     * @param TestResponse $response
-     * @param string $file
-     * @param string $function
-     * @param int $statusCode
+     * @param  TestResponse  $response
+     * @param  string  $file
+     * @param  string  $function
+     * @param  int  $statusCode
      */
-    protected function assertFunctionFailure($response, $file, $function, $statusCode = 500)
+    protected function assertFunctionFailure(TestResponse $response, string $file, string $function, int $statusCode = 500)
     {
-        $this->assertFunctionSuccess($response, $file, $function, $statusCode);
+        $this->assertFunctionWithStatus($response, $file, $function, $statusCode);
     }
 
     /**
-     * @param TestResponse $response
-     * @param string $file
-     * @param string $function
-     * @param int $statusCode
+     * @param  TestResponse  $response
+     * @param  string  $file
+     * @param  string  $function
+     * @param  int  $statusCode
      */
-    private function assertFunctionWithStatus($response, $file, $function, $statusCode = null)
+    protected function assertFunctionSuccessJson(TestResponse $response, string $file, string $function, int $statusCode = 200)
     {
-        $filename = __DIR__.'/error-html/'.basename($file, '.php').'.'.$function.'.html';
+        $this->assertFunctionWithStatus($response, $file, $function, $statusCode, true);
+    }
+
+    /**
+     * @param  TestResponse  $response
+     * @param  string  $file
+     * @param  string  $function
+     * @param  int  $statusCode
+     */
+    protected function assertFunctionFailureJson(TestResponse $response, string $file, string $function, int $statusCode = 500)
+    {
+        $this->assertFunctionWithStatus($response, $file, $function, $statusCode, true);
+    }
+
+    /**
+     * @param  TestResponse  $response
+     * @param  string  $file
+     * @param  string  $function
+     * @param  int  $statusCode
+     * @param  bool  $json
+     */
+    private function assertFunctionWithStatus(TestResponse $response, string $file, string $function, int $statusCode = null, bool $json = false)
+    {
+        $filename = __DIR__.'/error-output/'.basename($file, '.php').'.'.$function.($json ? '.json' : '.html');
         if (file_exists($filename)) {
             @unlink($filename);
         }
@@ -69,7 +92,7 @@ class TestCase extends SupportTestCase
     /**
      * Get package providers.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      *
      * @return array
      */

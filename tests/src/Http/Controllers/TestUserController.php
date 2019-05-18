@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ResourceController\Tests\Http\Controllers;
 
 use ResourceController\Tests\Models\TestUser;
