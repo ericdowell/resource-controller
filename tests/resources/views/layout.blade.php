@@ -7,12 +7,7 @@
     <title>Resource Controller</title>
 </head>
 <body>
-<div class="flex-center position-ref full-height">
-    <div class="content">
-        <div class="title m-b-md">
-            {{ $modelKey }} - {{ $modelAction }} - {{ $template }}
-        </div>
-    </div>
-</div>
+<main>
+    <strong>Template:</strong> {{ $template }}</main>
 </body>
 </html>

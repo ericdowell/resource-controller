@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ResourceController\Controllers\Html;
+namespace ResourceController\Controllers;
 
 use ResourceController\Traits\Controllers\AssignOwner;
 
