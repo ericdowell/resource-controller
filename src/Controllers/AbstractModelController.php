@@ -8,9 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
-use ResourceController\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use ResourceController\Traits\Controllers\Response\WithJson;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 abstract class AbstractModelController extends Controller
