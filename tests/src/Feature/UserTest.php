@@ -12,6 +12,11 @@ use ResourceController\Tests\Models\TestUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use ResourceController\Tests\Traits\WithRequestHeaders;
 
+/**
+ * @group test_user
+ * @group controller
+ * @group feature
+ */
 class UserTest extends TestCase
 {
     use RefreshDatabase, WithRequestHeaders, WithFaker;
@@ -29,22 +34,18 @@ class UserTest extends TestCase
     }
 
     /**
-     * @test
-     * @group feature
-     * @group single-model
+     * @return void
      */
-    public function testModelIndex()
+    public function testModelIndex(): void
     {
         $this->assertFunctionSuccess($this->get(route('test_user.index')), __FILE__, __FUNCTION__);
         $this->assertFunctionSuccessJson($this->get(route('test_user.index'), self::getAcceptJsonFormHeaders()), __FILE__, __FUNCTION__);
     }
 
     /**
-     * @test
-     * @group feature
-     * @group single-model
+     * @return void
      */
-    public function testModelCreate()
+    public function testModelCreate(): void
     {
         $user = factory(TestUser::class)->create();
         $this->assertFunctionSuccess($this->actingAs($user)->get(route('test_user.create')), __FILE__, __FUNCTION__);
@@ -52,13 +53,9 @@ class UserTest extends TestCase
     }
 
     /**
-     * @test
-     * @group feature
-     * @group single-model
-     *
-     * @returns TestUser|null
+     * @returns void
      */
-    public function testModelStoreShowEdit()
+    public function testModelStoreShowEdit(): void
     {
         $user = factory(TestUser::class)->create();
 
@@ -85,11 +82,9 @@ class UserTest extends TestCase
     }
 
     /**
-     * @test
-     * @group feature
-     * @group single-model
+     * @return void
      */
-    public function testModelUpdateAndDestroy()
+    public function testModelUpdateAndDestroy(): void
     {
         /** @var TestUser $user */
         $user = factory(TestUser::class)->create();

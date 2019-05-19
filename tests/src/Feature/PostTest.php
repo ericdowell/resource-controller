@@ -12,6 +12,11 @@ use ResourceController\Tests\Models\TestPost;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use ResourceController\Tests\Traits\WithRequestHeaders;
 
+/**
+ * @group test_post
+ * @group controller
+ * @group feature
+ */
 class PostTest extends TestCase
 {
     use RefreshDatabase, WithRequestHeaders, WithFaker;
@@ -29,9 +34,11 @@ class PostTest extends TestCase
     }
 
     /**
+     * @group index
+     *
      * @return void
      */
-    public function testPostIndex()
+    public function testPostIndex(): void
     {
         /** @var \ResourceController\Tests\Models\TestUser $user */
         $user = factory(TestUser::class)->create();
@@ -49,9 +56,11 @@ class PostTest extends TestCase
     }
 
     /**
+     * @group store
+     *
      * @return void
      */
-    public function testPostStore()
+    public function testPostStore(): void
     {
         /** @var \ResourceController\Tests\Models\TestUser $user */
         $user = factory(TestUser::class)->create();
@@ -75,15 +84,17 @@ class PostTest extends TestCase
 
         $this->assertIsNumeric($id);
 
-        $post = TestPost::whereId($id)->whereUserId($user->id)->first();
+        $post = TestPost::whereId($id)->whereTestUserId($user->id)->first();
 
         $this->assertInstanceOf(TestPost::class, $post);
     }
 
     /**
+     * @group show
+     *
      * @return void
      */
-    public function testPostShow()
+    public function testPostShow(): void
     {
         /** @var \ResourceController\Tests\Models\TestUser $user */
         $user = factory(TestUser::class)->create();
@@ -105,9 +116,11 @@ class PostTest extends TestCase
     }
 
     /**
+     * @group update
+     *
      * @return void
      */
-    public function testPostUpdate()
+    public function testPostUpdate(): void
     {
         /** @var \ResourceController\Tests\Models\TestUser $user */
         $user = factory(TestUser::class)->create();
@@ -137,9 +150,11 @@ class PostTest extends TestCase
     }
 
     /**
+     * @group destroy
+     *
      * @return void
      */
-    public function testPostDestroy()
+    public function testPostDestroy(): void
     {
         /** @var \ResourceController\Tests\Models\TestUser $user */
         $user = factory(TestUser::class)->create();

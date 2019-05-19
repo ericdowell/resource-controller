@@ -14,16 +14,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $title
  * @property string $body
- * @property int $user_id
+ * @property int $test_user_id
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestPost whereBody($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestPost whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestPost whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestPost whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestPost whereIsPublished($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestPost whereTestUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestPost whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestPost whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestPost whereUserId($value)
  */
 class TestPost extends Model
 {
@@ -45,7 +45,7 @@ class TestPost extends Model
         'title',
         'body',
         'is_published',
-        'user_id',
+        'test_user_id',
     ];
 
     /**
