@@ -48,7 +48,7 @@ class PostTest extends TestCase
         $user->refresh();
         $response = $this->get(route('test_user.test_post.index', ['test_user' => $user->id]));
 
-        $response->assertStatus(200);
+        $this->assertFunctionSuccessJson($response, __FILE__, __FUNCTION__.'.index');
 
         foreach ($user->posts as $post) {
             $response->assertJsonFragment($post->toArray());
@@ -77,7 +77,6 @@ class PostTest extends TestCase
 
         $response->assertJsonMissingValidationErrors();
         $this->assertFunctionSuccessJson($response, __FILE__, __FUNCTION__.'.store');
-        $response->assertStatus(200);
         $response->assertJson(['test_post' => $data]);
 
         $id = $response->json('test_post.id');
@@ -106,7 +105,7 @@ class PostTest extends TestCase
             'test_post' => $post->id,
         ]));
 
-        $response->assertStatus(200);
+        $this->assertFunctionSuccessJson($response, __FILE__, __FUNCTION__.'.show');
 
         $id = $response->json('test_post.id');
         $this->assertIsNumeric($id);
@@ -139,7 +138,7 @@ class PostTest extends TestCase
         ]), $data, $this->getAcceptJsonFormHeaders());
 
         $response->assertJsonMissingValidationErrors();
-        $response->assertStatus(200);
+        $this->assertFunctionSuccessJson($response, __FILE__, __FUNCTION__.'.update');
 
         $id = $response->json('test_post.id');
         $this->assertIsNumeric($id);
@@ -168,7 +167,7 @@ class PostTest extends TestCase
             'test_post' => $post->id,
         ]), [], $this->getAcceptJsonFormHeaders());
 
-        $response->assertStatus(200);
+        $this->assertFunctionSuccessJson($response, __FILE__, __FUNCTION__.'.destroy');
 
         $id = $response->json('test_post.id');
         $this->assertIsNumeric($id);

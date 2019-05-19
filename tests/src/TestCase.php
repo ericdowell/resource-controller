@@ -79,7 +79,7 @@ class TestCase extends SupportTestCase
      */
     private function assertFunctionWithStatus(TestResponse $response, string $file, string $function, int $statusCode = null, bool $json = false)
     {
-        $filename = __DIR__.'/error-output/'.basename($file, '.php').'.'.$function.($json ? '.json' : '.html');
+        $filename = __DIR__.'/error-output/'.basename($file, '.php').'.'.trim($function, '.').($json ? '.json' : '.html');
         if (file_exists($filename)) {
             @unlink($filename);
         }
