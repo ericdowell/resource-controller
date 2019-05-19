@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ResourceController\Traits\Controllers;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
 trait PaginateIndex
@@ -40,7 +39,17 @@ trait PaginateIndex
      */
     public function index()
     {
-        $modelKey = Str::plural($this->getResponseModelKey());
+        if (method_exists($this, 'setModelAction')) {
+            $this->setModelAction(__FUNCTION__);
+        }
+
+        $modelKey = $this->getResponseModelKey();
+
+        if (request()->expectsJson()) {
+            return $this->response([
+                $modelKey => $this->newModel()->paginate(),
+            ]);
+        }
 
         return $this->response([
             $modelKey => $this->newModel()->paginate(),

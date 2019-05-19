@@ -12,6 +12,14 @@ use ResourceController\Controllers\JsonApi\AbstractModelController as JsonAbstra
 abstract class AbstractModelController extends JsonAbstractModelController
 {
     /**
+     * @var array
+     */
+    const CONVERT_STATUS_CODES = [
+        301,
+        302,
+    ];
+
+    /**
      * @var string
      */
     protected $routeBase;
@@ -40,6 +48,9 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     public function create()
     {
+        if (request()->expectsJson()) {
+            return abort(404);
+        }
         $this->setModelAction(__FUNCTION__);
 
         $instance = $this->newModel();
@@ -64,6 +75,9 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     public function edit()
     {
+        if (request()->expectsJson()) {
+            return abort(404);
+        }
         $this->setModelAction(__FUNCTION__);
 
         $instance = $this->getModelInstance();
@@ -106,6 +120,9 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     protected function response($data = [], $status = 200, array $headers = [])
     {
+        if (request()->expectsJson()) {
+            return parent::response($data, in_array($status, static::CONVERT_STATUS_CODES) ? 200 : $status, $headers);
+        }
         $this->additionalViewData($data);
 
         $template = $this->getTemplateName();
@@ -122,6 +139,9 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     protected function responseModifySuccess($data = [], $status = 302, array $headers = [], $secure = null)
     {
+        if (request()->expectsJson()) {
+            return parent::responseModifySuccess($data, $status, $headers);
+        }
         $instance = Arr::get($data, $this->getResponseModelKey());
         $inputs = Arr::except($data, $this->getResponseModelKey());
         $to = action([static::class, 'show'], [$this->getResponseModelKey() => $instance->id]);
@@ -138,6 +158,9 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     protected function responseDestroySuccess($data = [], $status = 302, array $headers = [], $secure = null)
     {
+        if (request()->expectsJson()) {
+            return parent::responseDestroySuccess($data, $status, $headers);
+        }
         $to = action([static::class, 'index']);
 
         return redirect($to, $status, $headers, $secure)->withInput($data);
@@ -152,6 +175,10 @@ abstract class AbstractModelController extends JsonAbstractModelController
      */
     protected function responseError($data = [], $status = 302, array $headers = [], $fallback = false)
     {
+        if (request()->expectsJson()) {
+            return parent::responseError($data, $status, $headers);
+        }
+
         return redirect()->back($status, $headers, $fallback)->withErrors(Arr::get($data, 'errors'));
     }
 }

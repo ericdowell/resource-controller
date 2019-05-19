@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * ResourceController\Tests\Models\TestUser.
  *
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection|\ResourceController\Tests\Models\TestPost[] $posts
  * @mixin \Illuminate\Database\Eloquent\Builder
  * @property int $id
  * @property string $name
@@ -32,13 +33,6 @@ class TestUser extends Authenticatable
     use Notifiable;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'users';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -57,4 +51,12 @@ class TestUser extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany(TestPost::class);
+    }
 }
