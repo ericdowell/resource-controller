@@ -5,7 +5,7 @@ namespace ResourceController\Traits\Controllers\Response;
 trait WithJson
 {
     /**
-     * Standard JSON response method. Can override to return other content types.
+     * Standard JSON response method.
      *
      * @param  string|array|object  $data
      * @param  int  $status

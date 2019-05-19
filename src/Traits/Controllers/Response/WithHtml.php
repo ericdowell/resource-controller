@@ -29,6 +29,8 @@ trait WithHtml
     }
 
     /**
+     * Renders HTML based on template and data passed.
+     *
      * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @return array|string
      * @throws \Throwable
@@ -41,6 +43,8 @@ trait WithHtml
     }
 
     /**
+     * Standard HTML response method.
+     *
      * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @param  int  $status
      * @param  array  $headers
@@ -55,6 +59,8 @@ trait WithHtml
     }
 
     /**
+     * HTML redirect response for store/update endpoints.
+     *
      * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @param  int  $status
      * @param  array  $headers
@@ -71,6 +77,8 @@ trait WithHtml
     }
 
     /**
+     * HTML redirect response for destroy endpoint.
+     *
      * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @param  int  $status
      * @param  array  $headers
@@ -85,6 +93,8 @@ trait WithHtml
     }
 
     /**
+     * HTML redirect response for when errors occur.
+     *
      * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @param  int  $status
      * @param  array  $headers
