@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ResourceController\Tests\Http\Controllers;
 
 use ResourceController\Tests\Models\TestUser;
-use ResourceController\Controllers\Html\UserController;
+use ResourceController\Controllers\JsonHtml\UserController;
 use ResourceController\Tests\Http\Requests\TestUser as TestUserRequest;
 
 class TestUserController extends UserController

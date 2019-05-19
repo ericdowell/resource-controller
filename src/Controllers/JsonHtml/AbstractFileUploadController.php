@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ResourceController\Controllers\Html;
+namespace ResourceController\Controllers\JsonHtml;
 
 use ResourceController\Traits\Controllers\AssignOwner;
 use ResourceController\Traits\Controllers\UploadMediaFile;
