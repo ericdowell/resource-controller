@@ -70,6 +70,46 @@ abstract class AbstractModelController extends Controller
     protected $skipAttributes = [];
 
     /**
+     * Standard response method.
+     *
+     * @param  string|array|object  $data
+     * @param  int  $status
+     * @param  array  $headers
+     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\JsonResponse
+     */
+    abstract protected function response($data = [], $status = 200, array $headers = []);
+
+    /**
+     * Response for store/update endpoints.
+     *
+     * @param  array  $data
+     * @param  int  $status
+     * @param  array  $headers
+     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\JsonResponse
+     */
+    abstract protected function responseModifySuccess($data = [], $status = 200, array $headers = []);
+
+    /**
+     * Response for destroy endpoint.
+     *
+     * @param  array  $data
+     * @param  int  $status
+     * @param  array  $headers
+     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\JsonResponse
+     */
+    abstract protected function responseDestroySuccess($data = [], $status = 200, array $headers = []);
+
+    /**
+     * Response for when errors occur.
+     *
+     * @param  array  $data
+     * @param  int  $status
+     * @param  array  $headers
+     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\JsonResponse
+     */
+    abstract protected function responseError($data = [], $status = 200, array $headers = []);
+
+    /**
      * @param  string  $action
      * @return $this
      */
