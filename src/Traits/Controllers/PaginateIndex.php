@@ -49,7 +49,7 @@ trait PaginateIndex
             return $this->response([
                 $modelKey => $this->newModel()->paginate(),
             ]);
-        };
+        }
 
         return $this->response([
             $modelKey => $this->newModel()->paginate(),

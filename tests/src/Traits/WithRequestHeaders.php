@@ -11,7 +11,7 @@ trait WithRequestHeaders
      */
     public static function xRequestWithAjax(): array
     {
-        return ['X-Requested-With' => 'XMLHttpRequest',];
+        return ['X-Requested-With' => 'XMLHttpRequest'];
     }
 
     /**
@@ -19,7 +19,7 @@ trait WithRequestHeaders
      */
     public static function requestAcceptJson(): array
     {
-        return ['Accept' => 'application/json',];
+        return ['Accept' => 'application/json'];
     }
 
     /**
@@ -35,7 +35,7 @@ trait WithRequestHeaders
      */
     public static function xCsrfToken(): array
     {
-        return ['X-CSRF-TOKEN' => csrf_token(),];
+        return ['X-CSRF-TOKEN' => csrf_token()];
     }
 
     /**

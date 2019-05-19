@@ -7,8 +7,8 @@ namespace ResourceController\Tests\Feature;
 use Illuminate\Support\Facades\Route;
 use ResourceController\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use ResourceController\Tests\Models\TestUser;
 use ResourceController\Tests\Models\TestPost;
+use ResourceController\Tests\Models\TestUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use ResourceController\Tests\Traits\WithRequestHeaders;
 
