@@ -26,6 +26,8 @@ trait AssignOwner
     abstract protected function newModel(): Model;
 
     /**
+     * If an existing model is found then return this response.
+     *
      * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\JsonResponse
      */
     abstract protected function checkExistingResponse();
@@ -70,8 +72,11 @@ trait AssignOwner
     }
 
     /**
+     * Return response in the event existing model is found.
+     * Return checkExistingResponse or custom response.
+     *
      * @param  \Illuminate\Foundation\Http\FormRequest  $request
-     * @return \Illuminate\Http\JsonResponse|null
+     * @return \Symfony\Component\HttpFoundation\Response|null|void
      */
     protected function checkExistingStore(FormRequest $request): ?JsonResponse
     {

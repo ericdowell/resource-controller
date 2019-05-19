@@ -9,7 +9,7 @@ use ResourceController\Traits\Controllers\UploadMediaFile;
 
 abstract class AbstractFileUploadController extends AbstractModelController
 {
-    use UploadMediaFile, AssignOwner;
+    use AssignOwner, UploadMediaFile;
 
     /**
      * @var array

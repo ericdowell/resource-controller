@@ -16,7 +16,7 @@ trait PaginateIndex
     abstract protected function getResponseModelKey(): string;
 
     /**
-     * Standard JSON response method. Can override to return other content types.
+     * Standard response method.
      *
      * @param  array  $data
      * @param  int  $status

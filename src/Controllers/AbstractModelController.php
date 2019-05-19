@@ -428,7 +428,7 @@ abstract class AbstractModelController extends Controller
      * Return checkExistingResponse or custom response.
      *
      * @param  \Illuminate\Foundation\Http\FormRequest  $request
-     * @return \Symfony\Component\HttpFoundation\Response|null
+     * @return \Symfony\Component\HttpFoundation\Response|null|void
      */
     protected function checkExistingStore(FormRequest $request)
     {

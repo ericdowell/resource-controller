@@ -20,7 +20,7 @@ use Illuminate\Filesystem\FilesystemAdapter;
 trait MediaModel
 {
     /**
-     * @return string|
+     * @return string
      */
     public static function disk(): string
     {

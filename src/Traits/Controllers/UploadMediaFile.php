@@ -20,6 +20,8 @@ trait UploadMediaFile
     abstract protected function newModel(): Model;
 
     /**
+     * Get the attributes from request for store action.
+     *
      * @param  \Illuminate\Foundation\Http\FormRequest  $request
      * @return array
      */
@@ -55,6 +57,9 @@ trait UploadMediaFile
     }
 
     /**
+     * Get attributes/foreign keys from request,
+     * save a new model and return the instance.
+     *
      * @param  FormRequest  $request
      * @return \Illuminate\Database\Eloquent\Model
      * @throws \RuntimeException
@@ -71,6 +76,8 @@ trait UploadMediaFile
     }
 
     /**
+     * Fill in request attributes and update model resource.
+     *
      * @param  \Illuminate\Database\Eloquent\Model|MediaModel  $instance
      * @param  \Illuminate\Foundation\Http\FormRequest  $request
      * @return bool
