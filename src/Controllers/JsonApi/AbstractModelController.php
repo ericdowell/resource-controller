@@ -145,17 +145,27 @@ abstract class AbstractModelController extends Controller
 
         if ($model instanceof Model) {
             return $model;
-        } elseif (is_numeric($model)) {
-            if (Str::singular($this->getResponseModelKey()) === $name) {
-                return $this->newModel()->findOrFail($model);
-            }
-            $guessClass = Str::studly($name);
-            $guessNamespaces = [rtrim(app()->getNamespace(), '\\'), $this->guessModelClassNamespace()];
-            foreach ($guessNamespaces as $namespace) {
-                $modelClass = $namespace.'\\'.$guessClass;
-                if (class_exists($modelClass)) {
-                    return app($modelClass)->findOrFail($model);
-                }
+        }
+        if (Str::singular($this->getResponseModelKey()) === $name) {
+            return $this->newModel()->findOrFail($model);
+        }
+
+        return $this->guessModelParameterQuery($name, $model);
+    }
+
+    /**
+     * @param  string  $name
+     * @param  mixed   $model
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    protected function guessModelParameterQuery(string $name, $model): Model
+    {
+        $guessClass = Str::studly($name);
+        $guessNamespaces = [rtrim(app()->getNamespace(), '\\'),$this->guessModelClassNamespace()];
+        foreach ($guessNamespaces as $namespace) {
+            $modelClass = $namespace.'\\'.$guessClass;
+            if (class_exists($modelClass)) {
+                return app($modelClass)->findOrFail($model);
             }
         }
         $message = "No model found when using route parameter '{$name}' with value: ".print_r($model ?? 'null', true);
