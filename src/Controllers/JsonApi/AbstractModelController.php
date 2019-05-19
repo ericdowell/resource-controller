@@ -161,7 +161,7 @@ abstract class AbstractModelController extends Controller
     protected function guessModelParameterQuery(string $name, $model): Model
     {
         $guessClass = Str::studly($name);
-        $guessNamespaces = [rtrim(app()->getNamespace(), '\\'),$this->guessModelClassNamespace()];
+        $guessNamespaces = [rtrim(app()->getNamespace(), '\\'), $this->guessModelClassNamespace()];
         foreach ($guessNamespaces as $namespace) {
             $modelClass = $namespace.'\\'.$guessClass;
             if (class_exists($modelClass)) {
