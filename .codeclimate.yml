@@ -1,14 +1,10 @@
-engines:
+version: "2"
+plugins:
   phpcodesniffer:
     enabled: true
-    config:
-      file_extensions: "php"
   fixme:
     enabled: true
-ratings:
-  paths:
-    - "src/**.php"
-exclude_paths:
+exclude_patterns:
   - ".circleci"
   - ".codeclimate.yml"
   - ".gitignore"
@@ -18,8 +14,6 @@ exclude_paths:
   - "phpunit.php"
   - "phpunit.xml"
   - "readme.md"
-  - "config/**/*"
-  - "src/Http/Controllers/*"
-  - "src/Providers/*"
+  - "src/ServiceProvider.php"
   - "tests/**/*"
   - "vendor/**/*"
