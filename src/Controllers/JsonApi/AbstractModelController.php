@@ -10,5 +10,4 @@ use ResourceController\Controllers\AbstractModelController as Controller;
 abstract class AbstractModelController extends Controller
 {
     use WithJson;
-
 }

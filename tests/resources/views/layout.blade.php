@@ -8,6 +8,7 @@
 </head>
 <body>
 <main>
-    <strong>Template:</strong> {{ $template }}</main>
+    <strong>Template:</strong> {{ $template }}
+</main>
 </body>
 </html>

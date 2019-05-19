@@ -29,7 +29,7 @@ trait WithHtml
     }
 
     /**
-     * @param  array  $data
+     * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @return array|string
      * @throws \Throwable
      */
@@ -41,7 +41,7 @@ trait WithHtml
     }
 
     /**
-     * @param  array  $data
+     * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @param  int  $status
      * @param  array  $headers
      * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\Response
@@ -55,7 +55,7 @@ trait WithHtml
     }
 
     /**
-     * @param  array  $data
+     * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @param  int  $status
      * @param  array  $headers
      * @param  bool|null  $secure
@@ -64,14 +64,14 @@ trait WithHtml
     protected function redirectModifySuccess($data = [], $status = 302, array $headers = [], $secure = null)
     {
         $instance = Arr::get($data, $this->getResponseModelKey());
-        $inputs = Arr::except($data, $this->getResponseModelKey());
+        $inputs = Arr::except($data, [$this->getResponseModelKey(), 'password']);
         $to = action([static::class, 'show'], [$this->getResponseModelKey() => $instance->id]);
 
         return redirect($to, $status, $headers, $secure)->withInput($inputs);
     }
 
     /**
-     * @param  array  $data
+     * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @param  int  $status
      * @param  array  $headers
      * @param  bool|null  $secure
@@ -85,7 +85,7 @@ trait WithHtml
     }
 
     /**
-     * @param  array  $data
+     * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @param  int  $status
      * @param  array  $headers
      * @param  bool  $fallback
@@ -93,6 +93,9 @@ trait WithHtml
      */
     protected function redirectBackError($data = [], $status = 302, array $headers = [], $fallback = false)
     {
-        return redirect()->back($status, $headers, $fallback)->withErrors(Arr::get($data, 'errors'));
+        $errors = Arr::get($data, 'errors');
+        $inputs = Arr::except($data, [$this->getResponseModelKey(), 'password', 'errors']);
+
+        return redirect()->back($status, $headers, $fallback)->withInput($inputs)->withErrors($errors);
     }
 }
