@@ -41,7 +41,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "EricDowell\\ResourceController\\ServiceProvider"
+                "ResourceController\\ServiceProvider"
             ]
         },
         "branch-alias": {
