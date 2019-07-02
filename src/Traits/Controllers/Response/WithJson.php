@@ -51,7 +51,7 @@ trait WithJson
      * @param  array  $headers
      * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\JsonResponse
      */
-    protected function responseError($data = [], $status = 200, array $headers = [])
+    protected function responseError($data = [], $status = 422, array $headers = [])
     {
         return $this->response($data, $status, $headers);
     }
