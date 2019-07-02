@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ResourceController\Tests\Traits;
 
 use SplFileInfo;

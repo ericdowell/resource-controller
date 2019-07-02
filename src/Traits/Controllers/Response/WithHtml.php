@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ResourceController\Traits\Controllers\Response;
 
 use Illuminate\Support\Arr;

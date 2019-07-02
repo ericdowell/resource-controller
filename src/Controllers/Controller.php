@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ResourceController\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
