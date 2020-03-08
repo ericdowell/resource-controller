@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ResourceController\Controllers;
 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 abstract class AbstractModelController extends Controller

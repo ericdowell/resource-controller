@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="phpunit.php"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
          failOnRisky="true"
          failOnWarning="true"
-         processIsolation="false"
-         stopOnError="false"
-         stopOnFailure="false"
          verbose="true">
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/src/Unit</directory>
         </testsuite>
-
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/src/Feature</directory>
         </testsuite>
@@ -35,6 +28,6 @@
         <env name="APP_ENV" value="testing"/>
         <env name="APP_DEBUG" value="true"/>
         <env name="APP_KEY" value="base64:oPF0DoJcm8nOjTkN9vk3kZYw6Z0f+cP+poFKhtQZiFU="/>
-        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_CONNECTION" value="testing"/>
     </php>
 </phpunit>

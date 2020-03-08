@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace ResourceController\Tests\Feature;
 
-use Illuminate\Support\Facades\Route;
-use ResourceController\Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Route;
 use ResourceController\Tests\Models\TestPost;
 use ResourceController\Tests\Models\TestUser;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use ResourceController\Tests\TestCase;
 use ResourceController\Tests\Traits\WithRequestHeaders;
 
 /**

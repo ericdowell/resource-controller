@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Str;
 use Faker\Generator as Faker;
+use Illuminate\Support\Str;
 use ResourceController\Tests\Models\TestUser;
 
 /* @var \Illuminate\Database\Eloquent\Factory $factory */

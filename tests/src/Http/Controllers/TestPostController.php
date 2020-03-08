@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace ResourceController\Tests\Http\Controllers;
 
-use ResourceController\Tests\Models\TestPost;
-use ResourceController\Traits\Controllers\PaginateIndex;
 use ResourceController\Controllers\JsonApi\AbstractOwnerController;
 use ResourceController\Tests\Http\Requests\TestPost as TestPostRequest;
+use ResourceController\Tests\Models\TestPost;
+use ResourceController\Traits\Controllers\PaginateIndex;
 
 class TestPostController extends AbstractOwnerController
 {

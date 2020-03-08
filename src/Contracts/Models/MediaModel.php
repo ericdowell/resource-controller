@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ResourceController\Contracts\Models;
 
-use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Http\UploadedFile;
 
 interface MediaModel
 {
