@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ResourceController\Traits\Models;
 
-use Illuminate\Support\Str;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * ResourceController\Traits\Models\MediaModel.

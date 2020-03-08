@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace ResourceController\Controllers\JsonHtml;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
-use ResourceController\Traits\Controllers\Response\WithHtml;
+use Illuminate\Support\Facades\Route;
 use ResourceController\Controllers\JsonApi\AbstractModelController as JsonAbstractModelController;
+use ResourceController\Traits\Controllers\Response\WithHtml;
 
 abstract class AbstractModelController extends JsonAbstractModelController
 {

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ResourceController\Tests;
 
-use ResourceController\ServiceProvider;
 use Illuminate\Testing\TestResponse;
 use Orchestra\Testbench\TestCase as SupportTestCase;
+use ResourceController\ServiceProvider;
 use ResourceController\Tests\Traits\LoadTestConfiguration;
 
 class TestCase extends SupportTestCase

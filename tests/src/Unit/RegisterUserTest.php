@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ResourceController\Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-use ResourceController\Tests\TestCase;
 use ResourceController\Commands\RegisterUser;
 use ResourceController\Tests\Models\TestUser;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use ResourceController\Tests\TestCase;
 
 class RegisterUserTest extends TestCase
 {

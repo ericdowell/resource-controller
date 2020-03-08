@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ResourceController;
 
-use ResourceController\Commands\RegisterUser;
 use Illuminate\Support\ServiceProvider as SupportServiceProvider;
+use ResourceController\Commands\RegisterUser;
 
 class ServiceProvider extends SupportServiceProvider
 {
