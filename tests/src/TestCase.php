@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ResourceController\Tests;
 
 use ResourceController\ServiceProvider;
-use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Testing\TestResponse;
 use Orchestra\Testbench\TestCase as SupportTestCase;
 use ResourceController\Tests\Traits\LoadTestConfiguration;
 
