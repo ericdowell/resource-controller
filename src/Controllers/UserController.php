@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ResourceController\Controllers;
 
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Hash;
 
 abstract class UserController extends AbstractModelController
 {

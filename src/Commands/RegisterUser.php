@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace ResourceController\Commands;
 
-use RuntimeException;
-use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\Model;
+use RuntimeException;
 
 class RegisterUser extends Command
 {

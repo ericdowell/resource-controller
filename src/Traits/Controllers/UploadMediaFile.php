@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ResourceController\Traits\Controllers;
 
-use RuntimeException;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 use ResourceController\Contracts\Models\MediaModel;
+use RuntimeException;
 
 trait UploadMediaFile
 {
