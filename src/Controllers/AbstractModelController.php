@@ -124,6 +124,7 @@ abstract class AbstractModelController extends Controller
      * @param  string  $name
      * @param  \Illuminate\Http\Request|null  $request
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     protected function getModelParameter(string $name, Request $request = null): Model
@@ -141,7 +142,7 @@ abstract class AbstractModelController extends Controller
     }
 
     /**
-     * @param string $name
+     * @param  string  $name
      * @return string
      */
     protected function guessModelParameterNamespace(string $name): string
@@ -150,7 +151,7 @@ abstract class AbstractModelController extends Controller
     }
 
     /**
-     * @param string $name
+     * @param  string  $name
      * @return string
      */
     protected function guessModelParameterClass(string $name): string
@@ -160,7 +161,7 @@ abstract class AbstractModelController extends Controller
 
     /**
      * @param  string  $name
-     * @param  mixed   $model
+     * @param  mixed  $model
      * @return \Illuminate\Database\Eloquent\Model
      */
     protected function guessModelParameterFindOrFail(string $name, $model): Model
@@ -191,6 +192,7 @@ abstract class AbstractModelController extends Controller
      * an instanceof a specific interface/class.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
+     *
      * @throws \RuntimeException
      */
     protected function isModelInstanceOf(Model $model): void
@@ -540,6 +542,7 @@ abstract class AbstractModelController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\JsonResponse
+     *
      * @throws \Exception
      */
     public function destroy(Request $request)

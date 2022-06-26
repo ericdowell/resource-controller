@@ -36,6 +36,7 @@ trait UploadMediaFile
 
     /**
      * @param  \Illuminate\Database\Eloquent\Model  $model
+     *
      * @throws \RuntimeException
      */
     protected function isModelInstanceOf(Model $model): void
@@ -62,6 +63,7 @@ trait UploadMediaFile
      *
      * @param  FormRequest  $request
      * @return \Illuminate\Database\Eloquent\Model
+     *
      * @throws \RuntimeException
      */
     protected function modelCreate(FormRequest $request): Model

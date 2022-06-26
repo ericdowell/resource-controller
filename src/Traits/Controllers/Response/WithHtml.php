@@ -35,6 +35,7 @@ trait WithHtml
      *
      * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
      * @return array|string
+     *
      * @throws \Throwable
      */
     protected function renderHtml(array $data = [])
@@ -51,6 +52,7 @@ trait WithHtml
      * @param  int  $status
      * @param  array  $headers
      * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\Response
+     *
      * @throws \Throwable
      */
     protected function response($data = [], $status = 200, array $headers = [])

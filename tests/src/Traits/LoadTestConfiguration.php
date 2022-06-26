@@ -12,8 +12,7 @@ trait LoadTestConfiguration
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application $app
-     *
+     * @param  \Illuminate\Foundation\Application  $app
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -24,7 +23,7 @@ trait LoadTestConfiguration
     /**
      * Load config from one folder up.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      */
     protected function loadTestConfigs($app)
     {

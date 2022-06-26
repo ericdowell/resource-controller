@@ -26,7 +26,7 @@ interface MediaModel
     public function getBasePath(): string;
 
     /**
-     * @param \Illuminate\Http\UploadedFile $file
+     * @param  \Illuminate\Http\UploadedFile  $file
      * @return string
      */
     public function generatePath(UploadedFile $file): string;
@@ -37,7 +37,7 @@ interface MediaModel
     public function getUrlAttribute(): string;
 
     /**
-     * @param \Illuminate\Http\UploadedFile $file
+     * @param  \Illuminate\Http\UploadedFile  $file
      * @return string
      */
     public function getFilename(UploadedFile $file): string;
@@ -45,8 +45,8 @@ interface MediaModel
     /**
      * Save a new model and return the instance.
      *
-     * @param \Illuminate\Http\UploadedFile $file
-     * @param array $attributes
+     * @param  \Illuminate\Http\UploadedFile  $file
+     * @param  array  $attributes
      * @return \ResourceController\Traits\Models\MediaModel|\Illuminate\Database\Eloquent\Model
      */
     public function createMedia(UploadedFile $file, array $attributes = []): Model;
@@ -54,8 +54,8 @@ interface MediaModel
     /**
      * Create and return an un-saved model instance, but file saved to disk.
      *
-     * @param \Illuminate\Http\UploadedFile $file
-     * @param  array $attributes
+     * @param  \Illuminate\Http\UploadedFile  $file
+     * @param  array  $attributes
      * @return \ResourceController\Traits\Models\MediaModel|\Illuminate\Database\Eloquent\Model
      */
     public function makeMedia(UploadedFile $file, array $attributes = []): Model;
@@ -63,7 +63,7 @@ interface MediaModel
     /**
      * Fill the model with an array of attributes.
      *
-     * @param \Illuminate\Http\UploadedFile $file
+     * @param  \Illuminate\Http\UploadedFile  $file
      * @return Model
      */
     public function fillMedia(UploadedFile $file): Model;

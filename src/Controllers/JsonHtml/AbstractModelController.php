@@ -58,6 +58,7 @@ abstract class AbstractModelController extends JsonAbstractModelController
      * @param  int  $status
      * @param  array  $headers
      * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     *
      * @throws \Throwable
      */
     protected function response($data = [], $status = null, array $headers = [])
@@ -132,6 +133,7 @@ abstract class AbstractModelController extends JsonAbstractModelController
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
+     *
      * @throws \Throwable|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function create()
@@ -160,6 +162,7 @@ abstract class AbstractModelController extends JsonAbstractModelController
      * Show the form for editing the specified resource.
      *
      * @return \Illuminate\Http\Response
+     *
      * @throws \Throwable|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function edit()
