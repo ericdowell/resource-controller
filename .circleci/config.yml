@@ -8,6 +8,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Enable xdebug Extension
+          command: |
+            sudo pecl install xdebug
+            sudo docker-php-ext-enable xdebug
+      - run:
           name: Install PHP Dependencies
           command: composer install --no-interaction --optimize-autoloader --prefer-dist
       - run:
