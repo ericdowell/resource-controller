@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read \Illuminate\Database\Eloquent\Collection|\ResourceController\Tests\Models\TestPost[] $posts
  * @mixin \Illuminate\Database\Eloquent\Builder
+ *
  * @property int $id
  * @property string $name
  * @property string|null $username
@@ -21,6 +22,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $remember_token
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestUser whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestUser whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\ResourceController\Tests\Models\TestUser whereId($value)

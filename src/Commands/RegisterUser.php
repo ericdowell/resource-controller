@@ -33,6 +33,7 @@ class RegisterUser extends Command
      * Execute the console command.
      *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     public function handle(): int
@@ -56,8 +57,7 @@ class RegisterUser extends Command
     /**
      * Get all the attributes to create the User model with.
      *
-     * @param \Illuminate\Database\Eloquent\Model $userInstance
-     *
+     * @param  \Illuminate\Database\Eloquent\Model  $userInstance
      * @return array
      */
     protected function getUserAttributes(Model $userInstance): array
@@ -86,6 +86,7 @@ class RegisterUser extends Command
      * Return contents of json file if option is present.
      *
      * @return array
+     *
      * @throws \RuntimeException
      */
     protected function getAttributesFromFile(): array
@@ -104,8 +105,7 @@ class RegisterUser extends Command
     /**
      * Make sure email is valid, set email as part of attributes.
      *
-     * @param array $attributes
-     *
+     * @param  array  $attributes
      * @return void
      */
     protected function askForEmail(array &$attributes)
@@ -124,8 +124,7 @@ class RegisterUser extends Command
     /**
      * Make sure password and confirmation password match, set hashed password as part of attributes.
      *
-     * @param array $attributes
-     *
+     * @param  array  $attributes
      * @return void
      */
     protected function askForPassword(array &$attributes)
