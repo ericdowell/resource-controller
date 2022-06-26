@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: ericdowell/laravel-circleci
+      - image: cimg/php:8.1
     environment:
       TZ: "/usr/share/zoneinfo/America/Chicago"
     steps:
