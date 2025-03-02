@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
  *
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read \Illuminate\Database\Eloquent\Collection|\ResourceController\Tests\Models\TestPost[] $posts
+ *
  * @mixin \Illuminate\Database\Eloquent\Builder
  *
  * @property int $id

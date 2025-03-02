@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * ResourceController\Tests\Models\TestPost.
  *
  * @property-read \ResourceController\Tests\Models\TestUser $user
+ *
  * @mixin \Illuminate\Database\Eloquent\Builder
  *
  * @property int $id

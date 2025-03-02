@@ -274,7 +274,7 @@ abstract class AbstractModelController extends Controller
     /**
      * Get a model resource response message.
      *
-     * @param $message
+     * @param  $message
      * @return array
      */
     protected function getReturnMessage($message): array

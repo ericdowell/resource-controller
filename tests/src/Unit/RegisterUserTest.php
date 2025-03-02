@@ -16,6 +16,7 @@ class RegisterUserTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      * @group register-user
      */

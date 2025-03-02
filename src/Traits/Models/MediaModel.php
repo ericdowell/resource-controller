@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
  * ResourceController\Traits\Models\MediaModel.
  *
  * @property string $path
+ *
  * @mixin \Illuminate\Database\Eloquent\Builder
  * @mixin \Illuminate\Database\Eloquent\Model
  */
